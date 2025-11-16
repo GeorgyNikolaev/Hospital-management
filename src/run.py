@@ -34,10 +34,20 @@ def run_two_way(
     #     params = calibrate_seir(params, observed_new_hosp[:use_days], days=use_days)
     #     print(f"Calibrated: beta={params.beta:.4f}, hosp_rate={params.hosp_rate:.4f}")
 
-    # logs
-    logs = {"day": [], "today_hosp": [], "today_inc": [], "today_deaths": [], "today_admitted": [], "today_rejected": [], "sd_expected": [], "final_expected": [], "admitted": [], "rejected": [], "deaths": [], "population": []}
-    pid = 0
+    logs = {"day": [],
+            "infection": [],
+            "admitted": [],
+            "rejected": [],
+            "hosp_real": [],
+            "hosp_expected": [],
+            "inc_real": [],
+            "inc_expected": [],
+            "deaths_real": [],
+            "deaths_expected": [],
+            "population": []
+    }
 
+    pid = 0
     beta_modifier = 1.0
 
     def beta_time_fn(ti, beta):
@@ -62,23 +72,18 @@ def run_two_way(
             initial_infectious=params.initial_infectious
         )
 
-        # seir_df = simulate_seir_hcd(seir_params_today, days=1)
-        # mask = (seir_df["t"].astype(int) == day)
-        # expected_today = float(seir_df.loc[mask, "new_hospitalizations"].values[0]) if mask.any() else 0.0
-        # expected_icu_today = float(seir_df.loc[mask, "new_icu"].values[0]) if mask.any() else 0.0
-
         seir_df = simulate_seir_hcd(seir_params_today, days=day, beta_time_fn=beta_time_fn)
 
-        expected_today = seir_df["new_hospitalizations"].iloc[-1]
-        expected_icu_today = seir_df["new_icu"].iloc[-1]
+        expected_hosp = seir_df["new_hospitalizations"].iloc[-1]
+        expected_icu = seir_df["new_icu"].iloc[-1]
 
         # Создаем запись пациентов на день
-        events = sample_arrivals(expected_today, expected_icu_today, rng)
-        today_hosp = 0
-        today_inc = 0
-        today_deaths = 0
-        today_admitted = 0
-        today_rejected = 0
+        events = sample_arrivals(expected_hosp, expected_icu, rng)
+        admitted = 0
+        rejected = 0
+        hosp_real = 0
+        inc_real = 0
+        deaths_real = 0
         for ev in events:
             pid += 1
             los = rng.gamma(shape=2.0, scale=5.0) if ev["severity"] == "icu" else rng.gamma(shape=2.0, scale=3.0)
@@ -86,23 +91,15 @@ def run_two_way(
             p = des.attempt_admit(p, max_wait=0.5)
 
             if p.severity == "ward":
-                today_hosp += 1
+                hosp_real += 1
             elif p.severity == "icu":
-                today_inc += 1
+                inc_real += 1
             if p.died:
-                today_deaths += 1
+                deaths_real += 1
             if p.admitted:
-                today_admitted += 1
+                admitted += 1
             else:
-                today_rejected += 1
-
-
-
-        # Получаем метрики
-        daily = des.daily_metrics()
-        admitted = int(daily["admitted"].sum())
-        rejected = int(daily["rejected"].sum())
-        deaths = int(daily["deaths"].sum())
+                rejected += 1
 
         # 1) Смертность сокращает численность населения (вычитается из N)
         # if deaths > 0:
@@ -121,16 +118,15 @@ def run_two_way(
 
         # Логирование
         logs["day"].append(day)
-        logs["today_hosp"].append(today_hosp)
-        logs["today_inc"].append(today_inc)
-        logs["today_deaths"].append(today_deaths)
-        logs["today_admitted"].append(today_admitted)
-        logs["today_rejected"].append(today_rejected)
-        logs["sd_expected"].append(expected_today)
-        logs["final_expected"].append(expected_today)
+        logs["infection"].append(seir_df["new_infected"].iloc[-1])
         logs["admitted"].append(admitted)
         logs["rejected"].append(rejected)
-        logs["deaths"].append(deaths)
+        logs["hosp_real"].append(hosp_real)
+        logs["hosp_expected"].append(expected_hosp)
+        logs["inc_real"].append(inc_real)
+        logs["inc_expected"].append(expected_icu)
+        logs["deaths_real"].append(deaths_real)
+        logs["deaths_expected"].append(seir_df["new_deaths"].iloc[-1])
         logs["population"].append(params.population)
 
 
@@ -139,11 +135,11 @@ def run_two_way(
     log_df = pd.DataFrame(logs)
 
     plt.figure(figsize=(8, 5))
-    # plt.plot(log_df["day"], log_df["today_hosp"], label="hospitalizations")
-    # plt.plot(log_df["day"], log_df["today_inc"], label="icu hospitalizations")
-    plt.plot(log_df["day"], log_df["today_deaths"], label="deaths")
-    plt.plot(log_df["day"], log_df["today_admitted"], label="admitted")
-    plt.plot(log_df["day"], log_df["today_rejected"], label="rejected")
+    plt.plot(log_df["day"], log_df["admitted"], label="admitted")
+    plt.plot(log_df["day"], log_df["rejected"], label="rejected")
+    plt.plot(log_df["day"], log_df["hosp_real"], label="hosp_real")
+    plt.plot(log_df["day"], log_df["inc_real"], label="icu inc_real")
+    plt.plot(log_df["day"], log_df["deaths_real"], label="deaths_real")
     plt.legend()
     plt.show()
 
@@ -152,8 +148,7 @@ def run_two_way(
     fig.suptitle('Анализ моделирования эпидемии', fontsize=16, fontweight='bold')
 
     # 1. График ожидаемых случаев vs фактические
-    axes[0, 0].plot(log_df['day'], log_df['sd_expected'], label='Ожидаемые случаи сегодня', linewidth=2)
-    axes[0, 0].plot(log_df['day'], log_df['final_expected'], label='Финальные ожидаемые', linewidth=2, linestyle='--')
+    axes[0, 0].plot(log_df['day'], log_df['infection'], label='Ожидаемые случаи сегодня', linewidth=2)
     axes[0, 0].set_title('Ожидаемые случаи заболевания')
     axes[0, 0].set_xlabel('День')
     axes[0, 0].set_ylabel('Количество случаев')
@@ -170,7 +165,8 @@ def run_two_way(
     axes[0, 1].grid(True, alpha=0.3)
 
     # 3. График смертности
-    axes[0, 2].plot(log_df['day'], log_df['deaths'], label='Смерти', color='red', linewidth=2)
+    axes[0, 2].plot(log_df['day'], log_df['deaths_real'], label='Смерти реальный', linewidth=2)
+    axes[0, 2].plot(log_df['day'], log_df['deaths_expected'], label='Смерти ожидаемые', linewidth=2)
     axes[0, 2].set_title('Динамика смертности')
     axes[0, 2].set_xlabel('День')
     axes[0, 2].set_ylabel('Количество смертей')
@@ -178,9 +174,9 @@ def run_two_way(
     axes[0, 2].grid(True, alpha=0.3)
 
     # 4. Накопительные показатели
-    cumulative_admitted = log_df['admitted']
-    cumulative_rejected = log_df['rejected']
-    cumulative_deaths = log_df['deaths']
+    cumulative_admitted = log_df['admitted'].cumsum()
+    cumulative_rejected = log_df['rejected'].cumsum()
+    cumulative_deaths = log_df['deaths_real'].cumsum()
 
     axes[1, 0].plot(log_df['day'], cumulative_admitted, label='Всего госпитализировано', linewidth=2)
     axes[1, 0].plot(log_df['day'], cumulative_rejected, label='Всего отказано', linewidth=2)
@@ -204,7 +200,7 @@ def run_two_way(
     population = log_df['population'].iloc[0]
     axes[1, 2].plot(log_df['day'], log_df['admitted'] / population * 100, label='Госпитализировано (% населения)',
                     alpha=0.7)
-    axes[1, 2].plot(log_df['day'], log_df['deaths'] / population * 100, label='Смерти (% населения)', alpha=0.7)
+    axes[1, 2].plot(log_df['day'], log_df['deaths_real'] / population * 100, label='Смерти (% населения)', alpha=0.7)
     axes[1, 2].set_title('Показатели относительно населения')
     axes[1, 2].set_xlabel('День')
     axes[1, 2].set_ylabel('Процент от населения')
@@ -228,11 +224,10 @@ def run_two_way(
 
     # plot overview
     plt.figure(figsize=(10,4))
-    plt.plot(log_df["day"], log_df["sd_expected"], label="SD expected hosp")
-    plt.plot(log_df["day"], log_df["final_expected"], label="final expected")
+    plt.plot(log_df["day"], log_df["infection"], label="infection")
     plt.plot(log_df["day"], log_df["admitted"], label="admitted")
     plt.plot(log_df["day"], log_df["rejected"], label="rejected")
-    plt.plot(log_df["day"], log_df["deaths"], label="deaths")
+    plt.plot(log_df["day"], log_df["deaths_real"], label="deaths_real")
     plt.xlabel("day"); plt.ylabel("counts"); plt.legend(); plt.grid(True); plt.title("Two-way SD<->DES dynamics")
     out_png = os.path.join(RESULTS_DIR, f"overview.png")
     plt.tight_layout(); plt.savefig(out_png, dpi=150); plt.close()

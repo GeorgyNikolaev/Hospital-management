@@ -37,7 +37,6 @@ class HospitalConfig:
     name: str
     beds: int
     icu_beds: int
-    ventilators: int
     quality: float  # <1 better, >1 worse
 
 

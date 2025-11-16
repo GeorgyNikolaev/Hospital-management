@@ -92,7 +92,6 @@ def load_hospital_config(path: Optional[str]) -> List[HospitalConfig]:
                 name=item.get("name"),
                 beds=int(item.get("beds")),
                 icu_beds=int(item.get("icu_beds")),
-                ventilators=int(item.get("ventilators", 0)),
                 quality=float(item.get("quality", 1.0))
             ))
         return cfgs
@@ -111,7 +110,6 @@ def main():
 
     # real_data = load_real_data(data_path, region)
     # days = len(real_data)
-    days = 125
 
     params = make_params_consistent(
         population=settings.POPULATION,
