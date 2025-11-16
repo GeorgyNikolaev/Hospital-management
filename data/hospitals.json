@@ -1,0 +1,4 @@
+[
+  {"name":"Small_Public","beds":350,"icu_beds":20,"quality":1.0},
+  {"name":"Regional","beds":200,"icu_beds":10,"quality":0.95}
+]
