@@ -98,3 +98,4 @@ def make_params_consistent(
         initial_exposed=initial_exposed,
         initial_infectious=initial_infectious
     )
+

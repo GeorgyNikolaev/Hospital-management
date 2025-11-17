@@ -22,7 +22,6 @@ import pandas as pd
 from typing import List, Optional
 
 from src.core.config import settings
-from src.core.models import SEIRHCDParams
 from src.core.models import HospitalConfig
 from src.run import run_two_way
 from src.utils.utils import make_params_consistent
