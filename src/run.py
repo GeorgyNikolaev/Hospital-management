@@ -24,9 +24,6 @@ def run_two_way(
 
     # Моделирование SD <-> DES
     des_logs, des = run_des.run(hospitals_cfg, init_params, days, rng)
-
-
-
     # Сохранение данных
     plot_SD_DES_results(des_logs)
     save_SD_DES_results(des_logs, des)

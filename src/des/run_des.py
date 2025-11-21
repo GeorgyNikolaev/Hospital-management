@@ -39,6 +39,7 @@ def run(hospitals_cfg: List[HospitalConfig], init_params: SEIRHCDParams, days: i
     def beta_time_fn(ti, beta):
         return beta * beta_modifier
 
+    seir_df = None
     for day in range(days):
         print(f"day: {day}")
         seir_params_today = SEIRHCDParams(
@@ -58,7 +59,7 @@ def run(hospitals_cfg: List[HospitalConfig], init_params: SEIRHCDParams, days: i
             initial_infectious=params.initial_infectious
         )
 
-        seir_df = simulate_seir_hcd(seir_params_today, days=day, beta_time_fn=beta_time_fn)
+        seir_df = simulate_seir_hcd(params=seir_params_today, days=1, start_day=day+1, beta_time_fn=beta_time_fn, data=seir_df)
 
         expected_hosp = seir_df["new_hospitalizations"].iloc[-1]
         expected_icu = seir_df["new_icu"].iloc[-1]
@@ -92,11 +93,11 @@ def run(hospitals_cfg: List[HospitalConfig], init_params: SEIRHCDParams, days: i
         #     params.population = max(0, params.population - deaths_real)
 
         # 2) Высокий уровень отторжения => увеличить бета-модификатор (поведенческую реакцию)
-        overload = rejected / max(1.0, max(1.0, expected_hosp + expected_icu))
-        if overload < 0.1:
-            beta_modifier *= max(0.6, 1.0 - 0.25 * min(1.0, overload))
-        else:
-            beta_modifier += (1.0 - beta_modifier) * 0.02
+        # overload = rejected / max(1.0, max(1.0, expected_hosp + expected_icu))
+        # if overload < 0.1:
+        #     beta_modifier *= max(0.6, 1.0 - 0.25 * min(1.0, overload))
+        # else:
+        #     beta_modifier += (1.0 - beta_modifier) * 0.02
 
         # Логирование
         logs["day"].append(day)

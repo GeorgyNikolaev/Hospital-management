@@ -48,10 +48,10 @@ def plot_SD_results(results_df):
     ax2.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.show()
 
     out_png = os.path.join(RESULTS_SD_DIR, f"sd.png")
     plt.savefig(out_png, dpi=150)
+    plt.show()
     plt.close()
 
 def plot_SD_DES_results(log_df: pd.DataFrame):
@@ -63,10 +63,10 @@ def plot_SD_DES_results(log_df: pd.DataFrame):
     plt.plot(log_df["day"], log_df["inc_real"], label="icu inc_real")
     plt.plot(log_df["day"], log_df["deaths_real"], label="deaths_real")
     plt.legend()
-    plt.show()
 
     out_png = os.path.join(RESULTS_DES_DIR, f"1.png")
     plt.savefig(out_png)
+    plt.show()
     plt.close()
 
     # Создаем фигуру с несколькими субплогами
@@ -134,9 +134,9 @@ def plot_SD_DES_results(log_df: pd.DataFrame):
     axes[1, 2].grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.show()
 
     out_png = os.path.join(RESULTS_DES_DIR, f"2.png")
+    plt.show()
     plt.savefig(out_png)
     plt.close()
 

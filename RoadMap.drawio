@@ -1,53 +1,71 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.8 Chrome/140.0.7339.240 Electron/38.4.0 Safari/537.36" version="28.2.8">
   <diagram name="Страница — 1" id="_lkTzRLW_7v-ygmfFDh_">
-    <mxGraphModel dx="1042" dy="722" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1042" dy="722" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0" adaptiveColors="simple">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="owlRnpETjwI3ZZButk9U-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-1" target="owlRnpETjwI3ZZButk9U-2">
+        <mxCell id="owlRnpETjwI3ZZButk9U-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-1" target="owlRnpETjwI3ZZButk9U-2" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-1" value="Постройка SEIR-C-H-D модели" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="owlRnpETjwI3ZZButk9U-1" value="Постройка SEIR-C-H-D модели" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="294" y="150" width="207" height="48" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-2" target="owlRnpETjwI3ZZButk9U-4">
+        <mxCell id="owlRnpETjwI3ZZButk9U-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="ZfH4mZA31C3MoOOspyVI-3" target="owlRnpETjwI3ZZButk9U-4" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-2" value="Постройка DES модели" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="owlRnpETjwI3ZZButk9U-2" value="Постройка DES модели" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="293" y="235" width="208" height="38" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-4" target="owlRnpETjwI3ZZButk9U-6">
+        <mxCell id="owlRnpETjwI3ZZButk9U-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-4" target="owlRnpETjwI3ZZButk9U-6" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-4" value="Выбрать регион и эпидемию" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="293" y="305" width="208" height="32" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-4" value="Выбрать регион и эпидемию" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="293" y="438" width="208" height="32" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-6" target="owlRnpETjwI3ZZButk9U-8">
+        <mxCell id="owlRnpETjwI3ZZButk9U-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-6" target="owlRnpETjwI3ZZButk9U-8" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-6" value="Постройка всех нужных графиков" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="293" y="369" width="208" height="49" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-6" value="Постройка всех нужных графиков" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="293" y="502" width="208" height="49" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-8" target="owlRnpETjwI3ZZButk9U-11">
+        <mxCell id="owlRnpETjwI3ZZButk9U-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-8" target="owlRnpETjwI3ZZButk9U-11" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-8" value="Определение KPI и критериев оптимизации" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="293" y="450" width="208" height="49" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-8" value="Определение KPI и критериев оптимизации" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="293" y="583" width="208" height="49" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-11" target="owlRnpETjwI3ZZButk9U-13">
+        <mxCell id="owlRnpETjwI3ZZButk9U-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-11" target="owlRnpETjwI3ZZButk9U-13" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-11" value="Оптимизация для конкретного региона и эпидемии" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="293" y="525" width="208" height="49" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-11" value="Оптимизация для конкретного региона и эпидемии" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="293" y="658" width="208" height="49" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-13" target="owlRnpETjwI3ZZButk9U-15">
+        <mxCell id="owlRnpETjwI3ZZButk9U-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-13" target="owlRnpETjwI3ZZButk9U-15" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-13" value="Добавление возможности выбрать разные регионы и эпидемии" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="293" y="606" width="208" height="49" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-13" value="Добавление возможности выбрать разные регионы и эпидемии" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="293" y="739" width="208" height="49" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-15" value="Написание отчета" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="293" y="687" width="208" height="49" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-15" value="Написание отчета" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="293" y="820" width="208" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="ZfH4mZA31C3MoOOspyVI-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-2" target="ZfH4mZA31C3MoOOspyVI-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="397" y="273" as="sourcePoint" />
+            <mxPoint x="397" y="397" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZfH4mZA31C3MoOOspyVI-1" value="Связать SD и DES модель." style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="293" y="300" width="208" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="ZfH4mZA31C3MoOOspyVI-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ZfH4mZA31C3MoOOspyVI-1" target="ZfH4mZA31C3MoOOspyVI-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="397" y="338" as="sourcePoint" />
+            <mxPoint x="397" y="438" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZfH4mZA31C3MoOOspyVI-3" value="Моделировать без учета DES и с учетом DES" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="293" y="369" width="208" height="38" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
