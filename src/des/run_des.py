@@ -87,6 +87,9 @@ def run(hospitals_cfg: List[HospitalConfig], init_params: SEIRHCDParams, days: i
                 admitted += 1
             else:
                 rejected += 1
+        # seir_df.loc[seir_df.index[-1], "H"] = hosp_real
+        # seir_df.loc[seir_df.index[-1], "C"] = inc_real
+        # seir_df.loc[seir_df.index[-1], "D"] = deaths_real
 
         # 1) Смертность сокращает численность населения (вычитается из N)
         # if deaths_real > 0:

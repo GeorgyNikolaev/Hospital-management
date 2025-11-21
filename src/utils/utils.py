@@ -74,10 +74,7 @@ def make_params_consistent(
     alpha_c = (p_icu_among_hosp * gamma_h) / (1.0 - p_icu_among_hosp) if p_icu_among_hosp > 0 else 0.0
 
     # death among ICU
-    if p_icu == 0:
-        p_death_among_icu = 0.0
-    else:
-        p_death_among_icu = p_death / p_icu if p_icu > 0 else 0.0
+    p_death_among_icu = p_death / p_icu if p_icu > 0 else 0.0
     if p_death_among_icu >= 1.0:
         raise ValueError("p_death must be < p_icu (or check probabilities).")
     mu_c = (p_death_among_icu * gamma_c) / (1.0 - p_death_among_icu) if p_death_among_icu > 0 else 0.0

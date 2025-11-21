@@ -1,8 +1,11 @@
 [
   {"name":"Small_Public_1","beds":350,"icu_beds":20,"quality":1.0},
   {"name":"City_Public_1","beds":500,"icu_beds":30,"quality":1.0},
-  {"name":"City_Public_2","beds":500,"icu_beds":30,"quality":1.0},
-  {"name":"City_Public_3","beds":500,"icu_beds":30,"quality":1.0},
-  {"name":"City_Public_4","beds":500,"icu_beds":30,"quality":1.0},
+  {"name":"City_Public_2","beds":500,"icu_beds":40,"quality":1.0},
+  {"name":"City_Public_3","beds":500,"icu_beds":40,"quality":1.0},
+  {"name":"City_Public_4","beds":500,"icu_beds":40,"quality":1.0},
+  {"name":"City_Public_5","beds":500,"icu_beds":40,"quality":1.0},
+  {"name":"City_Public_5","beds":500,"icu_beds":40,"quality":1.0},
+  {"name":"City_Public_5","beds":500,"icu_beds":400,"quality":1.0},
   {"name":"Regional_1","beds":250,"icu_beds":10,"quality":0.95}
 ]
