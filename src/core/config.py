@@ -1,3 +1,4 @@
+import json
 from email.policy import default
 
 from pydantic import Field
@@ -32,4 +33,15 @@ class Settings(BaseSettings):
     INITIAL_EXPOSED: int = Field(default=200, alias="INITIAL_EXPOSED")
     INITIAL_INFECTIOUS: int = Field(default=150, alias="INITIAL_INFECTIOUS")
 
+
+with open("data/epidemics.json", encoding="utf-8") as f:
+    data = json.load(f)
+
 settings = Settings()
+for k, v in data[0]["data"].items():
+    try:
+        settings.__setattr__(str(k).upper(), v)
+    except Exception:
+        print(k)
+
+print(settings)
