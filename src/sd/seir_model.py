@@ -7,10 +7,7 @@ from src.core.models import SEIRHCDParams
 
 
 def simulate_seir_hcd(params: SEIRHCDParams, days: int, start_day: int = 1, dt: float = 1.0, beta_time_fn=None, data: pd.DataFrame = None) -> pd.DataFrame:
-    """
-    Simulate SEIR-H-C-D with RK4. All flows are rates * state.
-    Returns pandas DataFrame with compartments and instantaneous flows (per day).
-    """
+    """Симуляция SEIR-H-C-D модели"""
     n_steps = int(np.floor(days / dt)) + 1
     t = np.linspace(0.0, start_day + days - 1, n_steps + start_day - 1)
 
@@ -32,8 +29,7 @@ def simulate_seir_hcd(params: SEIRHCDParams, days: int, start_day: int = 1, dt: 
         C = data.C
         D = data.D
 
-    # flow recording arrays (instantaneous rates; units: individuals per day)
-    flow_new_exposed = np.zeros(n_steps+start_day-1)   # new exposures (infections)
+    flow_new_exposed = np.zeros(n_steps+start_day-1)
     flow_E_to_I = np.zeros(n_steps+start_day-1)
     flow_I_to_H = np.zeros(n_steps+start_day-1)
     flow_I_to_R = np.zeros(n_steps+start_day-1)
@@ -46,13 +42,12 @@ def simulate_seir_hcd(params: SEIRHCDParams, days: int, start_day: int = 1, dt: 
     def deriv(ti, S_, E_, I_, H_, C_, R_, D_):
         beta = params.beta if beta_time_fn is None else beta_time_fn(ti, params.beta)
 
-        # instantaneous flows (rates * counts)
         new_inf_flow = beta * S_ * I_ / params.population        # S -> E
         E_to_I_flow = params.sigma * E_                          # E -> I
         I_to_H_flow = params.alpha_h * I_                        # I -> H
-        I_to_R_flow = params.gamma * I_                          # I -> R (recovery from I)
+        I_to_R_flow = params.gamma * I_                          # I -> R
         H_to_C_flow = params.alpha_c * H_                        # H -> C
-        H_to_R_flow = params.gamma_h * H_                        # H -> R (discharge from hospital)
+        H_to_R_flow = params.gamma_h * H_                        # H -> R
         C_to_R_flow = params.gamma_c * C_                        # C -> R
         C_to_D_flow = params.mu_c * C_                           # C -> D
 
@@ -64,7 +59,6 @@ def simulate_seir_hcd(params: SEIRHCDParams, days: int, start_day: int = 1, dt: 
         dR = I_to_R_flow + H_to_R_flow + C_to_R_flow
         dD = C_to_D_flow
 
-        # return derivatives and the instantaneous flows for recording
         flows = {
             "new_inf_flow": new_inf_flow,
             "E_to_I_flow": E_to_I_flow,
@@ -78,7 +72,6 @@ def simulate_seir_hcd(params: SEIRHCDParams, days: int, start_day: int = 1, dt: 
 
         return (dS, dE, dI, dH, dC, dR, dD), flows
 
-    # RK4 integration loop
     for i in range(start_day, start_day + n_steps - 1):
         ti = t[i-1]
         state = (S[i-1], E[i-1], I[i-1], H[i-1], C[i-1], R[i-1], D[i-1])
@@ -99,8 +92,6 @@ def simulate_seir_hcd(params: SEIRHCDParams, days: int, start_day: int = 1, dt: 
 
         S[i], E[i], I[i], H[i], C[i], R[i], D[i] = updates
 
-        # record flows at this time step using flows evaluated at beginning (k1) scaled to individuals/day
-        # (alternatively could record average of flows1.flows4; we'll record flows evaluated at t_{i-1})
         flow_new_exposed[i] = flows1["new_inf_flow"]
         flow_E_to_I[i] = flows1["E_to_I_flow"]
         flow_I_to_H[i] = flows1["I_to_H_flow"]
@@ -110,7 +101,6 @@ def simulate_seir_hcd(params: SEIRHCDParams, days: int, start_day: int = 1, dt: 
         flow_C_to_R[i] = flows1["C_to_R_flow"]
         flow_C_to_D[i] = flows1["C_to_D_flow"]
 
-    # Convert instantaneous rates to counts per dt (here dt in days)
     new_infected = flow_new_exposed * dt
     new_E_to_I = flow_E_to_I * dt
     new_hospitalizations = flow_I_to_H * dt
@@ -121,57 +111,30 @@ def simulate_seir_hcd(params: SEIRHCDParams, days: int, start_day: int = 1, dt: 
     new_data = {
         "t": t,
         "S": S, "E": E, "I": I, "H": H, "C": C, "R": R, "D": D,
-        "new_infected": pd.concat([
-            data["new_infected"][:start_day],
-            pd.Series(new_infected[start_day:])
-        ]) if data is not None else new_infected,
-        "E_to_I": pd.concat([
-            data["E_to_I"][:start_day],
-            pd.Series(new_E_to_I[start_day:])
-        ]) if data is not None else new_E_to_I,
-        "new_hospitalizations": pd.concat([
-            data["new_hospitalizations"][:start_day],
-            pd.Series(new_hospitalizations[start_day:])
-        ]) if data is not None else new_hospitalizations,
-        "new_icu": pd.concat([
-            data["new_icu"][:start_day],
-            pd.Series(new_icu[start_day:])
-        ]) if data is not None else new_icu,
-        "new_deaths": pd.concat([
-            data["new_deaths"][:start_day],
-            pd.Series(new_deaths[start_day:])
-        ]) if data is not None else new_deaths,
-        "new_recoveries": pd.concat([
-            data["new_recoveries"][:start_day],
-            pd.Series(new_recoveries[start_day:])
-        ]) if data is not None else new_recoveries,
-        "rate_new_infected": pd.concat([
-            data["rate_new_infected"][:start_day],
-            pd.Series(flow_new_exposed[start_day:])
-        ]) if data is not None else flow_new_exposed,
-        "rate_I_to_H": pd.concat([
-            data["rate_I_to_H"][:start_day],
-            pd.Series(flow_I_to_H[start_day:])
-        ]) if data is not None else flow_I_to_H,
-        "rate_I_to_R": pd.concat([
-            data["rate_I_to_R"][:start_day],
-            pd.Series(flow_I_to_R[start_day:])
-        ]) if data is not None else flow_I_to_R,
-        "rate_H_to_C": pd.concat([
-            data["rate_I_to_R"][:start_day],
-            pd.Series(flow_H_to_C[start_day:])
-        ]) if data is not None else flow_H_to_C,
-        "flow_C_to_D": pd.concat([
-            data["flow_C_to_D"][:start_day],
-            pd.Series(flow_C_to_D[start_day:])
-        ]) if data is not None else flow_C_to_D,
+        "new_infected": concat(data["new_infected"] if not data is None else None, new_infected, start_day),
+        "E_to_I": concat(data["E_to_I"] if not data is None else None, new_E_to_I, start_day),
+        "new_hospitalizations": concat(data["new_hospitalizations"] if not data is None else None, new_hospitalizations, start_day),
+        "new_icu": concat(data["new_icu"] if not data is None else None, new_icu, start_day),
+        "new_deaths": concat(data["new_deaths"] if not data is None else None, new_deaths, start_day),
+        "new_recoveries": concat(data["new_recoveries"] if not data is None else None, new_recoveries, start_day),
+        "rate_new_infected": concat(data["rate_new_infected"] if not data is None else None, flow_new_exposed, start_day),
+        "rate_I_to_H": concat(data["rate_I_to_H"] if not data is None else None, flow_I_to_H, start_day),
+        "rate_I_to_R": concat(data["rate_I_to_R"] if not data is None else None, flow_I_to_R, start_day),
+        "rate_H_to_C": concat(data["rate_H_to_C"] if not data is None else None, flow_H_to_C, start_day),
+        "rate_C_to_D": concat(data["rate_C_to_D"] if not data is None else None, flow_C_to_D, start_day),
     }
 
     # Перед созданием DataFrame преобразовать все Series в numpy arrays
     for key in new_data:
         if hasattr(new_data[key], 'values'):
-            new_data[key] = new_data[key].values  # Из Series в numpy array
+            new_data[key] = new_data[key].values
 
     df = pd.DataFrame(new_data)
 
     return df
+
+def concat(data_1, data_2, index: int):
+    return pd.concat([
+            data_1[:index],
+            pd.Series(data_2[index:])
+        ]) if data_1 is not None else data_2

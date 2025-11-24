@@ -57,14 +57,28 @@ def plot_SD_results(results_df):
 def plot_SD_DES_results(log_df: pd.DataFrame):
     """Выводим графики для SD <-> DES модели"""
     plt.figure(figsize=(8, 5))
-    plt.plot(log_df["day"], log_df["admitted"], label="admitted")
-    plt.plot(log_df["day"], log_df["rejected"], label="rejected")
-    plt.plot(log_df["day"], log_df["hosp_real"], label="hosp_real")
-    plt.plot(log_df["day"], log_df["inc_real"], label="icu inc_real")
-    plt.plot(log_df["day"], log_df["deaths_real"], label="deaths_real")
+    # plt.plot(log_df["day"], log_df["admitted"], label="admitted")
+    plt.plot(log_df["day"], log_df["admitted_hosp"], label="admitted_hosp")
+    plt.plot(log_df["day"], log_df["admitted_icu"], label="admitted_icu")
+    plt.plot(log_df["day"], log_df["rejected_hosp"], label="rejected_hosp")
+    plt.plot(log_df["day"], log_df["rejected_icu"], label="rejected_icu")
+    plt.plot(log_df["day"], log_df["deaths_hosp"], label="deaths_hosp")
+    plt.plot(log_df["day"], log_df["deaths_icu"], label="deaths_icu")
     plt.legend()
 
-    out_png = os.path.join(RESULTS_DES_DIR, f"1.png")
+    out_png = os.path.join(RESULTS_DES_DIR, f"1_1.png")
+    plt.savefig(out_png)
+    plt.show()
+    plt.close()
+
+    plt.figure(figsize=(8, 5))
+    # plt.plot(log_df["day"], log_df["admitted"], label="admitted")
+    plt.plot(log_df["day"], log_df["admitted"], label="admitted")
+    plt.plot(log_df["day"], log_df["rejected"], label="rejected")
+    plt.plot(log_df["day"], log_df["deaths"], label="deaths")
+    plt.legend()
+
+    out_png = os.path.join(RESULTS_DES_DIR, f"1_2.png")
     plt.savefig(out_png)
     plt.show()
     plt.close()
@@ -91,7 +105,7 @@ def plot_SD_DES_results(log_df: pd.DataFrame):
     axes[0, 1].grid(True, alpha=0.3)
 
     # 3. График смертности
-    axes[0, 2].plot(log_df['day'], log_df['deaths_real'], label='Смерти реальный', linewidth=2)
+    axes[0, 2].plot(log_df['day'], log_df['deaths'], label='Смерти реальный', linewidth=2)
     axes[0, 2].plot(log_df['day'], log_df['deaths_expected'], label='Смерти ожидаемые', linewidth=2)
     axes[0, 2].set_title('Динамика смертности')
     axes[0, 2].set_xlabel('День')
@@ -102,7 +116,7 @@ def plot_SD_DES_results(log_df: pd.DataFrame):
     # 4. Накопительные показатели
     cumulative_admitted = log_df['admitted'].cumsum()
     cumulative_rejected = log_df['rejected'].cumsum()
-    cumulative_deaths = log_df['deaths_real'].cumsum()
+    cumulative_deaths = log_df['deaths'].cumsum()
 
     axes[1, 0].plot(log_df['day'], cumulative_admitted, label='Всего госпитализировано', linewidth=2)
     axes[1, 0].plot(log_df['day'], cumulative_rejected, label='Всего отказано', linewidth=2)
@@ -126,7 +140,7 @@ def plot_SD_DES_results(log_df: pd.DataFrame):
     population = log_df['population'].iloc[0]
     axes[1, 2].plot(log_df['day'], log_df['admitted'] / population * 100, label='Госпитализировано (% населения)',
                     alpha=0.7)
-    axes[1, 2].plot(log_df['day'], log_df['deaths_real'] / population * 100, label='Смерти (% населения)', alpha=0.7)
+    axes[1, 2].plot(log_df['day'], log_df['deaths'] / population * 100, label='Смерти (% населения)', alpha=0.7)
     axes[1, 2].set_title('Показатели относительно населения')
     axes[1, 2].set_xlabel('День')
     axes[1, 2].set_ylabel('Процент от населения')
@@ -147,8 +161,8 @@ def save_SD_DES_results(log_df: pd.DataFrame, des: DES):
     """Сохраняет результаты SD <-> DES модели"""
     patients = []
 
-    for hname in des.metrics:
-        patients.extend(des.metrics[hname]["patients"])
+    for h in des.hospitals:
+        patients.extend(h.patients)
 
     patients_df = pd.DataFrame(patients)
     ts = now_str()
@@ -162,7 +176,7 @@ def save_SD_DES_results(log_df: pd.DataFrame, des: DES):
     plt.plot(log_df["day"], log_df["infection"], label="infection")
     plt.plot(log_df["day"], log_df["admitted"], label="admitted")
     plt.plot(log_df["day"], log_df["rejected"], label="rejected")
-    plt.plot(log_df["day"], log_df["deaths_real"], label="deaths_real")
+    plt.plot(log_df["day"], log_df["deaths"], label="deaths_real")
     plt.xlabel("day"); plt.ylabel("counts"); plt.legend(); plt.grid(True); plt.title("Two-way SD<->DES dynamics")
     out_png = os.path.join(RESULTS_DES_DIR, f"overview.png")
     plt.tight_layout(); plt.savefig(out_png, dpi=150); plt.close()

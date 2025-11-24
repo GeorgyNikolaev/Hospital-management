@@ -3,13 +3,13 @@ from typing import List
 import pandas as pd
 
 from src.core.config import settings
-from src.core.models import SEIRHCDParams, HospitalConfig, Patient
+from src.core.models import SEIRHCDParams, Hospital, Patient
 from src.des.des_model import DES
 from src.sd.seir_model import simulate_seir_hcd
 from src.utils.utils import sample_arrivals
 
 
-def run(hospitals_cfg: List[HospitalConfig], init_params: SEIRHCDParams, days: int, rng):
+def run(hospitals_cfg: List[Hospital], init_params: SEIRHCDParams, days: int, rng):
     """Симуляция"""
     des = DES(hospitals_cfg, rng_seed=settings.RANDOM_SEED)
     params = init_params
@@ -21,17 +21,12 @@ def run(hospitals_cfg: List[HospitalConfig], init_params: SEIRHCDParams, days: i
     #     print(f"Calibrated: beta={params.beta:.4f}, hosp_rate={params.hosp_rate:.4f}")
 
     logs = {"day": [],
-                "infection": [],
-                "admitted": [],
-                "rejected": [],
-                "hosp_real": [],
-                "hosp_expected": [],
-                "inc_real": [],
-                "inc_expected": [],
-                "deaths_real": [],
-                "deaths_expected": [],
-                "population": []
-                }
+            "infection": [],
+            "hosp_expected": [],
+            "icu_expected": [],
+            "deaths_expected": [],
+            "population": []
+            }
 
     pid = 0
     beta_modifier = 1.0
@@ -41,7 +36,7 @@ def run(hospitals_cfg: List[HospitalConfig], init_params: SEIRHCDParams, days: i
 
     seir_df = None
     for day in range(days):
-        print(f"day: {day}")
+        # print(f"day: {day}")
         seir_params_today = SEIRHCDParams(
             population=params.population,
             beta=params.beta,
@@ -66,54 +61,68 @@ def run(hospitals_cfg: List[HospitalConfig], init_params: SEIRHCDParams, days: i
 
         # Создаем запись пациентов на день
         events = sample_arrivals(expected_hosp, expected_icu, rng)
-        admitted = 0
-        rejected = 0
-        hosp_real = 0
-        inc_real = 0
-        deaths_real = 0
         for ev in events:
             pid += 1
             los = rng.gamma(shape=2.0, scale=5.0) if ev["severity"] == "icu" else rng.gamma(shape=2.0, scale=3.0)
             p = Patient(id=pid, absolute_time=day + ev["time_frac"], severity=ev["severity"], los=max(1.0, los))
             p = des.attempt_admit(p, max_wait=0.5)
 
-            if p.severity == "ward":
-                hosp_real += 1
-            elif p.severity == "icu":
-                inc_real += 1
-            if p.died:
-                deaths_real += 1
-            if p.admitted:
-                admitted += 1
-            else:
-                rejected += 1
-        # seir_df.loc[seir_df.index[-1], "H"] = hosp_real
-        # seir_df.loc[seir_df.index[-1], "C"] = inc_real
-        # seir_df.loc[seir_df.index[-1], "D"] = deaths_real
+        metric_day = {}
+        for h in des.hospitals:
+            hospital_metrics = h.daily_metrics(day=day)
+            for key, value in hospital_metrics.items():
+                if key == "day":
+                    metric_day[key] = value
+                elif key in metric_day:
+                    metric_day[key] += value  # суммируем
+                else:
+                    metric_day[key] = value  # создаем новую запись
+
+        seir_df.loc[seir_df.index[-1], "H"] += metric_day["admitted_hosp"]
+        seir_df.loc[seir_df.index[-1], "C"] += metric_day["admitted_icu"]
+        seir_df.loc[seir_df.index[-1], "D"] += metric_day["deaths"]
 
         # 1) Смертность сокращает численность населения (вычитается из N)
-        # if deaths_real > 0:
-        #     params.population = max(0, params.population - deaths_real)
+        if metric_day["deaths"] > 0:
+            params.population = max(0, params.population - metric_day["deaths"])
 
         # 2) Высокий уровень отторжения => увеличить бета-модификатор (поведенческую реакцию)
-        # overload = rejected / max(1.0, max(1.0, expected_hosp + expected_icu))
-        # if overload < 0.1:
-        #     beta_modifier *= max(0.6, 1.0 - 0.25 * min(1.0, overload))
-        # else:
-        #     beta_modifier += (1.0 - beta_modifier) * 0.02
+        overload = metric_day["rejected"] / max(1.0, max(1.0, expected_hosp + expected_icu))
+        if overload < 0.1:
+            beta_modifier *= max(0.6, 1.0 - 0.25 * min(1.0, overload))
+        else:
+            beta_modifier += (1.0 - beta_modifier) * 0.02
 
         # Логирование
-        logs["day"].append(day)
         logs["infection"].append(seir_df["new_infected"].iloc[-1])
-        logs["admitted"].append(admitted)
-        logs["rejected"].append(rejected)
-        logs["hosp_real"].append(hosp_real)
         logs["hosp_expected"].append(expected_hosp)
-        logs["inc_real"].append(inc_real)
-        logs["inc_expected"].append(expected_icu)
-        logs["deaths_real"].append(deaths_real)
+        logs["icu_expected"].append(expected_icu)
         logs["deaths_expected"].append(seir_df["new_deaths"].iloc[-1])
         logs["population"].append(params.population)
 
+        for k, v in metric_day.items():
+            if k in logs:
+                logs[k].append(v)
+            else:
+                logs[k] = [v]
+
     logs = pd.DataFrame(logs)
     return logs, des
+
+def collect_hospital_metrics(des: DES, hid: int):
+    """
+    des: твоя DES-система
+    hid: индекс больницы в списке hospitals
+
+    Возвращает словарь метрик за текущий момент.
+    """
+    h = des.hospitals[hid]
+
+    return {
+        "beds_total": h.beds_total,
+        "beds_occupied": h.beds_occupied,
+        "icu_total": h.icu_total,
+        "icu_occupied": h.icu_occupied,
+        "admitted": h.last_admitted,
+        "rejected": h.last_rejected,
+    }

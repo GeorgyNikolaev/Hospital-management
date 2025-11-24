@@ -3,7 +3,7 @@ import numpy as np
 from typing import List
 
 from src.core.config import settings
-from src.core.models import SEIRHCDParams, HospitalConfig
+from src.core.models import SEIRHCDParams, Hospital
 from src.utils.plots import plot_SD_results, plot_SD_DES_results, save_SD_results, save_SD_DES_results
 from src.sd import run_sd
 from src.des import run_des
@@ -11,7 +11,7 @@ from src.des import run_des
 
 def run_two_way(
     init_params: SEIRHCDParams,
-    hospitals_cfg: List[HospitalConfig],
+    hospitals_cfg: List[Hospital],
     days: int,
 ):
     rng = np.random.RandomState(settings.RANDOM_SEED)

@@ -1,19 +1,4 @@
-"""
-seir_des_two_way.py
-
-Integrated SEIR <-> DES pipeline with two-way feedback.
-- Uses local CSV (no internet).
-- Region selectable via --region (e.g. "Europe", "Russia" ... values in 'location' column).
-- Calibration uses observed hospitalizations derived from 'weekly_hosp_admissions' or 'hosp_patients'.
-- Hospital network configurable via JSON (--hosp-config) or uses sensible defaults.
-- Outputs CSVs and PNGs to ./results/
-
-Usage example:
-    python seir_des_two_way.py --data data/owid-covid-data.csv --region Europe --days 180 --population 747000000 --calibrate
-
-Requirements:
-    numpy, pandas, scipy, scikit-learn, matplotlib
-"""
+""" """
 import os
 import json
 import numpy as np
@@ -22,7 +7,7 @@ import pandas as pd
 from typing import List, Optional
 
 from src.core.config import settings
-from src.core.models import HospitalConfig
+from src.core.models import Hospital
 from src.run import run_two_way
 from src.utils.utils import make_params_consistent
 
@@ -30,9 +15,6 @@ RESULTS_DIR = "results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 
-# ----------------------------
-# Data loader and preprocessing
-# ----------------------------
 def load_local_data(path: str, location: str) -> pd.DataFrame:
     if not os.path.exists(path):
         raise FileNotFoundError(f"Data file not found: {path}")
@@ -47,11 +29,7 @@ def load_local_data(path: str, location: str) -> pd.DataFrame:
 
 
 def derive_observed_new_hosp(df: pd.DataFrame) -> np.ndarray:
-    """
-    Derive per-day new hospitalizations from available columns:
-    priority: weekly_hosp_admissions / 7 -> hosp_patients diff (positive deltas)
-    returns numpy array of length = len(df)
-    """
+    """Убираем нуль из данных"""
     n = len(df)
     if "total_cases" in df.columns:
         if df["total_cases"].notnull().sum() > 0:
@@ -76,10 +54,8 @@ def derive_observed_new_hosp(df: pd.DataFrame) -> np.ndarray:
     # fallback: none available
     return np.zeros(n)
 
-# ----------------------------
-# CLI
-# ----------------------------
-def load_hospital_config(path: Optional[str]) -> List[HospitalConfig]:
+
+def load_hospital_config(path: Optional[str]) -> List[Hospital]:
     if path:
         if not os.path.exists(path):
             raise FileNotFoundError(f"Hospital config JSON not found: {path}")
@@ -87,11 +63,13 @@ def load_hospital_config(path: Optional[str]) -> List[HospitalConfig]:
             data = json.load(f)
         cfgs = []
         for item in data:
-            cfgs.append(HospitalConfig(
+            cfgs.append(Hospital(
+                id=item.get("id"),
                 name=item.get("name"),
                 beds=int(item.get("beds")),
                 icu_beds=int(item.get("icu_beds")),
-                quality=float(item.get("quality", 1.0))
+                quality=float(item.get("quality", 1.0)),
+                rng_seed=settings.RANDOM_SEED
             ))
         return cfgs
     return []

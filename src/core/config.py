@@ -41,7 +41,6 @@ settings = Settings()
 for k, v in data[0]["data"].items():
     try:
         settings.__setattr__(str(k).upper(), v)
-    except Exception:
-        print(k)
+    except Exception as e:
+        pass
 
-print(settings)

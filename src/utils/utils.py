@@ -7,7 +7,7 @@ from src.core.models import SEIRHCDParams
 
 def sample_arrivals(expected_hosp: float, expected_icu: float, rng: np.random.RandomState):
     """Функция распределяет пациентов в течение дня используя нормально распределение"""
-    ward_lambda = max(0.0, expected_hosp - expected_icu)
+    ward_lambda = max(0.0, expected_hosp)
     icu_lambda = max(0.0, expected_icu)
     n_ward = rng.poisson(lam=ward_lambda)
     n_icu = rng.poisson(lam=icu_lambda)
