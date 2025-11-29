@@ -1,4 +1,6 @@
 import os
+
+import numpy as np
 import pandas as pd
 
 from matplotlib import pyplot as plt
@@ -153,6 +155,123 @@ def plot_SD_DES_results(log_df: pd.DataFrame):
     plt.show()
     plt.savefig(out_png)
     plt.close()
+
+def plot_RL_results(metrics_dict):
+    """
+        Построение графиков из словаря метрик
+        """
+    days = metrics_dict['day']
+
+    # Создаем сетку графиков
+    fig, axes = plt.subplots(3, 2, figsize=(15, 12))
+    fig.suptitle('Анализ работы системы здравоохранения', fontsize=16, fontweight='bold')
+
+    # 1. График инфекций и ожидаемых показателей
+    ax1 = axes[0, 0]
+    ax1.plot(days, metrics_dict['infection'], 'r-', label='Инфекции', linewidth=2)
+    ax1.plot(days, metrics_dict['hosp_expected'], 'g--', label='Ожидаемые госпитализации', alpha=0.7)
+    ax1.plot(days, metrics_dict['icu_expected'], 'b--', label='Ожидаемые ICU', alpha=0.7)
+    ax1.plot(days, metrics_dict['deaths_expected'], 'k--', label='Ожидаемые смерти', alpha=0.7)
+    ax1.set_title('Эпидемиологическая ситуация')
+    ax1.set_xlabel('Дни')
+    ax1.set_ylabel('Количество')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+
+    # 2. График госпитализаций и отказов
+    ax2 = axes[0, 1]
+    ax2.plot(days, metrics_dict['admitted'], 'g-', label='Принято всего', linewidth=2)
+    ax2.plot(days, metrics_dict['admitted_hosp'], 'b-', label='Принято в стационар', alpha=0.8)
+    ax2.plot(days, metrics_dict['admitted_icu'], 'r-', label='Принято в ICU', alpha=0.8)
+    ax2.plot(days, metrics_dict['rejected'], 'k-', label='Отказов всего', linewidth=2)
+    ax2.plot(days, metrics_dict['rejected_hosp'], 'k--', label='Отказов стационар', alpha=0.7)
+    ax2.plot(days, metrics_dict['rejected_icu'], 'k:', label='Отказов ICU', alpha=0.7)
+    ax2.set_title('Госпитализации и отказы')
+    ax2.set_xlabel('Дни')
+    ax2.set_ylabel('Количество')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+
+    # 3. График смертности
+    ax3 = axes[1, 0]
+    ax3.plot(days, metrics_dict['deaths'], 'k-', label='Смерти всего', linewidth=2)
+    ax3.plot(days, metrics_dict['deaths_hosp'], 'r-', label='Смерти в стационаре', alpha=0.8)
+    ax3.plot(days, metrics_dict['deaths_icu'], 'b-', label='Смерти в ICU', alpha=0.8)
+    ax3.plot(days, metrics_dict['deaths_expected'], 'g--', label='Ожидаемые смерти', alpha=0.6)
+    ax3.set_title('Смертность')
+    ax3.set_xlabel('Дни')
+    ax3.set_ylabel('Количество')
+    ax3.legend()
+    ax3.grid(True, alpha=0.3)
+
+    # 4. График использования коек
+    ax4 = axes[1, 1]
+    # Расчет доступных коек (общие - законсервированные)
+    available_beds = np.array(metrics_dict['beds']) - np.array(metrics_dict['reserve_beds'])
+    available_icu = np.array(metrics_dict['icu']) - np.array(metrics_dict['reserve_icu'])
+
+    ax4.plot(days, available_beds, 'b-', label='Доступные койки', linewidth=2)
+    ax4.plot(days, metrics_dict['occupied_beds'], 'r-', label='Занятые койки', linewidth=2)
+    ax4.plot(days, available_icu, 'c-', label='Доступные ICU', linewidth=2)
+    ax4.plot(days, metrics_dict['occupied_icu'], 'm-', label='Занятые ICU', linewidth=2)
+    ax4.fill_between(days, metrics_dict['occupied_beds'], available_beds, alpha=0.3, color='blue',
+                     label='Свободные койки')
+    ax4.fill_between(days, metrics_dict['occupied_icu'], available_icu, alpha=0.3, color='cyan', label='Свободные ICU')
+    ax4.set_title('Использование коечного фонда')
+    ax4.set_xlabel('Дни')
+    ax4.set_ylabel('Количество коек')
+    ax4.legend()
+    ax4.grid(True, alpha=0.3)
+
+    # 5. График финансовых показателей
+    ax5 = axes[2, 0]
+    ax5.plot(days, metrics_dict['budget'], 'g-', label='Бюджет', linewidth=2)
+    ax5.plot(days, metrics_dict['expenses'], 'r-', label='Расходы', linewidth=2)
+    ax5.fill_between(days, metrics_dict['expenses'], metrics_dict['budget'],
+                     where=np.array(metrics_dict['budget']) >= np.array(metrics_dict['expenses']),
+                     alpha=0.3, color='green', label='Профицит')
+    ax5.fill_between(days, metrics_dict['expenses'], metrics_dict['budget'],
+                     where=np.array(metrics_dict['budget']) < np.array(metrics_dict['expenses']),
+                     alpha=0.3, color='red', label='Дефицит')
+    ax5.set_title('Финансовые показатели')
+    ax5.set_xlabel('Дни')
+    ax5.set_ylabel('Денежные единицы')
+    ax5.legend()
+    ax5.grid(True, alpha=0.3)
+
+    # 6. График эффективности системы
+    ax6 = axes[2, 1]
+    # Расчет ключевых показателей эффективности
+    rejection_rate = []
+    mortality_rate = []
+    bed_utilization = []
+
+    for i in range(len(days)):
+        total_patients = metrics_dict['admitted'][i] + metrics_dict['rejected'][i]
+        rejection_rate.append(metrics_dict['rejected'][i] / total_patients if total_patients > 0 else 0)
+        mortality_rate.append(
+            metrics_dict['deaths'][i] / metrics_dict['admitted'][i] if metrics_dict['admitted'][i] > 0 else 0)
+        bed_utilization.append(
+            metrics_dict['occupied_beds'][i] / metrics_dict['beds'][i] if metrics_dict['beds'][i] > 0 else 0)
+
+    ax6.plot(days, rejection_rate, 'r-', label='Уровень отказов', linewidth=2)
+    ax6.plot(days, mortality_rate, 'k-', label='Уровень смертности', linewidth=2)
+    ax6.plot(days, bed_utilization, 'b-', label='Загрузка коек', linewidth=2)
+    ax6.axhline(y=0.1, color='r', linestyle='--', alpha=0.5, label='Целевой уровень отказов (10%)')
+    ax6.axhline(y=0.8, color='b', linestyle='--', alpha=0.5, label='Оптимальная загрузка (80%)')
+    ax6.set_title('Ключевые показатели эффективности')
+    ax6.set_xlabel('Дни')
+    ax6.set_ylabel('Доля')
+    ax6.set_ylim(0, 1)
+    ax6.legend()
+    ax6.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+
+    # if save_path:
+    #     plt.savefig(save_path, dpi=300, bbox_inches='tight')
+
+    plt.show()
 
 def save_SD_results(results_df):
     """Сохраняет результаты SD модели"""

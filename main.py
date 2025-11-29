@@ -66,7 +66,7 @@ def load_hospital_config(path: Optional[str]) -> List[Hospital]:
             cfgs.append(Hospital(
                 id=item.get("id"),
                 name=item.get("name"),
-                bed=int(item.get("bed")),
+                beds=int(item.get("beds")),
                 reserve_beds=int(item.get("reserve_beds")),
                 icu=int(item.get("icu_beds")),
                 reserve_icu=int(item.get("reserve_icu")),

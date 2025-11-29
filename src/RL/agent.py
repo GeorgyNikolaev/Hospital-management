@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -22,7 +23,7 @@ class QNetwork(nn.Module):
 
 class HospitalAgent:
     """DQN агент"""
-    def __init__(self, obs_size=6, n_actions=10, lr=1e-3, gamma=0.99):
+    def __init__(self, obs_size=18, n_actions=10, lr=1e-3, gamma=0.99):
         self.obs_size = obs_size
         self.n_actions = n_actions
         self.gamma = gamma
@@ -74,11 +75,11 @@ class HospitalAgent:
         batch = random.sample(self.memory, self.batch_size)
         obs, act, rew, next_obs, action_mask, next_action_mask = zip(*batch)
 
-        obs = torch.tensor(obs, dtype=torch.float32)               # (B, obs_size)
+        obs = torch.tensor(np.array(obs), dtype=torch.float32)              # (B, obs_size)
         act = torch.tensor(act, dtype=torch.long)                  # (B,)
         rew = torch.tensor(rew, dtype=torch.float32)              # (B,)
-        next_obs = torch.tensor(next_obs, dtype=torch.float32)    # (B, obs_size)
-        action_mask = torch.tensor(action_mask, dtype=torch.bool) # (B, n_actions)
+        next_obs = torch.tensor(np.array(next_obs), dtype=torch.float32)    # (B, obs_size)
+        # action_mask = torch.tensor(action_mask, dtype=torch.bool) # (B, n_actions)
         next_action_mask = torch.tensor(next_action_mask, dtype=torch.bool) # (B, n_actions)
 
         q_vals = self.q(obs).gather(1, act.unsqueeze(1)).squeeze(1)  # (B,)

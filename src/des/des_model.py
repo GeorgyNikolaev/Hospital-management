@@ -20,7 +20,7 @@ class DES:
 
         for h in self.hospitals:
             occ = h.current_occ(now)
-            cap_left = max(0, h.beds - occ["beds_in_use"]) + max(0, h.icu_beds - occ["icu_in_use"])
+            cap_left = max(0, h.beds - occ["beds_in_use"]) + max(0, h.icu - occ["icu_in_use"])
             scores.append([h, max(1e-6, cap_left) * h.quality])
 
         return [x[0] for x in sorted(scores, key=lambda x: x[1], reverse=True)]

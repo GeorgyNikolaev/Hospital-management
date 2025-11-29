@@ -1,10 +1,10 @@
 """Обучение"""
+import json
 from typing import List
 
 from src.core.config import settings
 from src.core.models import Hospital, SEIRHCDParams, Patient
 from src.des.des_model import DES
-from src.des.run_des import collect_hospital_metrics
 from src.sd.seir_model import simulate_seir_hcd
 from src.utils.utils import sample_arrivals
 
@@ -38,18 +38,20 @@ def run_with_rl(
 
     # === INITIAL STATE COLLECTION ===
     initial_metrics = []
-    for hid in range(len(des.hospitals)):
-        metrics = collect_hospital_metrics(des, hid)
+    for h in des.hospitals:
+        metrics = h.daily_metrics()
         initial_metrics.append(metrics)
 
     # init environments
     obs_list = [envs[i].reset(initial_metrics[i]) for i in range(len(envs))]
 
     for day in range(days):
+        print(f"day: {day}")
         actions = []
         action_masks = []
 
         for hid, agent in enumerate(agents):
+            des.hospitals[hid].save_daily_metrics(day=day)
             # вычисляем маску действий для больницы (текущий бюджет и резервы учтены внутри Hospital)
             mask = des.hospitals[hid].get_action_mask()
             action_masks.append(mask)
@@ -99,14 +101,11 @@ def run_with_rl(
                     metric_day[key] += value  # суммируем
                 else:
                     metric_day[key] = value  # создаем новую запись
-            maintenance = h.bed * h.costs.get("bed_day", 0) + h.icu * h.costs.get("icu_day", 0)
-            metric_day["maintenance_cost"] = metric_day.get("maintenance_cost", 0) + maintenance
-            # expenses/budget_spent если Hospital хранит их:
-            metric_day["budget_spent"] = metric_day.get("budget_spent", 0) + hospital_metrics.get("expenses", 0)
+        # print(json.dumps(metric_day, indent=2, ensure_ascii=False))
 
         # 1) Смертность сокращает численность населения (вычитается из N)
         if metric_day["deaths"] > 0:
-            params.population = max(0, params.population - metric_day["deaths"])
+            params.population = max(1000, params.population - metric_day["deaths"])
 
         # 2) Высокий уровень отторжения => увеличить бета-модификатор (поведенческую реакцию)
         overload = metric_day["rejected"] / max(1.0, max(1.0, expected_hosp + expected_icu))
@@ -115,25 +114,25 @@ def run_with_rl(
         else:
             beta_modifier += (1.0 - beta_modifier) * 0.02
 
-            # Логирование
-            logs["infection"].append(seir_df["new_infected"].iloc[-1])
-            logs["hosp_expected"].append(expected_hosp)
-            logs["icu_expected"].append(expected_icu)
-            logs["deaths_expected"].append(seir_df["new_deaths"].iloc[-1])
-            logs["population"].append(params.population)
+        # Логирование
+        logs["infection"].append(seir_df["new_infected"].iloc[-1])
+        logs["hosp_expected"].append(expected_hosp)
+        logs["icu_expected"].append(expected_icu)
+        logs["deaths_expected"].append(seir_df["new_deaths"].iloc[-1])
+        logs["population"].append(params.population)
 
-            for k, v in metric_day.items():
-                if k in logs:
-                    logs[k].append(v)
-                else:
-                    logs[k] = [v]
+        for k, v in metric_day.items():
+            if k in logs:
+                logs[k].append(v)
+            else:
+                logs[k] = [v]
 
 
         new_obs_list = []
         rewards = []
 
-        for hid in range(len(des.hospitals)):
-            metrics = collect_hospital_metrics(des, hid, day)
+        for hid, h in enumerate(des.hospitals):
+            metrics = h.daily_metrics(day=day)
             next_obs, reward = envs[hid].step(metrics, actions[hid])
 
             # вычисляем маску действий для next state (важно: budget/резервы уже обновлены после apply_action)

@@ -15,19 +15,12 @@ class HospitalEnv:
         self.last_obs = None
         self.day = 0
 
-    def build_obs(self, metrics):
+    def build_obs(self, metrics: dict):
         """
         Привязка к твоим метрикам: используем поля, которые реально заполняет Hospital.
         Возвращает нормализованный вектор [beds, occupied_beds, icu, occupied_icu, admitted, rejected]
         """
-        x = np.array([
-            metrics.get("beds", 0),  # total beds
-            metrics.get("occupied_beds", 0),  # occupied beds
-            metrics.get("icu", 0),  # total icu
-            metrics.get("occupied_icu", 0),  # occupied icu
-            metrics.get("admitted", 0),
-            metrics.get("rejected", 0),
-        ], dtype=np.float32)
+        x = np.array(list(metrics.values()), dtype=np.float32)
 
         # простая нормализация по максимуму в векторе (защита от деления на 0)
         denom = max(1.0, float(np.max(x)))
@@ -59,100 +52,89 @@ class HospitalEnv:
 
     def compute_reward(self, metrics, action):
         """
-        Возвращает scalar reward (float).
-        Используемые ключи metrics (обязательные):
-          - "beds_total", "beds_occupied", "icu_total", "icu_occupied", "admitted", "rejected"
-        Дополнительные (опционально, если есть в вашей симуляции):
-          - "maintenance_cost"            : суммарные ежедневные расходы на поддержание (float)
-          - "bed_maint_cost", "icu_maint_cost" : поддержание на одну единицу (float)
-          - "budget_spent"                : потрачено средств на покупки в этот день (float)
-          - "budget"                      : оставшийся бюджет (float)  (необязательно)
-        Параметры-коэффициенты вынесены в локальные переменные — легко настраивать.
+        Расчет награды для агента управления больницей
+        Стратегия: баланс между качеством медицинской помощи и финансовой эффективностью
         """
+        reward = 0
 
-        # --- извлекаем базовые метрики (ожидаются всегда) ---
-        beds_total = float(metrics.get("beds_total", 0.0))
-        beds_occupied = float(metrics.get("beds_occupied", 0.0))
-        icu_total = float(metrics.get("icu_total", 0.0))
-        icu_occupied = float(metrics.get("icu_occupied", 0.0))
-        admitted = float(metrics.get("admitted", 0.0))
-        rejected = float(metrics.get("rejected", 0.0))
+        # Базовые веса для разных компонент награды
+        WEIGHT_ADMITTED = 2.0
+        WEIGHT_REJECTED = -5.0
+        WEIGHT_DEATHS = -10.0
+        WEIGHT_RESOURCE_UTILIZATION = 1.0
+        WEIGHT_BUDGET = 0.5
+        WEIGHT_ACTION_COST = -0.1
 
-        # --- дополнительные метрики (опционально) ---
-        maintenance_cost = metrics.get("maintenance_cost", None)
-        bed_maint_cost = float(metrics.get("bed_maint_cost", 1.0))
-        icu_maint_cost = float(metrics.get("icu_maint_cost", 5.0))
-        budget_spent = float(metrics.get("budget_spent", 0.0))
-        # budget = metrics.get("budget", None)  # для информации, если нужно
+        # 1. Награда за принятых пациентов (положительная)
+        reward += metrics["admitted"] * WEIGHT_ADMITTED
 
-        # --- коэффициенты (настраиваемые) ---
-        REJECT_PENALTY = 50.0  # тяжёлый штраф за один отказ
-        ADMIT_REWARD = 1.0  # положительная мотивация за госпитализацию
-        ICU_IMPORTANCE = 2.0  # ICU важнее, поэтому интенсивнее штрафуем нагрузку
-        UTIL_THRESHOLD = 0.8  # порог комфортной загрузки
-        UTIL_PENALTY_SCALE = 20.0  # масштаб штрафа за превышение порога (квадратично)
-        MAINT_PENALTY_SCALE = 0.1  # масштаб штрафа за maintenance_cost / расчетной стоимости
-        PURCHASE_PENALTY_SCALE = 0.5  # масштаб штрафа за деньги, потраченные на покупку в этот день
-        RESERVE_BONUS = 2.0  # бонус за консервацию (reserve) — стимулирует экономию
-        BUY_PENALTY = 1.0  # небольшой штраф за покупку (чтобы не покупать лишнее)
-        MAX_ABS_REWARD = 1e6  # защита от аномалий
+        # 2. Штраф за отказов в госпитализации (сильно отрицательная)
+        reward += metrics["rejected"] * WEIGHT_REJECTED
 
-        # --- базовый reward ---
-        reward = 0.0
+        # 3. Штраф за смерти (очень сильно отрицательная)
+        reward += metrics["deaths"] * WEIGHT_DEATHS
+        # Дополнительный штраф за смерти в ICU
+        reward += metrics["deaths_icu"] * WEIGHT_DEATHS * 1.5
 
-        # 1) поощрение за госпитализацию и сильный штраф за отказ
-        reward += ADMIT_REWARD * admitted
-        reward -= REJECT_PENALTY * rejected
+        # 4. Награда за эффективное использование ресурсов
+        if metrics["beds"] > 0:
+            bed_utilization = metrics["occupied_beds"] / metrics["beds"]
+            # Идеальная загрузка 70-90% - максимальная награда
+            if 0.7 <= bed_utilization <= 0.9:
+                reward += WEIGHT_RESOURCE_UTILIZATION * 2
+            elif bed_utilization > 0.9:
+                # Перегрузка - штраф
+                reward += WEIGHT_RESOURCE_UTILIZATION * (1 - bed_utilization)
+            else:
+                # Недогрузка - небольшой штраф
+                reward += WEIGHT_RESOURCE_UTILIZATION * (bed_utilization - 0.5)
 
-        # 2) загрузка (нормализуем; если нет коек, считаем загрузку = 1.0)
-        bed_util = beds_occupied / max(1.0, beds_total)
-        icu_util = icu_occupied / max(1.0, icu_total)
+        if metrics["icu"] > 0:
+            icu_utilization = metrics["occupied_icu"] / metrics["icu"]
+            if 0.6 <= icu_utilization <= 0.85:
+                reward += WEIGHT_RESOURCE_UTILIZATION * 3  # ICU важнее обычных коек
+            elif icu_utilization > 0.85:
+                reward += WEIGHT_RESOURCE_UTILIZATION * (1 - icu_utilization) * 2
+            else:
+                reward += WEIGHT_RESOURCE_UTILIZATION * (icu_utilization - 0.4)
 
-        # штраф за превышение порога — квадратичная зависимость для сильной реакции на большие перегрузки
-        bed_excess = max(0.0, bed_util - UTIL_THRESHOLD)
-        icu_excess = max(0.0, icu_util - UTIL_THRESHOLD)
+        # 5. Учет бюджета (положительная за экономию, отрицательная за перерасход)
+        budget_balance = metrics.get("budget", 0) - metrics.get("expenses", 0)
+        reward += budget_balance * WEIGHT_BUDGET
 
-        reward -= UTIL_PENALTY_SCALE * (bed_excess ** 2)
-        reward -= UTIL_PENALTY_SCALE * ICU_IMPORTANCE * (icu_excess ** 2)
+        # 6. Штраф за дорогостоящие действия (стимулируем разумное использование)
+        action_costs = {
+            0: 0,  # Ничего не делать - бесплатно
+            1: 10,  # Купить 1 койку
+            2: 45,  # Купить 5 коек (скидка за опт)
+            3: 50,  # Купить 1 ИВЛ
+            4: 225,  # Купить 5 ИВЛ (скидка за опт)
+            5: 2,  # Законсервировать 1 койку
+            6: 8,  # Законсервировать 5 коек
+            7: 5,  # Законсервировать 1 ИВЛ
+            8: 20,  # Законсервировать 5 ИВЛ
+            9: 1,  # Срочный бюджет (административные расходы)
+        }
 
-        # 3) штраф за поддержание (maintenance): используем явное значение, если есть,
-        #    иначе аппроксимируем как per-unit * количество
-        if maintenance_cost is not None:
-            reward -= MAINT_PENALTY_SCALE * maintenance_cost
-        else:
-            approx_maintenance = bed_maint_cost * beds_total + icu_maint_cost * icu_total
-            reward -= MAINT_PENALTY_SCALE * approx_maintenance
+        reward += action_costs.get(action, 0) * WEIGHT_ACTION_COST
 
-        # 4) штраф за покупки, если присутствует (чтобы агент думал о бюджете)
-        if budget_spent is not None and budget_spent > 0.0:
-            reward -= PURCHASE_PENALTY_SCALE * budget_spent
+        # 7. Бонус за предотвращение кризисных ситуаций
+        crisis_penalty = 0
+        if metrics["rejected"] > metrics["admitted"] * 0.1:  # Более 10% отказов
+            crisis_penalty -= 20
+        if metrics["occupied_icu"] >= metrics["icu"]:  # Переполнение ICU
+            crisis_penalty -= 30
 
-        # 5) бонусы / штрафы, зависящие от действия:
-        #    actions: 1-4 = покупка, 5-8 = консервация (reserve), 0 = ничего, 9 = экстренный бюджет
-        if action in (5, 6, 7, 8):
-            # консервация уменьшает будущие maintenance_cost — небольшой стимулирующий бонус
-            reward += RESERVE_BONUS
-        elif action in (1, 2, 3, 4):
-            # покупка увеличивает ресурсы, но тратит бюджет — небольшой отрицательный сигнал,
-            # чтобы не покупать опрометчиво (реальная дисциплина достигается через budget_spent)
-            reward -= BUY_PENALTY
-        elif action == 9:
-            # экстренное выделение бюджета — нейтрально/немного отрицательно
-            reward -= BUY_PENALTY * 2.0
+        reward += crisis_penalty
 
-        # 6) дополнительная адаптивная штрафная составляющая:
-        #    если нет коек вообще (beds_total==0) и есть пациенты — очень большой штраф через rejected уже есть,
-        #    но добавим мягкий штраф за нулевой резерв мощности
-        if beds_total <= 0 and (admitted + rejected) > 0:
-            reward -= 20.0
-        if icu_total <= 0 and icu_occupied > 0:
-            reward -= 40.0
+        # 8. Штраф за избыточные ресурсы (стимулируем эффективное планирование)
+        excess_resources_penalty = 0
+        if metrics["beds"] > 0 and metrics["occupied_beds"] / metrics["beds"] < 0.3:
+            excess_resources_penalty -= 5
+        if metrics["icu"] > 0 and metrics["occupied_icu"] / metrics["icu"] < 0.2:
+            excess_resources_penalty -= 8
 
-        # 7) финальная защита и нормировка: предотвращаем NaN/inf и экстремы
-        if not np.isfinite(reward):
-            reward = -1e3
-        # при желании можно масштабировать/нормировать reward по дню или по населению — пока возвращаем raw float
-        reward = float(max(-MAX_ABS_REWARD, min(MAX_ABS_REWARD, reward)))
+        reward += excess_resources_penalty
 
-        return reward
+        return float(reward)
 

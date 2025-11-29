@@ -10,9 +10,9 @@
     "budget": 15000000,
     "costs": {
       "bed_purchase": 250000,
-      "bed_rent_per_day": 5000,
+      "bed_day": 5000,
       "icu_purchase": 2500000,
-      "icu_rent_per_day": 15000
+      "icu_day": 15000
     }
   },
   {
@@ -26,9 +26,9 @@
     "budget": 45000000,
     "costs": {
       "bed_purchase": 220000,
-      "bed_rent_per_day": 4500,
+      "bed_day": 4500,
       "icu_purchase": 2300000,
-      "icu_rent_per_day": 13000
+      "icu_day": 13000
     }
   },
   {
@@ -42,9 +42,9 @@
     "budget": 90000000,
     "costs": {
       "bed_purchase": 200000,
-      "bed_rent_per_day": 4000,
+      "bed_day": 4000,
       "icu_purchase": 2000000,
-      "icu_rent_per_day": 12000
+      "icu_day": 12000
     }
   }
 ]
