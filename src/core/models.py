@@ -80,8 +80,10 @@ class Hospital:
                            "deaths_icu": 0,
                            "beds": 0,
                            "reserve_beds": 0,
+                           "occupied_beds": 0,
                            "icu": 0,
                            "reserve_icu": 0,
+                           "occupied_icu": 0,
                            "budget": 0,
                            "expenses": 0}
     patients: list = field(default_factory=list, init=False, repr=False)
@@ -189,7 +191,7 @@ class Hospital:
     def get_action_mask(self):
         mask = [0] * 10
         if self.costs["bed_purchase"] < self.budget or self.reserve_beds >= 1: mask[1] = 1
-        if self.costs["bed_purchase" * 5] < self.budget or self.reserve_beds >= 5: mask[2] = 1
+        if self.costs["bed_purchase"] * 5 < self.budget or self.reserve_beds >= 5: mask[2] = 1
         if self.costs["icu_purchase"] < self.budget or self.reserve_icu >= 1: mask[3] = 1
         if self.costs["icu_purchase"] * 5 < self.budget or self.reserve_icu >= 5: mask[4] = 1
         if self.reserve_beds >= 1: mask[5] = 1

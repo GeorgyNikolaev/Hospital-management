@@ -47,8 +47,14 @@ def run_with_rl(
 
     for day in range(days):
         actions = []
+        action_masks = []
+
         for hid, agent in enumerate(agents):
-            action = agent.select_action(obs_list[hid])
+            # вычисляем маску действий для больницы (текущий бюджет и резервы учтены внутри Hospital)
+            mask = des.hospitals[hid].get_action_mask()
+            action_masks.append(mask)
+
+            action = agent.select_action(obs_list[hid], mask)  # передаём маску
             actions.append(action)
 
             # применяем действие к больнице
@@ -93,6 +99,10 @@ def run_with_rl(
                     metric_day[key] += value  # суммируем
                 else:
                     metric_day[key] = value  # создаем новую запись
+            maintenance = h.bed * h.costs.get("bed_day", 0) + h.icu * h.costs.get("icu_day", 0)
+            metric_day["maintenance_cost"] = metric_day.get("maintenance_cost", 0) + maintenance
+            # expenses/budget_spent если Hospital хранит их:
+            metric_day["budget_spent"] = metric_day.get("budget_spent", 0) + hospital_metrics.get("expenses", 0)
 
         # 1) Смертность сокращает численность населения (вычитается из N)
         if metric_day["deaths"] > 0:
@@ -124,15 +134,16 @@ def run_with_rl(
 
         for hid in range(len(des.hospitals)):
             metrics = collect_hospital_metrics(des, hid, day)
-
-            # шаг среды
             next_obs, reward = envs[hid].step(metrics, actions[hid])
+
+            # вычисляем маску действий для next state (важно: budget/резервы уже обновлены после apply_action)
+            next_mask = des.hospitals[hid].get_action_mask()
 
             new_obs_list.append(next_obs)
             rewards.append(reward)
 
-            # сохраняем опыт
-            agents[hid].store(obs_list[hid], actions[hid], reward, next_obs)
+            # сохраняем опыт с маской состояния и маской next
+            agents[hid].store(obs_list[hid], actions[hid], reward, next_obs, action_masks[hid], next_mask)
 
         for agent in agents:
             agent.train_step()
