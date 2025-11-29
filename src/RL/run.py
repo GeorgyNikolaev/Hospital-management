@@ -41,17 +41,11 @@ def run_with_rl(
     for hid in range(len(des.hospitals)):
         metrics = collect_hospital_metrics(des, hid)
         initial_metrics.append(metrics)
+
     # init environments
     obs_list = [envs[i].reset(initial_metrics[i]) for i in range(len(envs))]
 
-    # ================================================================
-    #                   ГЛАВНЫЙ ЦИКЛ СИМУЛЯЦИИ
-    # ================================================================
     for day in range(days):
-
-        # ================================================================
-        # 1) АГЕНТЫ ПРИНИМАЮТ РЕШЕНИЕ (до симуляции дня)
-        # ================================================================
         actions = []
         for hid, agent in enumerate(agents):
             action = agent.select_action(obs_list[hid])
@@ -60,16 +54,6 @@ def run_with_rl(
             # применяем действие к больнице
             des.hospitals[hid].apply_action(action)
 
-        # ================================================================
-        # 2) ОБНУЛЯЕМ СЧЁТЧИКИ ADMITTED/REJECTED (перед входом новых пациентов)
-        # ================================================================
-        for h in des.hospitals:
-            h.last_admitted = 0
-            h.last_rejected = 0
-
-        # ================================================================
-        # 3) СИМУЛЯЦИЯ 1 ДНЯ (твой исходный код)
-        # ================================================================
         seir_params_today = SEIRHCDParams(
             population=params.population,
             beta=params.beta,
@@ -134,14 +118,12 @@ def run_with_rl(
                 else:
                     logs[k] = [v]
 
-        # ================================================================
-        # 4) СОБИРАЕМ НОВЫЕ МЕТРИКИ ПО БОЛЬНИЦАМ (ПОСЛЕ ДНЯ)
-        # ================================================================
+
         new_obs_list = []
         rewards = []
 
         for hid in range(len(des.hospitals)):
-            metrics = collect_hospital_metrics(des, hid)
+            metrics = collect_hospital_metrics(des, hid, day)
 
             # шаг среды
             next_obs, reward = envs[hid].step(metrics, actions[hid])
@@ -152,9 +134,6 @@ def run_with_rl(
             # сохраняем опыт
             agents[hid].store(obs_list[hid], actions[hid], reward, next_obs)
 
-        # ================================================================
-        # 5) ОБУЧЕНИЕ АГЕНТОВ
-        # ================================================================
         for agent in agents:
             agent.train_step()
 

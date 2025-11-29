@@ -5,6 +5,8 @@
     "quality": 0.9,
     "beds": 50,
     "icu_beds": 15,
+    "reserve_beds": 5,
+    "reserve_icu": 2,
     "budget": 15000000,
     "costs": {
       "bed_purchase": 250000,
@@ -19,6 +21,8 @@
     "quality": 1.0,
     "beds": 200,
     "icu_beds": 40,
+    "reserve_beds": 20,
+    "reserve_icu": 4,
     "budget": 45000000,
     "costs": {
       "bed_purchase": 220000,
@@ -32,7 +36,9 @@
     "name": "Крупная клиническая больница / Федеральный центр",
     "quality": 1.2,
     "beds": 500,
-    "icu_beds": 600,
+    "icu_beds": 60,
+    "reserve_beds": 10,
+    "reserve_icu": 5,
     "budget": 90000000,
     "costs": {
       "bed_purchase": 200000,

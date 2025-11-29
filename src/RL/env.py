@@ -9,7 +9,6 @@ class HospitalEnv:
     def __init__(self, hospital_id, obs_size=6):
         """
         obs_size — размер вектора состояния.
-        hospital_id — просто идентификатор (удобно для логов).
         """
         self.hid = hospital_id
         self.obs_size = obs_size
@@ -18,15 +17,7 @@ class HospitalEnv:
 
     def build_obs(self, metrics):
         """
-        metrics: словарь с метриками больницы, например:
-        {
-            "beds_total": ...,
-            "beds_occupied": ...,
-            "icu_total": ...,
-            "icu_occupied": ...,
-            "admitted": ...,
-            "rejected": ...
-        }
+        metrics: словарь с метриками больницы.
         Возвращает вектор состояния.
         """
         x = np.array([
@@ -43,7 +34,7 @@ class HospitalEnv:
 
     def reset(self, metrics):
         """
-        Начало эпизода. metrics — метрики на день 0.
+        Начало эпизода. Metrics — метрики на день 0.
         """
         self.day = 0
         self.last_obs = self.build_obs(metrics)

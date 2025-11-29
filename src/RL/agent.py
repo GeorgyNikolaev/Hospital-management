@@ -21,12 +21,7 @@ class QNetwork(nn.Module):
 
 
 class HospitalAgent:
-    """
-    DQN агент, работающий в реальном времени:
-    - принимает текущее состояние
-    - выдает действие
-    - обучается на опыте
-    """
+    """DQN агент"""
     def __init__(self, obs_size=6, n_actions=3, lr=1e-3, gamma=0.99):
         self.obs_size = obs_size
         self.n_actions = n_actions
@@ -45,20 +40,24 @@ class HospitalAgent:
         self.eps_decay = 0.995
         self.eps_min = 0.05
 
-    def select_action(self, obs):
-        """
-        eps-greedy выбор действия
-        """
+    def select_action(self, obs, action_mask):
         if random.random() < self.eps:
-            return random.randint(0, self.n_actions - 1)
+            # Выбираем только из разрешённых действий
+            valid_actions = [i for i in range(self.n_actions) if action_mask[i] == 1]
+            return random.choice(valid_actions)
 
         obs_t = torch.tensor(obs, dtype=torch.float32).unsqueeze(0)
+
         with torch.no_grad():
-            qvals = self.q(obs_t)
+            qvals = self.q(obs_t).squeeze(0)
+
+        # Маскируем невозможные действия
+        qvals[torch.tensor(action_mask) == 0] = -1e9
+
         return int(torch.argmax(qvals).item())
 
-    def store(self, obs, action, reward, next_obs):
-        self.memory.append((obs, action, reward, next_obs))
+    def store(self, obs, action, reward, next_obs, action_mask):
+        self.memory.append((obs, action, reward, next_obs, action_mask))
 
     def train_step(self):
         if len(self.memory) < self.batch_size:
@@ -66,17 +65,26 @@ class HospitalAgent:
 
         batch = random.sample(self.memory, self.batch_size)
 
-        obs, act, rew, next_obs = zip(*batch)
+        obs, act, rew, next_obs, action_mask = zip(*batch)
 
         obs = torch.tensor(obs, dtype=torch.float32)
         act = torch.tensor(act, dtype=torch.long)
         rew = torch.tensor(rew, dtype=torch.float32)
         next_obs = torch.tensor(next_obs, dtype=torch.float32)
+        action_mask = torch.tensor(action_mask, dtype=torch.float32)
 
         q_vals = self.q(obs).gather(1, act.unsqueeze(1)).squeeze()
 
+        # with torch.no_grad():
+        #     next_q = self.q_target(next_obs).max(1)[0]
+        #     target = rew + self.gamma * next_q
         with torch.no_grad():
-            next_q = self.q_target(next_obs).max(1)[0]
+            next_q = self.q_target(next_obs)
+
+            # Маска запрещенных действий в следующем состоянии
+            next_q[action_mask == 0] = -1e9
+
+            next_q = next_q.max(1)[0]
             target = rew + self.gamma * next_q
 
         loss = nn.MSELoss()(q_vals, target)

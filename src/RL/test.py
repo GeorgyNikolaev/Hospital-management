@@ -1,4 +1,4 @@
-from src.RL.env import CentralizedHospitalEnvGym
+from src.RL.env import HospitalEnv
 
 epidemic_data = [
     {'hosp_real': 50, 'inc_real': 10, 'admitted': 60, 'infection': 200, 'rejected': 0, 'deaths_real': 2},
@@ -19,7 +19,7 @@ hospital_profiles = {
         "bed_rent_per_day": 40.0, "vent_rent_per_day": 180.0}},
 }
 
-env = CentralizedHospitalEnvGym(epidemic_data, hospital_profiles)
+env = HospitalEnv(epidemic_data, hospital_profiles)
 obs, info = env.reset(seed=42)
 print("obs.shape =", obs.shape)
 action = env.action_space.sample()

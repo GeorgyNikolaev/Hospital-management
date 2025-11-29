@@ -57,13 +57,33 @@ class Hospital:
     """Конфиг госпиталя"""
     id: int
     name: str
-    beds: int
-    icu_beds: int
+    bed: int
+    reserve_beds: int
+    icu: int
+    reserve_icu: int
     quality: float  # <1 better, >1 worse
+    costs: dict
+    budget: int
     rng_seed: int = 42
     beds_heap: list = field(default_factory=list, init=False, repr=False)
     icu_heap: list = field(default_factory=list, init=False, repr=False)
     metrics: dict = field(default_factory=dict, init=False, repr=False)
+    _default_metric_day = {"day": 0,
+                           "admitted": 0,
+                           "admitted_hosp": 0,
+                           "admitted_icu": 0,
+                           "rejected": 0,
+                           "rejected_hosp": 0,
+                           "rejected_icu": 0,
+                           "deaths": 0,
+                           "deaths_hosp": 0,
+                           "deaths_icu": 0,
+                           "beds": 0,
+                           "reserve_beds": 0,
+                           "icu": 0,
+                           "reserve_icu": 0,
+                           "budget": 0,
+                           "expenses": 0}
     patients: list = field(default_factory=list, init=False, repr=False)
     rng: np.random.RandomState = field(init=False, repr=False)
 
@@ -92,33 +112,24 @@ class Hospital:
         """Попытка оформить пациента"""
         occ = self.current_occ(now)
         needs_icu = patient.severity == "icu"
-        avail_bed = (occ["beds_in_use"] < self.beds)
-        avail_icu = (occ["icu_in_use"] < self.icu_beds)
+        avail_bed = (occ["beds_in_use"] < self.bed)
+        avail_icu = (occ["icu_in_use"] < self.icu)
         admit_time = now
 
         day = math.floor(admit_time)
         if day in self.metrics:
             metric = self.metrics[day]
         else:
-            metric = {"day": day,
-                      "admitted": 0,
-                      "admitted_hosp": 0,
-                      "admitted_icu": 0,
-                      "rejected": 0,
-                      "rejected_hosp": 0,
-                      "rejected_icu": 0,
-                      "deaths": 0,
-                      "deaths_hosp": 0,
-                      "deaths_icu": 0}
+            metric = self._default_metric_day
+            metric["day"] = day
             self.metrics[day] = metric
-
 
         if needs_icu:
             if avail_icu:
                 patient.admitted = True
             else:
                 if self.icu_heap:
-                    earliest = self.icu_heap[occ["icu_in_use"] - self.icu_beds]
+                    earliest = self.icu_heap[occ["icu_in_use"]]
                     if earliest <= now + max_wait:
                         admit_time = earliest
                         patient.admitted = True
@@ -127,7 +138,7 @@ class Hospital:
                 patient.admitted = True
             else:
                 if self.beds_heap:
-                    earliest = self.beds_heap[occ["beds_in_use"] - self.beds]
+                    earliest = self.beds_heap[occ["beds_in_use"]]
                     if earliest <= now + max_wait:
                         admit_time = earliest
                         patient.admitted = True
@@ -168,23 +179,62 @@ class Hospital:
 
     def daily_metrics(self, day):
         """Дневная метрика"""
-        return self.metrics.get(day, {"day": day,
-                                      "admitted": 0,
-                                      "admitted_hosp": 0,
-                                      "admitted_icu": 0,
-                                      "rejected": 0,
-                                      "rejected_hosp": 0,
-                                      "rejected_icu": 0,
-                                      "deaths": 0,
-                                      "deaths_hosp": 0,
-                                      "deaths_icu": 0})
+        metric = self.metrics.get(day)
+        if not metric:
+            metric = self._default_metric_day
+            self.metrics[day] = metric
+        return metric
+
+
+    def get_action_mask(self):
+        mask = [0] * 10
+        if self.costs["bed_purchase"] < self.budget or self.reserve_beds >= 1: mask[1] = 1
+        if self.costs["bed_purchase" * 5] < self.budget or self.reserve_beds >= 5: mask[2] = 1
+        if self.costs["icu_purchase"] < self.budget or self.reserve_icu >= 1: mask[3] = 1
+        if self.costs["icu_purchase"] * 5 < self.budget or self.reserve_icu >= 5: mask[4] = 1
+        if self.reserve_beds >= 1: mask[5] = 1
+        if self.reserve_beds >= 5: mask[6] = 1
+        if self.reserve_icu >= 1: mask[7] = 1
+        if self.reserve_icu >= 5: mask[8] = 1
+        return mask
 
     def apply_action(self, action):
-        if action == 0:
+        """Принятие действия к больнице"""
+        if action == 0:  # Ничего не делать
             return
-        elif action == 1:
-            self.beds = int(self.beds_total * 1.10)
-            self.icu = int(self.icu_total * 1.10)
-        elif action == 2:
-            self.beds_total = int(self.beds_total * 0.90)
-            self.icu_total = int(self.icu_total * 0.90)
+        elif action == 1: # Купить 1 койку (освободить)
+            self._add_beds("bed", 1)
+        elif action == 2: # Купить 5 коек (освободить)
+            self._add_beds("bed", 5)
+        elif action == 3: # Купить 1 аппарат ИВЛ (освободить)
+            self._add_beds("icu", 1)
+        elif action == 4: # Купить 5 аппаратов ИВЛ (освободить)
+            self._add_beds("icu", 5)
+        elif action == 5: # Зарезервировать 1 койку
+            self._add_beds("bed", 1, isReserved=True)
+        elif action == 6: # Зарезервировать 5 коек (освободить)
+            self._add_beds("bed", 5, isReserved=True)
+        elif action == 7: # Зарезервировать 1 аппарат ИВЛ (освободить)
+            self._add_beds("icu", 1, isReserved=True)
+        elif action == 8: # Зарезервировать 5 аппаратов ИВЛ (освободить)
+            self._add_beds("icu", 5, isReserved=True)
+        elif action == 9: # Срочно выделить бюджет на закупку
+            return
+
+    def _add_beds(self, bed_type: str, n: int, isReserved: bool=False):
+        r = getattr(self, "reserve_" + bed_type, 0)
+        b = getattr(self, bed_type, 0)
+        if isReserved:
+            if b >= n:
+                setattr(self, "reserve_" + bed_type, r + n)
+                setattr(self, bed_type, b - n)
+        else:
+            if r >= n:
+                setattr(self, bed_type, b + n)
+                setattr(self, "reserve_" + bed_type, r - n)
+            elif self.costs[bed_type + "_purchase"] * n < self.budget:
+                self.budget -= self.costs[bed_type + "_purchase"] * n
+                setattr(self, bed_type, b + n)
+        
+
+

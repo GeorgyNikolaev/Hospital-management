@@ -109,7 +109,7 @@ def run(hospitals_cfg: List[Hospital], init_params: SEIRHCDParams, days: int, rn
     logs = pd.DataFrame(logs)
     return logs, des
 
-def collect_hospital_metrics(des: DES, hid: int):
+def collect_hospital_metrics(des: DES, hid: int, day: int=0):
     """
     des: твоя DES-система
     hid: индекс больницы в списке hospitals
@@ -119,10 +119,10 @@ def collect_hospital_metrics(des: DES, hid: int):
     h = des.hospitals[hid]
 
     return {
-        "beds_total": h.beds_total,
-        "beds_occupied": h.beds_occupied,
-        "icu_total": h.icu_total,
-        "icu_occupied": h.icu_occupied,
-        "admitted": h.last_admitted,
-        "rejected": h.last_rejected,
+        "beds_total": h.beds,
+        "beds_occupied": len(h.beds_heap),
+        "icu_total": h.icu_beds,
+        "icu_occupied": len(h.icu_heap),
+        "admitted": h.daily_metrics(day=day)["admitted"],
+        "rejected": h.daily_metrics(day=day)["rejected"],
     }
