@@ -9,8 +9,8 @@
     "reserve_icu": 2,
     "budget": 15000000,
     "costs": {
-      "bed_purchase": 250000,
-      "bed_day": 5000,
+      "beds_purchase": 250000,
+      "beds_day": 5000,
       "icu_purchase": 2500000,
       "icu_day": 15000
     }
@@ -25,8 +25,8 @@
     "reserve_icu": 4,
     "budget": 45000000,
     "costs": {
-      "bed_purchase": 220000,
-      "bed_day": 4500,
+      "beds_purchase": 220000,
+      "beds_day": 4500,
       "icu_purchase": 2300000,
       "icu_day": 13000
     }
@@ -41,8 +41,8 @@
     "reserve_icu": 5,
     "budget": 90000000,
     "costs": {
-      "bed_purchase": 200000,
-      "bed_day": 4000,
+      "beds_purchase": 200000,
+      "beds_day": 4000,
       "icu_purchase": 2000000,
       "icu_day": 12000
     }

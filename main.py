@@ -6,6 +6,9 @@ import pandas as pd
 
 from typing import List, Optional
 
+from src.RL.agent import HospitalAgent
+from src.RL.env import HospitalEnv
+from src.RL.train import train_epochs, load_agent_checkpoint
 from src.core.config import settings
 from src.core.models import Hospital
 from src.run import run_two_way
@@ -107,6 +110,18 @@ def main():
     )
 
     run_two_way(init_params=params, hospitals_cfg=hospitals, days=settings.DAYS)
+    # agents, df_summary = train_epochs(
+    #     hospitals_cfg=hospitals,
+    #     init_params=params,
+    #     days=110,
+    #     num_epochs=200,
+    #     agents=None,  # если None — создаст новых
+    #     save_dir="checkpoints/hospital_rl",
+    #     logs_csv="training_log.csv",
+    #     save_every=10,
+    #     best_metric="reward",
+    #     seed_base=42
+    # )
 
 
 if __name__ == "__main__":

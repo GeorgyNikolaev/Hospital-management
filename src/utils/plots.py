@@ -207,8 +207,8 @@ def plot_RL_results(metrics_dict):
     # 4. График использования коек
     ax4 = axes[1, 1]
     # Расчет доступных коек (общие - законсервированные)
-    available_beds = np.array(metrics_dict['beds']) - np.array(metrics_dict['reserve_beds'])
-    available_icu = np.array(metrics_dict['icu']) - np.array(metrics_dict['reserve_icu'])
+    available_beds = np.array(metrics_dict['beds'])
+    available_icu = np.array(metrics_dict['icu'])
 
     ax4.plot(days, available_beds, 'b-', label='Доступные койки', linewidth=2)
     ax4.plot(days, metrics_dict['occupied_beds'], 'r-', label='Занятые койки', linewidth=2)

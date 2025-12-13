@@ -90,7 +90,7 @@ class Hospital:
 
     @property
     def _default_metric_day(self) -> dict[str, int]:
-        print(self.costs["bed_day"] * self.beds + self.costs["icu_day"] * self.icu)
+        # print(self.costs["bed_day"] * self.beds + self.costs["icu_day"] * self.icu)
         return {"day": 0,
                 "admitted": 0,
                 "admitted_hosp": 0,
@@ -108,7 +108,7 @@ class Hospital:
                 "reserve_icu": self.reserve_icu,
                 "occupied_icu": len(self.icu_heap),
                 "budget": self.budget,
-                "expenses": self.costs["bed_day"] * self.beds + self.costs["icu_day"] * self.icu
+                "expenses": self.costs["beds_day"] * self.beds + self.costs["icu_day"] * self.icu
                 }
 
     def _purge(self, now):
@@ -206,6 +206,8 @@ class Hospital:
         if not metric:
             metric = self._default_metric_day
             self.metrics[day] = metric
+        metric["beds"] = self.beds
+        metric["icu"] = self.icu
         return metric
 
     def save_daily_metrics(self, day: int = 0):
@@ -218,15 +220,15 @@ class Hospital:
 
 
     def get_action_mask(self):
-        mask = [0] * 10
-        if self.costs["bed_purchase"] < self.budget or self.reserve_beds >= 1: mask[1] = 1
-        if self.costs["bed_purchase"] * 5 < self.budget or self.reserve_beds >= 5: mask[2] = 1
-        if self.costs["icu_purchase"] < self.budget or self.reserve_icu >= 1: mask[3] = 1
-        if self.costs["icu_purchase"] * 5 < self.budget or self.reserve_icu >= 5: mask[4] = 1
-        if self.reserve_beds >= 1: mask[5] = 1
-        if self.reserve_beds >= 5: mask[6] = 1
-        if self.reserve_icu >= 1: mask[7] = 1
-        if self.reserve_icu >= 5: mask[8] = 1
+        mask = [1] * 10
+        if self.costs["beds_purchase"] > self.budget and self.reserve_beds < 1: mask[1] = 0
+        if self.costs["beds_purchase"] * 5 > self.budget and self.reserve_beds < 5: mask[2] = 0
+        if self.costs["icu_purchase"] > self.budget and self.reserve_icu < 1: mask[3] = 0
+        if self.costs["icu_purchase"] * 5 > self.budget and self.reserve_icu < 5: mask[4] = 0
+        if self.beds < 1: mask[5] = 0
+        if self.beds < 5: mask[6] = 0
+        if self.icu < 1: mask[7] = 0
+        if self.icu < 5: mask[8] = 0
         return mask
 
     def apply_action(self, action):
@@ -234,28 +236,28 @@ class Hospital:
         if action == 0:  # Ничего не делать
             return
         elif action == 1: # Купить 1 койку (освободить)
-            self._add_beds("bed", 1)
+            self._add_beds("beds", 1)
         elif action == 2: # Купить 5 коек (освободить)
-            self._add_beds("bed", 5)
+            self._add_beds("beds", 5)
         elif action == 3: # Купить 1 аппарат ИВЛ (освободить)
             self._add_beds("icu", 1)
         elif action == 4: # Купить 5 аппаратов ИВЛ (освободить)
             self._add_beds("icu", 5)
         elif action == 5: # Законсервировать 1 койку
-            self._add_beds("bed", 1, isReserved=True)
+            self._add_beds("beds", 1, is_reserved=True)
         elif action == 6: # Законсервировать 5 коек
-            self._add_beds("bed", 5, isReserved=True)
+            self._add_beds("beds", 5, is_reserved=True)
         elif action == 7: # Законсервировать 1 аппарат ИВЛ
-            self._add_beds("icu", 1, isReserved=True)
+            self._add_beds("icu", 1, is_reserved=True)
         elif action == 8: # Законсервировать 5 аппаратов ИВЛ
-            self._add_beds("icu", 5, isReserved=True)
+            self._add_beds("icu", 5, is_reserved=True)
         elif action == 9: # Срочно выделить бюджет на закупку
             return
 
-    def _add_beds(self, bed_type: str, n: int, isReserved: bool=False):
+    def _add_beds(self, bed_type: str, n: int, is_reserved: bool=False):
         r = getattr(self, "reserve_" + bed_type, 0)
         b = getattr(self, bed_type, 0)
-        if isReserved:
+        if is_reserved:
             if b >= n:
                 setattr(self, "reserve_" + bed_type, r + n)
                 setattr(self, bed_type, b - n)

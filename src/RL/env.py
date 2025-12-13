@@ -52,89 +52,102 @@ class HospitalEnv:
 
     def compute_reward(self, metrics, action):
         """
-        Расчет награды для агента управления больницей
-        Стратегия: баланс между качеством медицинской помощи и финансовой эффективностью
+        Сбалансированная функция награды для среды управления больницей.
+        Масштабы нормированы, штрафы сглажены, добавлен ICU rejected.
         """
-        reward = 0
 
-        # Базовые веса для разных компонент награды
-        WEIGHT_ADMITTED = 2.0
-        WEIGHT_REJECTED = -5.0
-        WEIGHT_DEATHS = -10.0
-        WEIGHT_RESOURCE_UTILIZATION = 1.0
-        WEIGHT_BUDGET = 0.5
-        WEIGHT_ACTION_COST = -0.1
+        reward = 0.0
 
-        # 1. Награда за принятых пациентов (положительная)
-        reward += metrics["admitted"] * WEIGHT_ADMITTED
+        # Масштабы
+        W_REJECT = -8.0  # отказ = плохо, но не фатально
+        W_REJECT_ICU = -12.0  # отказ в ICU — хуже
+        W_DEATH = -15.0  # смерть — главный штраф
+        W_UTIL = 5.0  # хорошее использование ресурсов
+        W_ACTION = 0.2  # штраф за дорогое действие
+        W_EXCESS = -4.0  # избыточные ресурсы
 
-        # 2. Штраф за отказов в госпитализации (сильно отрицательная)
-        reward += metrics["rejected"] * WEIGHT_REJECTED
+        admitted = metrics.get("admitted", 0)
+        admitted_icu = metrics.get("admitted_icu", 0)
 
-        # 3. Штраф за смерти (очень сильно отрицательная)
-        reward += metrics["deaths"] * WEIGHT_DEATHS
-        # Дополнительный штраф за смерти в ICU
-        reward += metrics["deaths_icu"] * WEIGHT_DEATHS * 1.5
+        # ----------------------------- #
+        # 1. Штраф за отказы
+        # ----------------------------- #
+        if admitted > 0:
+            reject_rate = metrics["rejected"] / admitted
+            reward += reject_rate * W_REJECT
 
-        # 4. Награда за эффективное использование ресурсов
+        if admitted_icu > 0:
+            reject_rate_icu = metrics["rejected_icu"] / admitted_icu
+            reward += reject_rate_icu * W_REJECT_ICU
+
+        # ----------------------------- #
+        # 2. Штраф за смерти
+        # ----------------------------- #
+        if admitted > 0:
+            death_rate = metrics["deaths"] / admitted
+            reward += death_rate * W_DEATH
+
+        if admitted_icu > 0:
+            death_rate_icu = metrics["deaths_icu"] / admitted_icu
+            reward += death_rate_icu * W_DEATH * 1.3
+
+        # ----------------------------- #
+        # 3. Награда/штраф за использование ресурсов
+        # ----------------------------- #
+        def util_reward(util, ideal_low, ideal_high, weight):
+            """
+            Плавная функция:
+            - в целевом диапазоне → +weight
+            - если недозагрузка — близко к 0
+            - если перегруз — штраф пропорционально перегрузу
+            """
+            if ideal_low <= util <= ideal_high:
+                return weight
+            elif util < ideal_low:
+                return weight * (util / ideal_low)  # 0 → половина → целевое
+            else:  # util > ideal_high
+                overload = util - ideal_high
+                return -weight * (1 + 4 * overload)  # штраф растёт быстро
+
+        # обычные койки
         if metrics["beds"] > 0:
-            bed_utilization = metrics["occupied_beds"] / metrics["beds"]
-            # Идеальная загрузка 70-90% - максимальная награда
-            if 0.7 <= bed_utilization <= 0.9:
-                reward += WEIGHT_RESOURCE_UTILIZATION * 2
-            elif bed_utilization > 0.9:
-                # Перегрузка - штраф
-                reward += WEIGHT_RESOURCE_UTILIZATION * (1 - bed_utilization)
-            else:
-                # Недогрузка - небольшой штраф
-                reward += WEIGHT_RESOURCE_UTILIZATION * (bed_utilization - 0.5)
+            util_beds = metrics["occupied_beds"] / metrics["beds"]
+            reward += util_reward(util_beds, 0.7, 0.9, W_UTIL)
 
+        # ICU
         if metrics["icu"] > 0:
-            icu_utilization = metrics["occupied_icu"] / metrics["icu"]
-            if 0.6 <= icu_utilization <= 0.85:
-                reward += WEIGHT_RESOURCE_UTILIZATION * 3  # ICU важнее обычных коек
-            elif icu_utilization > 0.85:
-                reward += WEIGHT_RESOURCE_UTILIZATION * (1 - icu_utilization) * 2
-            else:
-                reward += WEIGHT_RESOURCE_UTILIZATION * (icu_utilization - 0.4)
+            util_icu = metrics["occupied_icu"] / metrics["icu"]
+            reward += util_reward(util_icu, 0.6, 0.85, W_UTIL * 1.5)
 
-        # 5. Учет бюджета (положительная за экономию, отрицательная за перерасход)
-        budget_balance = metrics.get("budget", 0) - metrics.get("expenses", 0)
-        reward += budget_balance * WEIGHT_BUDGET
-
-        # 6. Штраф за дорогостоящие действия (стимулируем разумное использование)
+        # ----------------------------- #
+        # 4. Стоимость действий
+        # ----------------------------- #
         action_costs = {
-            0: 0,  # Ничего не делать - бесплатно
-            1: 10,  # Купить 1 койку
-            2: 45,  # Купить 5 коек (скидка за опт)
-            3: 50,  # Купить 1 ИВЛ
-            4: 225,  # Купить 5 ИВЛ (скидка за опт)
-            5: 2,  # Законсервировать 1 койку
-            6: 8,  # Законсервировать 5 коек
-            7: 5,  # Законсервировать 1 ИВЛ
-            8: 20,  # Законсервировать 5 ИВЛ
-            9: 1,  # Срочный бюджет (административные расходы)
+            0: 0,
+            1: -10,
+            2: -45,
+            3: -50,
+            4: -225,
+            5: 5,
+            6: 15,
+            7: 8,
+            8: 25,
+            9: -50,
         }
 
-        reward += action_costs.get(action, 0) * WEIGHT_ACTION_COST
+        reward += action_costs.get(action, 0) * W_ACTION
 
-        # 7. Бонус за предотвращение кризисных ситуаций
-        crisis_penalty = 0
-        if metrics["rejected"] > metrics["admitted"] * 0.1:  # Более 10% отказов
-            crisis_penalty -= 20
-        if metrics["occupied_icu"] >= metrics["icu"]:  # Переполнение ICU
-            crisis_penalty -= 30
+        # ----------------------------- #
+        # 5. Штраф за избыточные ресурсы
+        # ----------------------------- #
+        if metrics["beds"] > 0:
+            if metrics["occupied_beds"] / metrics["beds"] < 0.3:
+                reward += W_EXCESS
 
-        reward += crisis_penalty
-
-        # 8. Штраф за избыточные ресурсы (стимулируем эффективное планирование)
-        excess_resources_penalty = 0
-        if metrics["beds"] > 0 and metrics["occupied_beds"] / metrics["beds"] < 0.3:
-            excess_resources_penalty -= 5
-        if metrics["icu"] > 0 and metrics["occupied_icu"] / metrics["icu"] < 0.2:
-            excess_resources_penalty -= 8
-
-        reward += excess_resources_penalty
+        if metrics["icu"] > 0:
+            if metrics["occupied_icu"] / metrics["icu"] < 0.2:
+                reward += W_EXCESS * 1.5
 
         return float(reward)
+
 

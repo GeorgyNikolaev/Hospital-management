@@ -20,7 +20,7 @@ hospital_profiles = {
 }
 
 env = HospitalEnv(epidemic_data, hospital_profiles)
-obs, info = env.reset(seed=42)
+obs, info = env.reset()
 print("obs.shape =", obs.shape)
 action = env.action_space.sample()
 obs, reward, terminated, truncated, info = env.step(action)

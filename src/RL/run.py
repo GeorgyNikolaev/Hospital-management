@@ -16,6 +16,7 @@ def run_with_rl(
         rng,
         agents,          # список объектов HospitalAgent, один на больницу
         envs,            # список HospitalEnv
+        is_train: bool=True
 ):
     des = DES(hospitals_cfg, rng_seed=settings.RANDOM_SEED)
     params = init_params
@@ -25,7 +26,10 @@ def run_with_rl(
             "hosp_expected": [],
             "icu_expected": [],
             "deaths_expected": [],
-            "population": []
+            "population": [],
+            "actions": [],
+            "beds": [],
+            "icu": []
             }
 
     pid = 0
@@ -45,8 +49,12 @@ def run_with_rl(
     # init environments
     obs_list = [envs[i].reset(initial_metrics[i]) for i in range(len(envs))]
 
+    # добавим аккумулятор reward по агентам
+    n_agents = len(agents)
+    episode_rewards = [0.0 for _ in range(n_agents)]
+
     for day in range(days):
-        print(f"day: {day}")
+        # print(f"day: {day}")
         actions = []
         action_masks = []
 
@@ -61,6 +69,8 @@ def run_with_rl(
 
             # применяем действие к больнице
             des.hospitals[hid].apply_action(action)
+
+        logs["actions"].append(actions)
 
         seir_params_today = SEIRHCDParams(
             population=params.population,
@@ -144,14 +154,17 @@ def run_with_rl(
             # сохраняем опыт с маской состояния и маской next
             agents[hid].store(obs_list[hid], actions[hid], reward, next_obs, action_masks[hid], next_mask)
 
-        for agent in agents:
-            agent.train_step()
-
-        if day % 20 == 0:
+            # аккумулируем reward для эпизода
+            episode_rewards[hid] += float(reward)
+        if is_train:
             for agent in agents:
-                agent.update_target()
+                agent.train_step()
+
+            if day % 20 == 0:
+                for agent in agents:
+                    agent.update_target()
 
         # обновляем состояния
         obs_list = new_obs_list
 
-    return logs, des
+    return logs, des, agents, episode_rewards
