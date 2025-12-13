@@ -1,4 +1,6 @@
+import copy
 import json
+from dataclasses import replace
 
 import numpy as np
 
@@ -25,18 +27,16 @@ def run_two_way(
     rng = np.random.RandomState(settings.RANDOM_SEED)
 
     # Моделирование SD модели
-    # sd_logs = run_sd.run(init_params)
+    sd_logs = run_sd.run(init_params)
     # Графики
-    # plot_SD_results(sd_logs)
-    # save_SD_results(sd_logs)
+    plot_SD_results(sd_logs)
+    save_SD_results(sd_logs)
 
     # Моделирование SD <-> DES
-    # des_logs, des = run_des.run(hospitals_cfg, init_params, days, rng)
+    des_logs, des = run_des.run(hospitals_cfg, init_params, days, rng)
     # Сохранение данных
-    # plot_SD_DES_results(des_logs)
-    # save_SD_DES_results(des_logs, des)
-
-
+    plot_SD_DES_results(des_logs)
+    save_SD_DES_results(des_logs, des)
 
     agents = [HospitalAgent() for _ in hospitals_cfg]
     for i in range(len(agents)):

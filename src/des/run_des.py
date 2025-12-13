@@ -36,7 +36,7 @@ def run(hospitals_cfg: List[Hospital], init_params: SEIRHCDParams, days: int, rn
 
     seir_df = None
     for day in range(days):
-        # print(f"day: {day}")
+        print(f"day: {day}")
         seir_params_today = SEIRHCDParams(
             population=params.population,
             beta=params.beta,
@@ -72,7 +72,7 @@ def run(hospitals_cfg: List[Hospital], init_params: SEIRHCDParams, days: int, rn
             hospital_metrics = h.daily_metrics(day=day)
             for key, value in hospital_metrics.items():
                 if key == "day":
-                    metric_day[key] = value
+                    metric_day[key] = day
                 elif key in metric_day:
                     metric_day[key] += value  # суммируем
                 else:

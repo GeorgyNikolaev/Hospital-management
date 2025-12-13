@@ -14,7 +14,7 @@ class DES:
         self.hospitals = hospitals
         self.rng = np.random.RandomState(rng_seed)
 
-    def assign_preferential(self, now, severity, use_random=True):
+    def assign_preferential(self, now, severity, use_random=False):
         """Оценивает больницы и возвращает список лучших"""
         if use_random:
             # Возвращаем случайный порядок больниц
