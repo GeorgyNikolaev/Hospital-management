@@ -53,19 +53,33 @@ def run_two_way(
     data_array = np.array(logs["actions"])
 
     # Создаем график
-    plt.figure(figsize=(10, 6))
+    # Словарь соответствия числовых значений и текстовых меток
+    action_labels = {
+        0: 'Ничего не делать',
+        1: 'Купить 1 койку',
+        2: 'Купить 5 коек',
+        3: 'Купить 1 аппарат ИВЛ',
+        4: 'Купить 5 аппаратов ИВЛ',
+        5: 'Законсервировать 1 койку',
+        6: 'Законсервировать 5 коек',
+        7: 'Законсервировать 1 аппарат ИВЛ',
+        8: 'Законсервировать 5 аппаратов ИВЛ',
+        9: 'Срочно выделить бюджет'
+    }
 
-    # X координаты (номера подмассивов)
+    plt.figure(figsize=(10, 6))
     x = range(len(logs["actions"]))
 
-    # Для каждого элемента в подмассиве строим отдельный график
-    for i in range(data_array.shape[1]):  # data_array.shape[1] = 3
+    for i in range(data_array.shape[1]):
         y = [subarray[i] for subarray in logs["actions"]]
-        plt.plot(x, y, 'o-', label=f'Элемент {i + 1}', markersize=8)
+        plt.plot(x, y, 'o-', label=f'Больница {i + 1}', markersize=8)
 
-    plt.xlabel('Номер подмассива')
-    plt.ylabel('Значение')
-    plt.title('Графики значений по позициям в подмассивах')
+    plt.xlabel('День')
+    plt.title('График принятия решени1 больниц')
+
+    # Устанавливаем метки на оси Y
+    plt.yticks(ticks=list(action_labels.keys()), labels=list(action_labels.values()))
     plt.legend()
     plt.grid(True, alpha=0.3)
+    plt.tight_layout()  # Чтобы метки не обрезались
     plt.show()

@@ -106,7 +106,7 @@ def run_with_rl(
             hospital_metrics = h.daily_metrics(day=day)
             for key, value in hospital_metrics.items():
                 if key == "day":
-                    metric_day[key] = value
+                    metric_day[key] = day
                 elif key in metric_day:
                     metric_day[key] += value  # суммируем
                 else:
@@ -156,6 +156,7 @@ def run_with_rl(
 
             # аккумулируем reward для эпизода
             episode_rewards[hid] += float(reward)
+
         if is_train:
             for agent in agents:
                 agent.train_step()
