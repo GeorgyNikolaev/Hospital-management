@@ -20,8 +20,6 @@ def train_epochs(
     agents=None,
     save_dir="checkpoints",
     logs_csv="training_log.csv",
-    save_every=5,
-    best_metric="deaths",   # "deaths" минимизировать; или "reward" максимизировать
     seed_base=1234
 ):
     os.makedirs(save_dir, exist_ok=True)
@@ -33,10 +31,7 @@ def train_epochs(
     writer = SummaryWriter(log_dir=os.path.join(save_dir, "tb"))
     records = []
 
-    # best tracking
     best_value = None
-    best_path = None
-
 
     for epoch in range(1, num_epochs + 1):
         rng = np.random.RandomState(seed_base + epoch)  # детерминированное варьирование
@@ -56,26 +51,38 @@ def train_epochs(
             envs=envs
         )
 
-        if epoch % 50 == 0:
-            data_array = np.array(logs["actions"])
-
-            # Создаем график
-            plt.figure(figsize=(10, 6))
-
-            # X координаты (номера подмассивов)
-            x = range(len(logs["actions"]))
-
-            # Для каждого элемента в подмассиве строим отдельный график
-            for i in range(data_array.shape[1]):  # data_array.shape[1] = 3
-                y = [subarray[i] for subarray in logs["actions"]]
-                plt.plot(x, y, 'o-', label=f'Элемент {i + 1}', markersize=8)
-
-            plt.xlabel('Номер подмассива')
-            plt.ylabel('Значение')
-            plt.title('Графики значений по позициям в подмассивах')
-            plt.legend()
-            plt.grid(True, alpha=0.3)
-            plt.show()
+        # if epoch % 50 == 0:
+        #     data_array = np.array(logs["actions"])
+        #
+        #     action_labels = {
+        #         0: 'Ничего не делать',
+        #         1: 'Купить 1 койку',
+        #         2: 'Купить 5 коек',
+        #         3: 'Купить 1 аппарат ИВЛ',
+        #         4: 'Купить 5 аппаратов ИВЛ',
+        #         5: 'Законсервировать 1 койку',
+        #         6: 'Законсервировать 5 коек',
+        #         7: 'Законсервировать 1 аппарат ИВЛ',
+        #         8: 'Законсервировать 5 аппаратов ИВЛ',
+        #         9: 'Срочно выделить бюджет'
+        #     }
+        #
+        #     plt.figure(figsize=(10, 6))
+        #     x = range(len(logs["actions"]))
+        #
+        #     # Для каждого элемента в подмассиве строим отдельный график
+        #     for i in range(data_array.shape[1]):  # data_array.shape[1] = 3
+        #         y = [subarray[i] for subarray in logs["actions"]]
+        #         plt.plot(x, y, 'o-', label=f'Больница {i + 1}', markersize=8)
+        #
+        #     plt.xlabel('День')
+        #     plt.title('График принятия решени1 больниц')
+        #     # Устанавливаем метки на оси Y
+        #     plt.yticks(ticks=list(action_labels.keys()), labels=list(action_labels.values()))
+        #     plt.legend()
+        #     plt.grid(True, alpha=0.3)
+        #     plt.tight_layout()  # Чтобы метки не обрезались
+        #     plt.show()
 
         # summary metrics для эпохи
         total_deaths = sum(logs.get("deaths", [0]))
@@ -90,12 +97,6 @@ def train_epochs(
         writer.add_scalar("epoch/total_deaths", total_deaths, epoch)
         writer.add_scalar("epoch/total_rejected", total_rejected, epoch)
         writer.add_scalar("epoch/total_infected", total_infected, epoch)
-
-        # сохраняем per-day time-series logs в отдельный CSV (опционально)
-        # преобразуем logs (dict of lists) -> df и сохраним в per-epoch csv
-
-        # df_epoch = pd.DataFrame(logs)
-        # df_epoch.to_csv(os.path.join(save_dir, f"epoch_{epoch}_timeseries.csv"), index=False)
 
         # записываем summary в records
         rec = {
@@ -112,49 +113,25 @@ def train_epochs(
         df_records = pd.DataFrame(records)
         df_records.to_csv(os.path.join(save_dir, logs_csv), index=False)
 
-        # # чекпоинт моделей периодически
-        # if epoch % save_every == 0:
-        #     for i, agent in enumerate(agents):
-        #         ckpt = {
-        #             "epoch": epoch,
-        #             "model_state": agent.q.state_dict(),
-        #             "optimizer_state": agent.optim.state_dict(),
-        #             "eps": agent.eps
-        #         }
-        #         torch.save(ckpt, os.path.join(save_dir, f"agent{i}_epoch{epoch}.pt"))
+        for i, agent in enumerate(agents):
+            value = episode_rewards[i]
 
-        # сохранить лучшую модель по best_metric
-        if best_metric == "deaths":
-            metric_value = total_deaths  # минимизировать
-            is_better = (best_value is None) or (metric_value < best_value)
-        elif best_metric == "reward":
-            metric_value = sum_agent_rewards  # максимизировать
-            is_better = (best_value is None) or (metric_value > best_value)
-        else:
-            metric_value = sum_agent_rewards
-            is_better = (best_value is None) or (metric_value > best_value)
-
-        if is_better:
-            best_value = metric_value
-            # удаляем старый best, если был
-            if best_path is not None and os.path.exists(best_path):
-                try:
-                    os.remove(best_path)
-                except Exception:
-                    pass
-            # сохраняем новые best
-            for i, agent in enumerate(agents):
-                path = os.path.join(save_dir, f"agent{i}_best.pt")
+            if best_value is None or value > best_value:
+                best_value = value
+                path = os.path.join(save_dir, f"agent_best.pt")
                 ckpt = {
                     "epoch": epoch,
                     "model_state": agent.q.state_dict(),
                     "optimizer_state": agent.optim.state_dict(),
                     "eps": agent.eps,
-                    "metric_value": metric_value,
-                    "metric_name": best_metric
+                    "metric_value": value,
+                    "metric_name": "reward"
                 }
                 torch.save(ckpt, path)
-            best_path = os.path.join(save_dir, f"agent0_best.pt")  # just marker
+                for j in range(len(agents)):
+                    agents[j].q.load_state_dict(agent.q.state_dict())
+                    agents[j].q_target.load_state_dict(agent.q.state_dict())
+                    agents[j].optim.load_state_dict(agent.optim.state_dict())
 
         print(f"[Epoch {epoch:3}] deaths={total_deaths:7.1f}, rejected={total_rejected:7.1f}, mean_reward={mean_agent_reward:7.3f}")
 

@@ -2,6 +2,8 @@
 import json
 from typing import List
 
+import numpy as np
+
 from src.core.config import settings
 from src.core.models import Hospital, SEIRHCDParams, Patient
 from src.des.des_model import DES
@@ -53,13 +55,58 @@ def run_with_rl(
     n_agents = len(agents)
     episode_rewards = [0.0 for _ in range(n_agents)]
 
+    expected_hosp = 0
+    expected_icu = 0
+
+    expected_hosp_5 = 0
+    expected_icu_5 = 0
+    expected_hosp_15 = 0
+    expected_icu_15 = 0
+
     for day in range(days):
         # print(f"day: {day}")
         actions = []
         action_masks = []
 
+        if day == 0:
+            seir_params_today = SEIRHCDParams(
+                population=params.population,
+                beta=params.beta,
+                sigma=params.sigma,
+                gamma=params.gamma,
+                gamma_h=params.gamma_h,
+                gamma_c=params.gamma_c,
+                mu_c=params.mu_c,
+                alpha_h=params.alpha_h,
+                alpha_c=params.alpha_c,
+                p_hosp=params.p_hosp,
+                p_icu=params.p_icu,
+                p_death=params.p_death,
+                initial_exposed=params.initial_exposed,
+                initial_infectious=params.initial_infectious
+            )
+            seir_df = simulate_seir_hcd(params=seir_params_today, days=15, start_day=day+1, beta_time_fn=beta_time_fn, data=seir_df)
+
+            expected_hosp = seir_df["new_hospitalizations"].iloc[-1]
+            expected_icu = seir_df["new_icu"].iloc[-1]
+
+            expected_hosp_5 = seir_df["new_hospitalizations"].iloc[-5]
+            expected_icu_5 = seir_df["new_icu"].iloc[-5]
+            expected_hosp_15 = seir_df["new_hospitalizations"].iloc[-15]
+            expected_icu_15 = seir_df["new_icu"].iloc[-15]
+
+            for hid, agent in enumerate(agents):
+                des.hospitals[hid].save_daily_metrics(day=day)
+                obs_list[hid] = np.append(obs_list[hid], expected_hosp)
+                obs_list[hid] = np.append(obs_list[hid], expected_icu)
+                obs_list[hid] = np.append(obs_list[hid], expected_hosp_5)
+                obs_list[hid] = np.append(obs_list[hid], expected_icu_5)
+                obs_list[hid] = np.append(obs_list[hid], expected_hosp_15)
+                obs_list[hid] = np.append(obs_list[hid], expected_icu_15)
+
         for hid, agent in enumerate(agents):
             des.hospitals[hid].save_daily_metrics(day=day)
+
             # вычисляем маску действий для больницы (текущий бюджет и резервы учтены внутри Hospital)
             mask = des.hospitals[hid].get_action_mask()
             action_masks.append(mask)
@@ -72,27 +119,6 @@ def run_with_rl(
 
         logs["actions"].append(actions)
 
-        seir_params_today = SEIRHCDParams(
-            population=params.population,
-            beta=params.beta,
-            sigma=params.sigma,
-            gamma=params.gamma,
-            gamma_h=params.gamma_h,
-            gamma_c=params.gamma_c,
-            mu_c=params.mu_c,
-            alpha_h=params.alpha_h,
-            alpha_c=params.alpha_c,
-            p_hosp=params.p_hosp,
-            p_icu=params.p_icu,
-            p_death=params.p_death,
-            initial_exposed=params.initial_exposed,
-            initial_infectious=params.initial_infectious
-        )
-        seir_df = simulate_seir_hcd(params=seir_params_today, days=1, start_day=day+1, beta_time_fn=beta_time_fn, data=seir_df)
-
-        expected_hosp = seir_df["new_hospitalizations"].iloc[-1]
-        expected_icu = seir_df["new_icu"].iloc[-1]
-
         # Создаем запись пациентов на день
         events = sample_arrivals(expected_hosp, expected_icu, rng)
         for ev in events:
@@ -104,6 +130,7 @@ def run_with_rl(
         metric_day = {}
         for h in des.hospitals:
             hospital_metrics = h.daily_metrics(day=day)
+            # print(hospital_metrics["beds"], hospital_metrics["occupied_beds"])
             for key, value in hospital_metrics.items():
                 if key == "day":
                     metric_day[key] = day
@@ -141,8 +168,42 @@ def run_with_rl(
         new_obs_list = []
         rewards = []
 
+        seir_params_tomorrow = SEIRHCDParams(
+            population=params.population,
+            beta=params.beta,
+            sigma=params.sigma,
+            gamma=params.gamma,
+            gamma_h=params.gamma_h,
+            gamma_c=params.gamma_c,
+            mu_c=params.mu_c,
+            alpha_h=params.alpha_h,
+            alpha_c=params.alpha_c,
+            p_hosp=params.p_hosp,
+            p_icu=params.p_icu,
+            p_death=params.p_death,
+            initial_exposed=params.initial_exposed,
+            initial_infectious=params.initial_infectious
+        )
+        seir_df = simulate_seir_hcd(params=seir_params_tomorrow, days=15, start_day=day + 2, beta_time_fn=beta_time_fn,
+                                    data=seir_df)
+
+        expected_hosp = seir_df["new_hospitalizations"].iloc[-1]
+        expected_icu = seir_df["new_icu"].iloc[-1]
+
+        expected_hosp_5 = seir_df["new_hospitalizations"].iloc[-5]
+        expected_icu_5 = seir_df["new_icu"].iloc[-5]
+        expected_hosp_15 = seir_df["new_hospitalizations"].iloc[-15]
+        expected_icu_15 = seir_df["new_icu"].iloc[-15]
+
         for hid, h in enumerate(des.hospitals):
             metrics = h.daily_metrics(day=day)
+            metrics["expected_hosp_1_day"] = expected_hosp / 3
+            metrics["expected_icu_1_day"] = expected_icu / 3
+            metrics["expected_hosp_5_day"] = expected_hosp_5 / 3
+            metrics["expected_icu_5_day"] = expected_icu_5 / 3
+            metrics["expected_hosp_15_day"] = expected_hosp_15 / 3
+            metrics["expected_icu_15_day"] = expected_icu_15 / 3
+
             next_obs, reward = envs[hid].step(metrics, actions[hid])
 
             # вычисляем маску действий для next state (важно: budget/резервы уже обновлены после apply_action)

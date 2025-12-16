@@ -23,7 +23,7 @@ class QNetwork(nn.Module):
 
 class HospitalAgent:
     """DQN агент"""
-    def __init__(self, obs_size=18, n_actions=10, lr=1e-3, gamma=0.99):
+    def __init__(self, obs_size=24, n_actions=10, lr=1e-3, gamma=0.99):
         self.obs_size = obs_size
         self.n_actions = n_actions
         self.gamma = gamma
@@ -34,7 +34,7 @@ class HospitalAgent:
 
         self.optim = optim.Adam(self.q.parameters(), lr=lr)
 
-        self.memory = deque(maxlen=50000)
+        self.memory = deque(maxlen=5000)
         self.batch_size = 64
 
         self.eps = 1.0  # exploration

@@ -6,6 +6,7 @@ import numpy as np
 
 from typing import List
 
+import pandas as pd
 from matplotlib import pyplot as plt
 
 from src.RL.agent import HospitalAgent
@@ -27,30 +28,33 @@ def run_two_way(
     rng = np.random.RandomState(settings.RANDOM_SEED)
 
     # Моделирование SD модели
-    sd_logs = run_sd.run(init_params)
+    # sd_logs = run_sd.run(init_params)
     # Графики
-    plot_SD_results(sd_logs)
-    save_SD_results(sd_logs)
+    # plot_SD_results(sd_logs)
+    # save_SD_results(sd_logs)
 
     # Моделирование SD <-> DES
-    des_logs, des = run_des.run(hospitals_cfg, init_params, days, rng)
+    # des_logs, des = run_des.run(hospitals_cfg, init_params, days, rng)
     # Сохранение данных
-    plot_SD_DES_results(des_logs)
-    save_SD_DES_results(des_logs, des)
+    # plot_SD_DES_results(des_logs)
+    # save_SD_DES_results(des_logs, des)
 
     agents = [HospitalAgent() for _ in hospitals_cfg]
     for i in range(len(agents)):
-        agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent{i}_best.pt")
+        agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best.pt")
 
     envs = [HospitalEnv(i) for i in range(len(hospitals_cfg))]
 
-    logs, des, agents, _ = run_with_rl(hospitals_cfg, init_params, days, rng, agents, envs, False)
+    rl_logs, des, agents, _ = run_with_rl(hospitals_cfg, init_params, days, rng, agents, envs, False)
+    rl_logs = pd.DataFrame(rl_logs)
+    plot_SD_DES_results(rl_logs)
     # print(json.dumps(logs, indent=2, ensure_ascii=False))
-    plot_RL_results(logs)
+    plot_RL_results(rl_logs)
 
 
 
-    data_array = np.array(logs["actions"])
+    data_array = np.array(rl_logs["actions"])
+    data_array = np.array(data_array.tolist())
 
     # Создаем график
     # Словарь соответствия числовых значений и текстовых меток
@@ -68,14 +72,14 @@ def run_two_way(
     }
 
     plt.figure(figsize=(10, 6))
-    x = range(len(logs["actions"]))
+    x = range(len(rl_logs["actions"]))
 
     for i in range(data_array.shape[1]):
-        y = [subarray[i] for subarray in logs["actions"]]
+        y = [subarray[i] for subarray in rl_logs["actions"]]
         plt.plot(x, y, 'o-', label=f'Больница {i + 1}', markersize=8)
 
     plt.xlabel('День')
-    plt.title('График принятия решени1 больниц')
+    plt.title('График принятия решений больниц')
 
     # Устанавливаем метки на оси Y
     plt.yticks(ticks=list(action_labels.keys()), labels=list(action_labels.values()))

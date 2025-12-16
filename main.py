@@ -114,12 +114,8 @@ def main():
     #     hospitals_cfg=hospitals,
     #     init_params=params,
     #     days=110,
-    #     num_epochs=200,
-    #     agents=None,  # если None — создаст новых
+    #     num_epochs=100,
     #     save_dir="checkpoints/hospital_rl",
-    #     logs_csv="training_log.csv",
-    #     save_every=10,
-    #     best_metric="reward",
     #     seed_base=42
     # )
 

@@ -91,25 +91,28 @@ class Hospital:
     @property
     def _default_metric_day(self) -> dict[str, int]:
         # print(self.costs["bed_day"] * self.beds + self.costs["icu_day"] * self.icu)
-        return {"day": 0,
-                "admitted": 0,
-                "admitted_hosp": 0,
-                "admitted_icu": 0,
-                "rejected": 0,
-                "rejected_hosp": 0,
-                "rejected_icu": 0,
-                "deaths": 0,
-                "deaths_hosp": 0,
-                "deaths_icu": 0,
-                "beds": self.beds,
-                "reserve_beds": self.reserve_beds,
-                "occupied_beds": len(self.beds_heap),
-                "icu": self.icu,
-                "reserve_icu": self.reserve_icu,
-                "occupied_icu": len(self.icu_heap),
-                "budget": self.budget,
-                "expenses": self.costs["beds_day"] * self.beds + self.costs["icu_day"] * self.icu
-                }
+        return {
+            "day": 0,
+            "admitted": 0,
+            "admitted_hosp": 0,
+            "admitted_icu": 0,
+            "rejected": 0,
+            "rejected_hosp": 0,
+            "rejected_icu": 0,
+            "deaths": 0,
+            "deaths_hosp": 0,
+            "deaths_icu": 0,
+            "beds": self.beds,
+            "reserve_beds": self.reserve_beds,
+            "occupied_beds": 0,
+            # "occupied_beds": len(self.beds_heap),
+            "icu": self.icu,
+            "reserve_icu": self.reserve_icu,
+            "occupied_icu": 0,
+            # "occupied_icu": len(self.icu_heap),
+            "budget": self.budget,
+            "expenses": self.costs["beds_day"] * self.beds + self.costs["icu_day"] * self.icu
+        }
 
     def _purge(self, now):
         """Очистка коек"""
@@ -137,12 +140,7 @@ class Hospital:
         admit_time = now
 
         day = math.floor(admit_time)
-        if day in self.metrics:
-            metric = self.metrics[day]
-        else:
-            metric = self._default_metric_day
-            metric["day"] = day
-            self.metrics[day] = metric
+        metric = self.save_daily_metrics(day=day)
 
         if needs_icu:
             if avail_icu:
@@ -186,6 +184,11 @@ class Hospital:
             metric["admitted_hosp"] += 1
             heapq.heappush(self.beds_heap, release)
 
+        # if needs_icu:
+        #     metric["occupied_icu"] += 1
+        # else:
+        #     metric["occupied_beds"] += 1
+
         patient.discharged_time = release
 
         base_death = settings.P_DEATH_HOSP_TREATED if patient.severity == "ward" else settings.P_DEATH_INC_TREATED
@@ -205,9 +208,17 @@ class Hospital:
         metric = self.metrics.get(day)
         if not metric:
             metric = self._default_metric_day
+            metric["day"] = day
+            metric["budget"] -= metric["expenses"]
             self.metrics[day] = metric
+
+        occ = self.current_occ(day)
+        metric["occupied_beds"] = occ["beds_in_use"]
+        metric["occupied_icu"] = occ["icu_in_use"]
+
         metric["beds"] = self.beds
         metric["icu"] = self.icu
+
         return metric
 
     def save_daily_metrics(self, day: int = 0):
@@ -216,19 +227,26 @@ class Hospital:
         if not metric:
             metric = self._default_metric_day
             metric["day"] = day
+            metric["budget"] -= metric["expenses"]
             self.metrics[day] = metric
+        metric["beds"] = self.beds
+        metric["icu"] = self.icu
+
+        return metric
 
 
     def get_action_mask(self):
         mask = [1] * 10
+        ocp_b = len(self.beds_heap)
+        ocp_i = len(self.icu_heap)
         if self.costs["beds_purchase"] > self.budget and self.reserve_beds < 1: mask[1] = 0
         if self.costs["beds_purchase"] * 5 > self.budget and self.reserve_beds < 5: mask[2] = 0
         if self.costs["icu_purchase"] > self.budget and self.reserve_icu < 1: mask[3] = 0
         if self.costs["icu_purchase"] * 5 > self.budget and self.reserve_icu < 5: mask[4] = 0
-        if self.beds < 1: mask[5] = 0
-        if self.beds < 5: mask[6] = 0
-        if self.icu < 1: mask[7] = 0
-        if self.icu < 5: mask[8] = 0
+        if self.beds-ocp_b < 1: mask[5] = 0
+        if self.beds-ocp_b < 5: mask[6] = 0
+        if self.icu-ocp_i < 1: mask[7] = 0
+        if self.icu-ocp_i < 5: mask[8] = 0
         return mask
 
     def apply_action(self, action):
@@ -257,8 +275,10 @@ class Hospital:
     def _add_beds(self, bed_type: str, n: int, is_reserved: bool=False):
         r = getattr(self, "reserve_" + bed_type, 0)
         b = getattr(self, bed_type, 0)
+
         if is_reserved:
-            if b >= n:
+            ocp = len(getattr(self, bed_type + "_heap", 0))
+            if (b - ocp) >= n:
                 setattr(self, "reserve_" + bed_type, r + n)
                 setattr(self, bed_type, b - n)
         else:

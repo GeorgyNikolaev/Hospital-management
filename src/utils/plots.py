@@ -67,23 +67,23 @@ def plot_SD_DES_results(log_df: pd.DataFrame):
     plt.plot(log_df["day"], log_df["deaths_hosp"], label="deaths_hosp")
     plt.plot(log_df["day"], log_df["deaths_icu"], label="deaths_icu")
     plt.legend()
-
+    #
     out_png = os.path.join(RESULTS_DES_DIR, f"1_1.png")
     plt.savefig(out_png)
     plt.show()
     plt.close()
-
-    plt.figure(figsize=(8, 5))
+    #
+    # plt.figure(figsize=(8, 5))
+    # # plt.plot(log_df["day"], log_df["admitted"], label="admitted")
     # plt.plot(log_df["day"], log_df["admitted"], label="admitted")
-    plt.plot(log_df["day"], log_df["admitted"], label="admitted")
-    plt.plot(log_df["day"], log_df["rejected"], label="rejected")
-    plt.plot(log_df["day"], log_df["deaths"], label="deaths")
-    plt.legend()
-
-    out_png = os.path.join(RESULTS_DES_DIR, f"1_2.png")
-    plt.savefig(out_png)
-    plt.show()
-    plt.close()
+    # plt.plot(log_df["day"], log_df["rejected"], label="rejected")
+    # plt.plot(log_df["day"], log_df["deaths"], label="deaths")
+    # plt.legend()
+    #
+    # out_png = os.path.join(RESULTS_DES_DIR, f"1_2.png")
+    # plt.savefig(out_png)
+    # plt.show()
+    # plt.close()
 
     # Создаем фигуру с несколькими субплогами
     fig, axes = plt.subplots(2, 3, figsize=(18, 12))
@@ -152,8 +152,8 @@ def plot_SD_DES_results(log_df: pd.DataFrame):
     plt.tight_layout()
 
     out_png = os.path.join(RESULTS_DES_DIR, f"2.png")
-    plt.show()
     plt.savefig(out_png)
+    plt.show()
     plt.close()
 
 def plot_RL_results(metrics_dict):
