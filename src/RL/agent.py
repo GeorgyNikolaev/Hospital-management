@@ -34,7 +34,7 @@ class HospitalAgent:
 
         self.optim = optim.Adam(self.q.parameters(), lr=lr)
 
-        self.memory = deque(maxlen=5000)
+        self.memory = deque(maxlen=1000)
         self.batch_size = 64
 
         self.eps = 1.0  # exploration

@@ -11,6 +11,8 @@ def sample_arrivals(expected_hosp: float, expected_icu: float, rng: np.random.Ra
     icu_lambda = max(0.0, expected_icu)
     n_ward = rng.poisson(lam=ward_lambda)
     n_icu = rng.poisson(lam=icu_lambda)
+    # n_ward = round(expected_hosp+0.5)
+    # n_icu = round(expected_icu+0.5)
     events = []
     for _ in range(n_ward):
         events.append({"time_frac": rng.random(), "severity": "ward"})

@@ -45,6 +45,9 @@ def run_with_rl(
     # === INITIAL STATE COLLECTION ===
     initial_metrics = []
     for h in des.hospitals:
+        h.beds = 5
+        h.icu = 2
+
         metrics = h.daily_metrics()
         initial_metrics.append(metrics)
 
@@ -87,13 +90,13 @@ def run_with_rl(
             )
             seir_df = simulate_seir_hcd(params=seir_params_today, days=15, start_day=day+1, beta_time_fn=beta_time_fn, data=seir_df)
 
-            expected_hosp = seir_df["new_hospitalizations"].iloc[-1]
-            expected_icu = seir_df["new_icu"].iloc[-1]
+            expected_hosp = seir_df["new_hospitalizations"].iloc[-15]
+            expected_icu = seir_df["new_icu"].iloc[-15]
 
             expected_hosp_5 = seir_df["new_hospitalizations"].iloc[-5]
             expected_icu_5 = seir_df["new_icu"].iloc[-5]
-            expected_hosp_15 = seir_df["new_hospitalizations"].iloc[-15]
-            expected_icu_15 = seir_df["new_icu"].iloc[-15]
+            expected_hosp_15 = seir_df["new_hospitalizations"].iloc[-1]
+            expected_icu_15 = seir_df["new_icu"].iloc[-1]
 
             for hid, agent in enumerate(agents):
                 des.hospitals[hid].save_daily_metrics(day=day)
@@ -130,7 +133,6 @@ def run_with_rl(
         metric_day = {}
         for h in des.hospitals:
             hospital_metrics = h.daily_metrics(day=day)
-            # print(hospital_metrics["beds"], hospital_metrics["occupied_beds"])
             for key, value in hospital_metrics.items():
                 if key == "day":
                     metric_day[key] = day
@@ -139,6 +141,7 @@ def run_with_rl(
                 else:
                     metric_day[key] = value  # создаем новую запись
         # print(json.dumps(metric_day, indent=2, ensure_ascii=False))
+        # print(metric_day["expenses"])
 
         # 1) Смертность сокращает численность населения (вычитается из N)
         if metric_day["deaths"] > 0:
@@ -151,11 +154,13 @@ def run_with_rl(
         else:
             beta_modifier += (1.0 - beta_modifier) * 0.02
 
+        # print(metric_day["expenses"])
+
         # Логирование
-        logs["infection"].append(seir_df["new_infected"].iloc[-1])
+        logs["infection"].append(seir_df["new_infected"].iloc[-15])
         logs["hosp_expected"].append(expected_hosp)
         logs["icu_expected"].append(expected_icu)
-        logs["deaths_expected"].append(seir_df["new_deaths"].iloc[-1])
+        logs["deaths_expected"].append(seir_df["new_deaths"].iloc[-15])
         logs["population"].append(params.population)
 
         for k, v in metric_day.items():
@@ -187,13 +192,14 @@ def run_with_rl(
         seir_df = simulate_seir_hcd(params=seir_params_tomorrow, days=15, start_day=day + 2, beta_time_fn=beta_time_fn,
                                     data=seir_df)
 
-        expected_hosp = seir_df["new_hospitalizations"].iloc[-1]
-        expected_icu = seir_df["new_icu"].iloc[-1]
+        expected_hosp = seir_df["new_hospitalizations"].iloc[-15]
+        expected_icu = seir_df["new_icu"].iloc[-15]
 
         expected_hosp_5 = seir_df["new_hospitalizations"].iloc[-5]
         expected_icu_5 = seir_df["new_icu"].iloc[-5]
-        expected_hosp_15 = seir_df["new_hospitalizations"].iloc[-15]
-        expected_icu_15 = seir_df["new_icu"].iloc[-15]
+        expected_hosp_15 = seir_df["new_hospitalizations"].iloc[-1]
+        expected_icu_15 = seir_df["new_icu"].iloc[-1]
+
 
         for hid, h in enumerate(des.hospitals):
             metrics = h.daily_metrics(day=day)

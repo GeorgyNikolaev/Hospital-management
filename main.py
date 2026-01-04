@@ -109,15 +109,15 @@ def main():
         initial_infectious=settings.INITIAL_INFECTIOUS
     )
 
-    run_two_way(init_params=params, hospitals_cfg=hospitals, days=settings.DAYS)
     # agents, df_summary = train_epochs(
     #     hospitals_cfg=hospitals,
     #     init_params=params,
     #     days=110,
-    #     num_epochs=100,
+    #     num_epochs=500,
     #     save_dir="checkpoints/hospital_rl",
     #     seed_base=42
     # )
+    run_two_way(init_params=params, hospitals_cfg=hospitals, days=settings.DAYS)
 
 
 if __name__ == "__main__":

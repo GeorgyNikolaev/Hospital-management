@@ -15,7 +15,7 @@ from src.RL.run import run_with_rl
 from src.RL.train import load_agent_checkpoint
 from src.core.config import settings
 from src.core.models import SEIRHCDParams, Hospital
-from src.utils.plots import plot_SD_results, plot_SD_DES_results, save_SD_results, save_SD_DES_results, plot_RL_results
+from src.utils.plots import plot_SD_results, plot_SD_DES_results, save_SD_results, save_SD_DES_results, plot_RL_results, plot_DES_vs_RL
 from src.sd import run_sd
 from src.des import run_des
 
@@ -28,30 +28,33 @@ def run_two_way(
     rng = np.random.RandomState(settings.RANDOM_SEED)
 
     # Моделирование SD модели
-    # sd_logs = run_sd.run(init_params)
+    sd_logs = run_sd.run(init_params)
     # Графики
-    # plot_SD_results(sd_logs)
-    # save_SD_results(sd_logs)
+    plot_SD_results(sd_logs)
+    save_SD_results(sd_logs)
 
     # Моделирование SD <-> DES
-    # des_logs, des = run_des.run(hospitals_cfg, init_params, days, rng)
+    hospitals_cfg_des = [copy.deepcopy(h) for h in hospitals_cfg]
+    init_params_des = replace(init_params)
+    des_logs, des = run_des.run(hospitals_cfg_des, init_params_des, days, rng)
     # Сохранение данных
-    # plot_SD_DES_results(des_logs)
-    # save_SD_DES_results(des_logs, des)
+    plot_SD_DES_results(des_logs)
+    save_SD_DES_results(des_logs, des)
 
-    agents = [HospitalAgent() for _ in hospitals_cfg]
+    hospitals_cfg_rl = [copy.deepcopy(h) for h in hospitals_cfg]
+    init_params_rl = replace(init_params)
+    agents = [HospitalAgent() for _ in hospitals_cfg_rl]
     for i in range(len(agents)):
         agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best.pt")
 
-    envs = [HospitalEnv(i) for i in range(len(hospitals_cfg))]
+    envs = [HospitalEnv(i) for i in range(len(hospitals_cfg_rl))]
 
-    rl_logs, des, agents, _ = run_with_rl(hospitals_cfg, init_params, days, rng, agents, envs, False)
+    rl_logs, des, agents, _ = run_with_rl(hospitals_cfg_rl, init_params_rl, days, rng, agents, envs, False)
     rl_logs = pd.DataFrame(rl_logs)
     plot_SD_DES_results(rl_logs)
     # print(json.dumps(logs, indent=2, ensure_ascii=False))
     plot_RL_results(rl_logs)
-
-
+    plot_DES_vs_RL(des_logs, rl_logs)
 
     data_array = np.array(rl_logs["actions"])
     data_array = np.array(data_array.tolist())
@@ -60,12 +63,12 @@ def run_two_way(
     # Словарь соответствия числовых значений и текстовых меток
     action_labels = {
         0: 'Ничего не делать',
-        1: 'Купить 1 койку',
-        2: 'Купить 5 коек',
+        1: 'Купить 5 койку',
+        2: 'Купить 10 коек',
         3: 'Купить 1 аппарат ИВЛ',
         4: 'Купить 5 аппаратов ИВЛ',
-        5: 'Законсервировать 1 койку',
-        6: 'Законсервировать 5 коек',
+        5: 'Законсервировать 5 коек',
+        6: 'Законсервировать 10 коек',
         7: 'Законсервировать 1 аппарат ИВЛ',
         8: 'Законсервировать 5 аппаратов ИВЛ',
         9: 'Срочно выделить бюджет'

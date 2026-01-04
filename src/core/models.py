@@ -121,7 +121,7 @@ class Hospital:
         while self.icu_heap and self.icu_heap[0] <= now:
             heapq.heappop(self.icu_heap)
 
-    def current_occ(self, now: float):
+    def current_occ(self, now: float = None):
         """Возвращает словарь с количеством занятых коек и ИВЛ для каждой больницы"""
         self._purge(now)
 
@@ -209,7 +209,8 @@ class Hospital:
         if not metric:
             metric = self._default_metric_day
             metric["day"] = day
-            metric["budget"] -= metric["expenses"]
+            self.budget -= metric["expenses"]
+            metric["budget"] = self.budget
             self.metrics[day] = metric
 
         occ = self.current_occ(day)
@@ -227,7 +228,8 @@ class Hospital:
         if not metric:
             metric = self._default_metric_day
             metric["day"] = day
-            metric["budget"] -= metric["expenses"]
+            self.budget -= metric["expenses"]
+            metric["budget"] = self.budget
             self.metrics[day] = metric
         metric["beds"] = self.beds
         metric["icu"] = self.icu
@@ -239,37 +241,38 @@ class Hospital:
         mask = [1] * 10
         ocp_b = len(self.beds_heap)
         ocp_i = len(self.icu_heap)
-        if self.costs["beds_purchase"] > self.budget and self.reserve_beds < 1: mask[1] = 0
-        if self.costs["beds_purchase"] * 5 > self.budget and self.reserve_beds < 5: mask[2] = 0
-        if self.costs["icu_purchase"] > self.budget and self.reserve_icu < 1: mask[3] = 0
-        if self.costs["icu_purchase"] * 5 > self.budget and self.reserve_icu < 5: mask[4] = 0
-        if self.beds-ocp_b < 1: mask[5] = 0
-        if self.beds-ocp_b < 5: mask[6] = 0
-        if self.icu-ocp_i < 1: mask[7] = 0
-        if self.icu-ocp_i < 5: mask[8] = 0
+        if self.costs["beds_purchase"] * 5 > self.budget and self.reserve_beds < 5: mask[1] = 0
+        if self.costs["beds_purchase"] * 10 > self.budget and self.reserve_beds < 10: mask[2] = 0
+        if self.costs["icu_purchase"] * 5 > self.budget and self.reserve_icu < 5: mask[3] = 0
+        if self.costs["icu_purchase"] * 10 > self.budget and self.reserve_icu < 10: mask[4] = 0
+        if self.beds-ocp_b < 5: mask[5] = 0
+        if self.beds-ocp_b < 10: mask[6] = 0
+        if self.icu-ocp_i < 5: mask[7] = 0
+        if self.icu-ocp_i < 10: mask[8] = 0
         return mask
 
     def apply_action(self, action):
         """Принятие действия к больнице"""
         if action == 0:  # Ничего не делать
             return
-        elif action == 1: # Купить 1 койку (освободить)
-            self._add_beds("beds", 1)
-        elif action == 2: # Купить 5 коек (освободить)
+        elif action == 1: # Купить 5 койку (освободить)
             self._add_beds("beds", 5)
-        elif action == 3: # Купить 1 аппарат ИВЛ (освободить)
-            self._add_beds("icu", 1)
-        elif action == 4: # Купить 5 аппаратов ИВЛ (освободить)
+        elif action == 2: # Купить 10 коек (освободить)
+            self._add_beds("beds", 10)
+        elif action == 3: # Купить 5 аппарат ИВЛ (освободить)
             self._add_beds("icu", 5)
-        elif action == 5: # Законсервировать 1 койку
-            self._add_beds("beds", 1, is_reserved=True)
-        elif action == 6: # Законсервировать 5 коек
+        elif action == 4: # Купить 10 аппаратов ИВЛ (освободить)
+            self._add_beds("icu", 10)
+        elif action == 5: # Законсервировать 5 койку
             self._add_beds("beds", 5, is_reserved=True)
-        elif action == 7: # Законсервировать 1 аппарат ИВЛ
-            self._add_beds("icu", 1, is_reserved=True)
-        elif action == 8: # Законсервировать 5 аппаратов ИВЛ
+        elif action == 6: # Законсервировать 10 коек
+            self._add_beds("beds", 10, is_reserved=True)
+        elif action == 7: # Законсервировать 5 аппарат ИВЛ
             self._add_beds("icu", 5, is_reserved=True)
+        elif action == 8: # Законсервировать 10 аппаратов ИВЛ
+            self._add_beds("icu", 10, is_reserved=True)
         elif action == 9: # Срочно выделить бюджет на закупку
+            self.budget += 6_000_000
             return
 
     def _add_beds(self, bed_type: str, n: int, is_reserved: bool=False):
@@ -286,8 +289,8 @@ class Hospital:
                 setattr(self, bed_type, b + n)
                 setattr(self, "reserve_" + bed_type, r - n)
             elif self.costs[bed_type + "_purchase"] * n < self.budget:
-                self.budget -= self.costs[bed_type + "_purchase"] * n
                 setattr(self, bed_type, b + n)
+                self.budget -= self.costs[bed_type + "_purchase"] * n
 
         
 
