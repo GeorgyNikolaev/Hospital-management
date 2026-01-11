@@ -14,12 +14,6 @@ def run(hospitals_cfg: List[Hospital], init_params: SEIRHCDParams, days: int, rn
     des = DES(hospitals_cfg, rng_seed=settings.RANDOM_SEED)
     params = init_params
 
-    # calibrate if requested and data provided
-    # if calibrate and (observed_new_hosp is not None) and observed_new_hosp.sum() > 0:
-    #     use_days = min(len(observed_new_hosp), max(30, days // 3))
-    #     params = calibrate_seir(params, observed_new_hosp[:use_days], days=use_days)
-    #     print(f"Calibrated: beta={params.beta:.4f}, hosp_rate={params.hosp_rate:.4f}")
-
     logs = {"day": [],
             "infection": [],
             "hosp_expected": [],
@@ -32,11 +26,11 @@ def run(hospitals_cfg: List[Hospital], init_params: SEIRHCDParams, days: int, rn
     beta_modifier = 1.0
 
     def beta_time_fn(ti, beta):
+        """Коллибровка beta параметра"""
         return beta * beta_modifier
 
     seir_df = None
     for day in range(days):
-        # print(f"day: {day}")
         seir_params_today = SEIRHCDParams(
             population=params.population,
             beta=params.beta,
@@ -87,11 +81,32 @@ def run(hospitals_cfg: List[Hospital], init_params: SEIRHCDParams, days: int, rn
             params.population = max(0, params.population - metric_day["deaths"])
 
         # 2) Высокий уровень отторжения => увеличить бета-модификатор (поведенческую реакцию)
-        overload = metric_day["rejected"] / max(1.0, max(1.0, expected_hosp + expected_icu))
-        if overload < 0.1:
-            beta_modifier *= max(0.6, 1.0 - 0.25 * min(1.0, overload))
+        overload = metric_day["rejected"] / max(1.0, len(events))
+        # --- параметры регулирования ---
+        OVERLOAD_LOW = 0.05  # система чувствует себя комфортно
+        OVERLOAD_HIGH = 0.20  # начинается перегрузка
+
+        BETA_MIN = 0.4
+        BETA_MAX = 1.6
+
+        UP_RATE = 0.03  # скорость ослабления ограничений
+        DOWN_RATE = 0.08  # скорость ужесточения (всегда быстрее!)
+
+        # --- регулирование ---
+        if overload < OVERLOAD_LOW:
+            # система справляется → ослабляем ограничения → beta ↑
+            beta_modifier += UP_RATE * (1.0 - overload / OVERLOAD_LOW)
+
+        elif overload > OVERLOAD_HIGH:
+            # перегрузка → ужесточаем ограничения → beta ↓
+            beta_modifier -= DOWN_RATE * (overload - OVERLOAD_HIGH) / (1.0 - OVERLOAD_HIGH)
+
         else:
-            beta_modifier += (1.0 - beta_modifier) * 0.02
+            # нейтральная зона → мягко возвращаем к 1.0
+            beta_modifier += 0.02 * (1.0 - beta_modifier)
+
+        # --- жёсткие границы ---
+        beta_modifier = max(BETA_MIN, min(BETA_MAX, beta_modifier))
 
         # Логирование
         logs["infection"].append(seir_df["new_infected"].iloc[-1])

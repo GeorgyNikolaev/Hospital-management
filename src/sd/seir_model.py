@@ -1,5 +1,4 @@
-import json
-
+"""SEIR-H-C-D симуляция"""
 import numpy as np
 import pandas as pd
 
@@ -11,10 +10,9 @@ def simulate_seir_hcd(params: SEIRHCDParams, days: int, start_day: int = 1, dt: 
     n_steps = int(np.floor(days / dt)) + 1
     t = np.linspace(0.0, start_day + days - 1, n_steps + start_day - 1)
 
-    # state arrays
     if data is None:
         S, E, I, H, C, R, D = [np.zeros(n_steps) for _ in range(7)]
-        # initial conditions
+
         S[0] = params.population - params.initial_exposed - params.initial_infectious
         E[0] = params.initial_exposed
         I[0] = params.initial_infectious
@@ -39,8 +37,9 @@ def simulate_seir_hcd(params: SEIRHCDParams, days: int, start_day: int = 1, dt: 
     flow_C_to_D = np.zeros(n_steps+start_day-1)
 
 
-    def deriv(ti, S_, E_, I_, H_, C_, R_, D_):
-        beta = params.beta if beta_time_fn is None else beta_time_fn(ti, params.beta)
+    def deriv(ti_, S_, E_, I_, H_, C_, R_, D_):
+        """Вычисление дифференциалов"""
+        beta = params.beta if beta_time_fn is None else beta_time_fn(ti_, params.beta)
 
         new_inf_flow = beta * S_ * I_ / params.population        # S -> E
         E_to_I_flow = params.sigma * E_                          # E -> I
@@ -108,21 +107,41 @@ def simulate_seir_hcd(params: SEIRHCDParams, days: int, start_day: int = 1, dt: 
     new_deaths = flow_C_to_D * dt
     new_recoveries = (flow_I_to_R + flow_H_to_R + flow_C_to_R) * dt
 
+    # Основные данные
     new_data = {
         "t": t,
         "S": S, "E": E, "I": I, "H": H, "C": C, "R": R, "D": D,
-        "new_infected": concat(data["new_infected"] if not data is None else None, new_infected, start_day),
-        "E_to_I": concat(data["E_to_I"] if not data is None else None, new_E_to_I, start_day),
-        "new_hospitalizations": concat(data["new_hospitalizations"] if not data is None else None, new_hospitalizations, start_day),
-        "new_icu": concat(data["new_icu"] if not data is None else None, new_icu, start_day),
-        "new_deaths": concat(data["new_deaths"] if not data is None else None, new_deaths, start_day),
-        "new_recoveries": concat(data["new_recoveries"] if not data is None else None, new_recoveries, start_day),
-        "rate_new_infected": concat(data["rate_new_infected"] if not data is None else None, flow_new_exposed, start_day),
-        "rate_I_to_H": concat(data["rate_I_to_H"] if not data is None else None, flow_I_to_H, start_day),
-        "rate_I_to_R": concat(data["rate_I_to_R"] if not data is None else None, flow_I_to_R, start_day),
-        "rate_H_to_C": concat(data["rate_H_to_C"] if not data is None else None, flow_H_to_C, start_day),
-        "rate_C_to_D": concat(data["rate_C_to_D"] if not data is None else None, flow_C_to_D, start_day),
     }
+
+    def get_value_or_none(key_):
+        """Вспомогательная функция для получения значения или None"""
+        return data.get(key_) if data is not None else None
+
+    def concat(data_1, data_2, index: int):
+        """Фугкция для конкатинации"""
+        return pd.concat([
+            data_1[:index],
+            pd.Series(data_2[index:])
+        ]) if data_1 is not None else data_2
+
+    # Данные для конкатенации
+    concatenation_config = [
+        ("new_infected", new_infected),
+        ("E_to_I", new_E_to_I),
+        ("new_hospitalizations", new_hospitalizations),
+        ("new_icu", new_icu),
+        ("new_deaths", new_deaths),
+        ("new_recoveries", new_recoveries),
+        ("rate_new_infected", flow_new_exposed),
+        ("rate_I_to_H", flow_I_to_H),
+        ("rate_I_to_R", flow_I_to_R),
+        ("rate_H_to_C", flow_H_to_C),
+        ("rate_C_to_D", flow_C_to_D),
+    ]
+
+    # Конкатенация
+    for key, new_value in concatenation_config:
+        new_data[key] = concat(get_value_or_none(key), new_value, start_day)
 
     # Перед созданием DataFrame преобразовать все Series в numpy arrays
     for key in new_data:
@@ -132,9 +151,3 @@ def simulate_seir_hcd(params: SEIRHCDParams, days: int, start_day: int = 1, dt: 
     df = pd.DataFrame(new_data)
 
     return df
-
-def concat(data_1, data_2, index: int):
-    return pd.concat([
-            data_1[:index],
-            pd.Series(data_2[index:])
-        ]) if data_1 is not None else data_2

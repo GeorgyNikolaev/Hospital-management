@@ -297,7 +297,7 @@ def plot_DES_vs_RL(des_log, rl_log):
     ax1 = axes[0, 0]
     ax1.plot(days, des_log['admitted'], 'r-', label='DES', linewidth=2)
     ax1.plot(days, rl_log['admitted'], 'b-', label='RL', linewidth=2)
-    ax1.set_title('Принятые люди')
+    ax1.set_title('Принято')
     ax1.set_xlabel('Дни')
     ax1.set_ylabel('Люди')
     ax1.legend()
@@ -306,7 +306,7 @@ def plot_DES_vs_RL(des_log, rl_log):
     ax2 = axes[0, 1]
     ax2.plot(days, des_log['rejected'], 'r-', label='DES', linewidth=2)
     ax2.plot(days, rl_log['rejected'], 'b-', label='RL', linewidth=2)
-    ax2.set_title('Принятые люди')
+    ax2.set_title('Отказы')
     ax2.set_xlabel('Дни')
     ax2.set_ylabel('Люди')
     ax2.legend()
@@ -341,6 +341,42 @@ def plot_DES_vs_RL(des_log, rl_log):
     ax4.grid(True, alpha=0.3)
 
     plt.tight_layout()
+    plt.show()
+
+def plot_RL_actions(rl_logs):
+    data_array = np.array(rl_logs["actions"])
+    data_array = np.array(data_array.tolist())
+
+    # Создаем график
+    # Словарь соответствия числовых значений и текстовых меток
+    action_labels = {
+        0: 'Ничего не делать',
+        1: 'Купить 5 койку',
+        2: 'Купить 10 коек',
+        3: 'Купить 1 аппарат ИВЛ',
+        4: 'Купить 5 аппаратов ИВЛ',
+        5: 'Законсервировать 5 коек',
+        6: 'Законсервировать 10 коек',
+        7: 'Законсервировать 1 аппарат ИВЛ',
+        8: 'Законсервировать 5 аппаратов ИВЛ',
+        9: 'Срочно выделить бюджет'
+    }
+
+    plt.figure(figsize=(10, 6))
+    x = range(len(rl_logs["actions"]))
+
+    for i in range(data_array.shape[1]):
+        y = [subarray[i] for subarray in rl_logs["actions"]]
+        plt.plot(x, y, 'o-', label=f'Больница {i + 1}', markersize=8)
+
+    plt.xlabel('День')
+    plt.title('График принятия решений больниц')
+
+    # Устанавливаем метки на оси Y
+    plt.yticks(ticks=list(action_labels.keys()), labels=list(action_labels.values()))
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()  # Чтобы метки не обрезались
     plt.show()
 
 def save_SD_results(results_df):

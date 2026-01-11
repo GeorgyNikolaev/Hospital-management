@@ -1,11 +1,9 @@
-""" """
+"""Точка входа"""
 import os
 import json
-import numpy as np
-import pandas as pd
 
 from typing import List, Optional
-
+from src.RL.train import train_epochs
 from src.core.config import settings
 from src.core.models import Hospital
 from src.run import run_two_way
@@ -13,49 +11,10 @@ from src.utils.utils import make_params_consistent
 
 RESULTS_DIR = "results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
-
-
-def load_local_data(path: str, location: str) -> pd.DataFrame:
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"Data file not found: {path}")
-    df = pd.read_csv(path, parse_dates=["date"], dayfirst=False)
-    if "location" in df.columns:
-        df = df[df["location"] == location].copy()
-    # If still empty, try exact match with variants (case-insensitive)
-    if df.empty and "location" in pd.read_csv(path, nrows=5).columns:
-        raise ValueError(f"No rows for region '{location}' in {path}. Check 'location' values.")
-    df = df.sort_values("date").reset_index(drop=True)
-    return df
-
-
-def derive_observed_new_hosp(df: pd.DataFrame) -> np.ndarray:
-    """Убираем нуль из данных"""
-    n = len(df)
-    if "total_cases" in df.columns:
-        if df["total_cases"].notnull().sum() > 0:
-            hp = df["total_cases"].fillna(0).values
-
-            # Убираем нули в начале
-            while len(hp) > 0 and hp[0] == 0:
-                hp = hp[1:]
-
-            if len(hp) == 0:
-                return np.array([])
-
-            # Находим только точки, где значение меняется
-            diffs = []
-            prev_value = 0
-            for i in range(len(hp)):
-                if hp[i] != prev_value:
-                    diffs.append(hp[i] - prev_value)
-                    prev_value = hp[i]
-
-            return np.array(diffs)
-    # fallback: none available
-    return np.zeros(n)
-
+IS_TRAIN = False
 
 def load_hospital_config(path: Optional[str]) -> List[Hospital]:
+    """Загрузка данныз о госпиталях"""
     if path:
         if not os.path.exists(path):
             raise FileNotFoundError(f"Hospital config JSON not found: {path}")
@@ -85,13 +44,6 @@ def main():
     hosp_config = "data/hospitals.json"
     hospitals = load_hospital_config(hosp_config)
 
-    # initial SEIR params
-    region = "Australia"
-    data_path = "D:/MEPHI/Simulation_modeling/data/owid-covid-data.csv"
-
-    # real_data = load_real_data(data_path, region)
-    # days = len(real_data)
-
     params = make_params_consistent(
         population=settings.POPULATION,
         sigma=settings.SIGMA,
@@ -106,15 +58,17 @@ def main():
         initial_infectious=settings.INITIAL_INFECTIOUS
     )
 
-    # agents, df_summary = train_epochs(
-    #     hospitals_cfg=hospitals,
-    #     init_params=params,
-    #     days=110,
-    #     num_epochs=500,
-    #     save_dir="checkpoints/hospital_rl",
-    #     seed_base=42
-    # )
-    run_two_way(init_params=params, hospitals_cfg=hospitals, days=settings.DAYS)
+    if IS_TRAIN:
+        agents, df_summary = train_epochs(
+            hospitals_cfg=hospitals,
+            init_params=params,
+            days=110,
+            num_epochs=500,
+            save_dir="checkpoints/hospital_rl",
+            seed_base=42
+        )
+    else:
+        run_two_way(init_params=params, hospitals_cfg=hospitals, days=settings.DAYS)
 
 
 if __name__ == "__main__":

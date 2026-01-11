@@ -3,6 +3,7 @@ import json
 from typing import List
 
 import numpy as np
+import pandas as pd
 
 from src.core.config import settings
 from src.core.models import Hospital, SEIRHCDParams, Patient
@@ -148,11 +149,32 @@ def run_with_rl(
             params.population = max(1000, params.population - metric_day["deaths"])
 
         # 2) Высокий уровень отторжения => увеличить бета-модификатор (поведенческую реакцию)
-        overload = metric_day["rejected"] / max(1.0, max(1.0, expected_hosp + expected_icu))
-        if overload < 0.1:
-            beta_modifier *= max(0.6, 1.0 - 0.25 * min(1.0, overload))
+        overload = metric_day["rejected"] / max(1.0, len(events))
+        # --- параметры регулирования ---
+        OVERLOAD_LOW = 0.05  # система чувствует себя комфортно
+        OVERLOAD_HIGH = 0.20  # начинается перегрузка
+
+        BETA_MIN = 0.4
+        BETA_MAX = 1.6
+
+        UP_RATE = 0.03  # скорость ослабления ограничений
+        DOWN_RATE = 0.08  # скорость ужесточения (всегда быстрее!)
+
+        # --- регулирование ---
+        if overload < OVERLOAD_LOW:
+            # система справляется → ослабляем ограничения → beta ↑
+            beta_modifier += UP_RATE * (1.0 - overload / OVERLOAD_LOW)
+
+        elif overload > OVERLOAD_HIGH:
+            # перегрузка → ужесточаем ограничения → beta ↓
+            beta_modifier -= DOWN_RATE * (overload - OVERLOAD_HIGH) / (1.0 - OVERLOAD_HIGH)
+
         else:
-            beta_modifier += (1.0 - beta_modifier) * 0.02
+            # нейтральная зона → мягко возвращаем к 1.0
+            beta_modifier += 0.02 * (1.0 - beta_modifier)
+
+        # --- жёсткие границы ---
+        beta_modifier = max(BETA_MIN, min(BETA_MAX, beta_modifier))
 
         # print(metric_day["expenses"])
 
@@ -235,4 +257,4 @@ def run_with_rl(
         # обновляем состояния
         obs_list = new_obs_list
 
-    return logs, des, agents, episode_rewards
+    return pd.DataFrame(logs), des, agents, episode_rewards
