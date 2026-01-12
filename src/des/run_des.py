@@ -6,7 +6,7 @@ from src.core.config import settings
 from src.core.models import SEIRHCDParams, Hospital, Patient
 from src.des.des_model import DES
 from src.sd.seir_model import simulate_seir_hcd
-from src.utils.utils import sample_arrivals
+from src.utils.utils import sample_arrivals, change_beta_modifier
 
 
 def run(hospitals_cfg: List[Hospital], init_params: SEIRHCDParams, days: int, rng):
@@ -82,31 +82,7 @@ def run(hospitals_cfg: List[Hospital], init_params: SEIRHCDParams, days: int, rn
 
         # 2) Высокий уровень отторжения => увеличить бета-модификатор (поведенческую реакцию)
         overload = metric_day["rejected"] / max(1.0, len(events))
-        # --- параметры регулирования ---
-        OVERLOAD_LOW = 0.05  # система чувствует себя комфортно
-        OVERLOAD_HIGH = 0.20  # начинается перегрузка
-
-        BETA_MIN = 0.4
-        BETA_MAX = 1.6
-
-        UP_RATE = 0.03  # скорость ослабления ограничений
-        DOWN_RATE = 0.08  # скорость ужесточения (всегда быстрее!)
-
-        # --- регулирование ---
-        if overload < OVERLOAD_LOW:
-            # система справляется → ослабляем ограничения → beta ↑
-            beta_modifier += UP_RATE * (1.0 - overload / OVERLOAD_LOW)
-
-        elif overload > OVERLOAD_HIGH:
-            # перегрузка → ужесточаем ограничения → beta ↓
-            beta_modifier -= DOWN_RATE * (overload - OVERLOAD_HIGH) / (1.0 - OVERLOAD_HIGH)
-
-        else:
-            # нейтральная зона → мягко возвращаем к 1.0
-            beta_modifier += 0.02 * (1.0 - beta_modifier)
-
-        # --- жёсткие границы ---
-        beta_modifier = max(BETA_MIN, min(BETA_MAX, beta_modifier))
+        beta_modifier = change_beta_modifier(beta_modifier, overload)
 
         # Логирование
         logs["infection"].append(seir_df["new_infected"].iloc[-1])
@@ -116,10 +92,7 @@ def run(hospitals_cfg: List[Hospital], init_params: SEIRHCDParams, days: int, rn
         logs["population"].append(params.population)
 
         for k, v in metric_day.items():
-            if k in logs:
-                logs[k].append(v)
-            else:
-                logs[k] = [v]
+            logs.setdefault(k, []).append(v)
 
     logs = pd.DataFrame(logs)
     return logs, des

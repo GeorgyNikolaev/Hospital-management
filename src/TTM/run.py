@@ -1,10 +1,8 @@
-"""Обучение"""
-import json
-from typing import List
-
+"""Threshold-Triggered Management - управление больницами через пороговые значения"""
 import numpy as np
 import pandas as pd
 
+from typing import List
 from src.core.config import settings
 from src.core.models import Hospital, SEIRHCDParams, Patient
 from src.des.des_model import DES

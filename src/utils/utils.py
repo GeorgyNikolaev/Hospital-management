@@ -98,3 +98,33 @@ def make_params_consistent(
         initial_infectious=initial_infectious
     )
 
+def change_beta_modifier(beta_modifier: float, overload: float) -> float:
+    """Корректировка beta_modifier"""
+    new_beta_modifier = beta_modifier
+
+    # --- параметры регулирования ---
+    OVERLOAD_LOW = 0.05  # система чувствует себя комфортно
+    OVERLOAD_HIGH = 0.20  # начинается перегрузка
+
+    BETA_MIN = 0.4
+    BETA_MAX = 1.6
+
+    UP_RATE = 0.03  # скорость ослабления ограничений
+    DOWN_RATE = 0.08  # скорость ужесточения (всегда быстрее!)
+
+    # --- регулирование ---
+    if overload < OVERLOAD_LOW:
+        # система справляется → ослабляем ограничения → beta ↑
+        new_beta_modifier -= UP_RATE * (1.0 - overload / OVERLOAD_LOW)
+
+    elif overload > OVERLOAD_HIGH:
+        # перегрузка → ужесточаем ограничения → beta ↓
+        new_beta_modifier += DOWN_RATE * (overload - OVERLOAD_HIGH) / (1.0 - OVERLOAD_HIGH)
+
+    else:
+        # нейтральная зона → мягко возвращаем к 1.0
+        new_beta_modifier += 0.02 * (1.0 - beta_modifier)
+
+    # --- жёсткие границы ---
+    new_beta_modifier = max(BETA_MIN, min(BETA_MAX, beta_modifier))
+    return new_beta_modifier
