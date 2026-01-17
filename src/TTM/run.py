@@ -1,8 +1,8 @@
 """Threshold-Triggered Management - управление больницами через пороговые значения"""
-import numpy as np
 import pandas as pd
 
 from typing import List
+from TTM.agent import Agent
 from src.core.config import settings
 from src.core.models import Hospital, SEIRHCDParams, Patient
 from src.des.des_model import DES
@@ -10,17 +10,17 @@ from src.sd.seir_model import simulate_seir_hcd
 from src.utils.utils import sample_arrivals, change_beta_modifier
 
 
-def run_with_rl(
+def run_ttm(
         hospitals_cfg: List[Hospital],
         init_params: SEIRHCDParams,
         days: int,
         rng,
-        agents,          # список объектов HospitalAgent, один на больницу
-        envs,            # список HospitalEnv
-        is_train: bool=True
 ):
+    """Функция для запуска симуляции"""
     des = DES(hospitals_cfg, rng_seed=settings.RANDOM_SEED)
     params = init_params
+
+    agent = Agent()
 
     logs = {"day": [],
             "infection": [],
@@ -37,6 +37,7 @@ def run_with_rl(
     beta_modifier = 1.0
 
     def beta_time_fn(ti, beta):
+        """Корректировка beta параметра"""
         return beta * beta_modifier
 
     seir_df = None
@@ -51,19 +52,10 @@ def run_with_rl(
         initial_metrics.append(metrics)
 
     # init environments
-    obs_list = [envs[i].reset(initial_metrics[i]) for i in range(len(envs))]
-
-    # добавим аккумулятор reward по агентам
-    n_agents = len(agents)
-    episode_rewards = [0.0 for _ in range(n_agents)]
+    obs_list = initial_metrics
 
     expected_hosp = 0
     expected_icu = 0
-
-    expected_hosp_5 = 0
-    expected_icu_5 = 0
-    expected_hosp_15 = 0
-    expected_icu_15 = 0
 
     for day in range(days):
         # print(f"day: {day}")
@@ -97,16 +89,16 @@ def run_with_rl(
             expected_hosp_15 = seir_df["new_hospitalizations"].iloc[-1]
             expected_icu_15 = seir_df["new_icu"].iloc[-1]
 
-            for hid, agent in enumerate(agents):
+            for hid in range(len(des.hospitals)):
                 des.hospitals[hid].save_daily_metrics(day=day)
-                obs_list[hid] = np.append(obs_list[hid], expected_hosp)
-                obs_list[hid] = np.append(obs_list[hid], expected_icu)
-                obs_list[hid] = np.append(obs_list[hid], expected_hosp_5)
-                obs_list[hid] = np.append(obs_list[hid], expected_icu_5)
-                obs_list[hid] = np.append(obs_list[hid], expected_hosp_15)
-                obs_list[hid] = np.append(obs_list[hid], expected_icu_15)
+                obs_list[hid]["expected_hosp_1_day"] = expected_hosp
+                obs_list[hid]["expected_icu_1_day"] = expected_icu
+                obs_list[hid]["expected_hosp_5_day"] = expected_hosp_5
+                obs_list[hid]["expected_icu_5_day"] = expected_icu_5
+                obs_list[hid]["expected_hosp_15_day"] = expected_hosp_15
+                obs_list[hid]["expected_icu_15_day"] = expected_icu_15
 
-        for hid, agent in enumerate(agents):
+        for hid in range(len(des.hospitals)):
             des.hospitals[hid].save_daily_metrics(day=day)
 
             # вычисляем маску действий для больницы (текущий бюджет и резервы учтены внутри Hospital)
@@ -127,7 +119,7 @@ def run_with_rl(
             pid += 1
             los = rng.gamma(shape=2.0, scale=5.0) if ev["severity"] == "icu" else rng.gamma(shape=2.0, scale=3.0)
             p = Patient(id=pid, absolute_time=day + ev["time_frac"], severity=ev["severity"], los=max(1.0, los))
-            p = des.attempt_admit(p, max_wait=0.5)
+            des.attempt_admit(p, max_wait=0.5)
 
         metric_day = {}
         for h in des.hospitals:
@@ -139,8 +131,6 @@ def run_with_rl(
                     metric_day[key] += value  # суммируем
                 else:
                     metric_day[key] = value  # создаем новую запись
-        # print(json.dumps(metric_day, indent=2, ensure_ascii=False))
-        # print(metric_day["expenses"])
 
         # 1) Смертность сокращает численность населения (вычитается из N)
         if metric_day["deaths"] > 0:
@@ -149,8 +139,6 @@ def run_with_rl(
         # 2) Высокий уровень отторжения => увеличить бета-модификатор (поведенческую реакцию)
         overload = metric_day["rejected"] / max(1.0, len(events))
         beta_modifier = change_beta_modifier(beta_modifier, overload)
-
-        # print(metric_day["expenses"])
 
         # Логирование
         logs["infection"].append(seir_df["new_infected"].iloc[-15])
@@ -163,7 +151,6 @@ def run_with_rl(
             logs.setdefault(k, []).append(v)
 
         new_obs_list = []
-        rewards = []
 
         seir_params_tomorrow = SEIRHCDParams(
             population=params.population,
@@ -202,29 +189,8 @@ def run_with_rl(
             metrics["expected_hosp_15_day"] = expected_hosp_15 / 3
             metrics["expected_icu_15_day"] = expected_icu_15 / 3
 
-            next_obs, reward = envs[hid].step(metrics, actions[hid])
+            new_obs_list.append(metrics)
 
-            # вычисляем маску действий для next state (важно: budget/резервы уже обновлены после apply_action)
-            next_mask = des.hospitals[hid].get_action_mask()
-
-            new_obs_list.append(next_obs)
-            rewards.append(reward)
-
-            # сохраняем опыт с маской состояния и маской next
-            agents[hid].store(obs_list[hid], actions[hid], reward, next_obs, action_masks[hid], next_mask)
-
-            # аккумулируем reward для эпизода
-            episode_rewards[hid] += float(reward)
-
-        if is_train:
-            for agent in agents:
-                agent.train_step()
-
-            if day % 20 == 0:
-                for agent in agents:
-                    agent.update_target()
-
-        # обновляем состояния
         obs_list = new_obs_list
 
-    return pd.DataFrame(logs), des, agents, episode_rewards
+    return pd.DataFrame(logs), des
