@@ -220,7 +220,7 @@ class Hospital:
         metric["beds"] = self.beds
         metric["icu"] = self.icu
 
-        return metric
+        return metric.copy()
 
     def save_daily_metrics(self, day: int = 0):
         """Сохранение дневной метрики"""
@@ -272,7 +272,7 @@ class Hospital:
         elif action == 8: # Законсервировать 10 аппаратов ИВЛ
             self._add_beds("icu", 10, is_reserved=True)
         elif action == 9: # Срочно выделить бюджет на закупку
-            self.budget += 6_000_000
+            self.budget += 30_000_000
             return
 
     def _add_beds(self, bed_type: str, n: int, is_reserved: bool=False):
