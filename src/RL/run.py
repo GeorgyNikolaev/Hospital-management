@@ -62,11 +62,6 @@ def run_with_rl(
     expected_hosp = 0
     expected_icu = 0
 
-    expected_hosp_5 = 0
-    expected_icu_5 = 0
-    expected_hosp_15 = 0
-    expected_icu_15 = 0
-
     for day in range(days):
         # print(f"day: {day}")
         actions = []
@@ -89,24 +84,24 @@ def run_with_rl(
                 initial_exposed=params.initial_exposed,
                 initial_infectious=params.initial_infectious
             )
-            seir_df = simulate_seir_hcd(params=seir_params_today, days=15, start_day=day+1, beta_time_fn=beta_time_fn, data=seir_df)
+            seir_df = simulate_seir_hcd(params=seir_params_today, days=7, start_day=day+1, beta_time_fn=beta_time_fn, data=seir_df)
 
-            expected_hosp = seir_df["new_hospitalizations"].iloc[-15]
-            expected_icu = seir_df["new_icu"].iloc[-15]
+            expected_hosp = seir_df["new_hospitalizations"].iloc[-7]
+            expected_icu = seir_df["new_icu"].iloc[-7]
 
-            expected_hosp_5 = seir_df["new_hospitalizations"].iloc[-5]
-            expected_icu_5 = seir_df["new_icu"].iloc[-5]
-            expected_hosp_15 = seir_df["new_hospitalizations"].iloc[-1]
-            expected_icu_15 = seir_df["new_icu"].iloc[-1]
+            expected_hosp_3 = seir_df["new_hospitalizations"].iloc[-5]
+            expected_icu_3 = seir_df["new_icu"].iloc[-5]
+            expected_hosp_7 = seir_df["new_hospitalizations"].iloc[-1]
+            expected_icu_7 = seir_df["new_icu"].iloc[-1]
 
             for hid, agent in enumerate(agents):
                 des.hospitals[hid].save_daily_metrics(day=day)
                 obs_list[hid] = np.append(obs_list[hid], expected_hosp)
                 obs_list[hid] = np.append(obs_list[hid], expected_icu)
-                obs_list[hid] = np.append(obs_list[hid], expected_hosp_5)
-                obs_list[hid] = np.append(obs_list[hid], expected_icu_5)
-                obs_list[hid] = np.append(obs_list[hid], expected_hosp_15)
-                obs_list[hid] = np.append(obs_list[hid], expected_icu_15)
+                obs_list[hid] = np.append(obs_list[hid], expected_hosp_3)
+                obs_list[hid] = np.append(obs_list[hid], expected_icu_3)
+                obs_list[hid] = np.append(obs_list[hid], expected_hosp_7)
+                obs_list[hid] = np.append(obs_list[hid], expected_icu_7)
 
         for hid, agent in enumerate(agents):
             des.hospitals[hid].save_daily_metrics(day=day)
@@ -155,10 +150,10 @@ def run_with_rl(
         # print(metric_day["expenses"])
 
         # Логирование
-        logs["infection"].append(seir_df["new_infected"].iloc[-15])
+        logs["infection"].append(seir_df["new_infected"].iloc[-7])
         logs["hosp_expected"].append(expected_hosp)
         logs["icu_expected"].append(expected_icu)
-        logs["deaths_expected"].append(seir_df["new_deaths"].iloc[-15])
+        logs["deaths_expected"].append(seir_df["new_deaths"].iloc[-7])
         logs["population"].append(params.population)
 
         for k, v in metric_day.items():
@@ -183,26 +178,26 @@ def run_with_rl(
             initial_exposed=params.initial_exposed,
             initial_infectious=params.initial_infectious
         )
-        seir_df = simulate_seir_hcd(params=seir_params_tomorrow, days=15, start_day=day + 2, beta_time_fn=beta_time_fn,
+        seir_df = simulate_seir_hcd(params=seir_params_tomorrow, days=7, start_day=day + 2, beta_time_fn=beta_time_fn,
                                     data=seir_df)
 
-        expected_hosp = seir_df["new_hospitalizations"].iloc[-15]
-        expected_icu = seir_df["new_icu"].iloc[-15]
+        expected_hosp = seir_df["new_hospitalizations"].iloc[-7]
+        expected_icu = seir_df["new_icu"].iloc[-7]
 
-        expected_hosp_5 = seir_df["new_hospitalizations"].iloc[-5]
-        expected_icu_5 = seir_df["new_icu"].iloc[-5]
-        expected_hosp_15 = seir_df["new_hospitalizations"].iloc[-1]
-        expected_icu_15 = seir_df["new_icu"].iloc[-1]
+        expected_hosp_3 = seir_df["new_hospitalizations"].iloc[-5]
+        expected_icu_3 = seir_df["new_icu"].iloc[-5]
+        expected_hosp_7 = seir_df["new_hospitalizations"].iloc[-1]
+        expected_icu_7 = seir_df["new_icu"].iloc[-1]
 
 
         for hid, h in enumerate(des.hospitals):
             metrics = h.daily_metrics(day=day)
             metrics["expected_hosp_1_day"] = expected_hosp / 3
             metrics["expected_icu_1_day"] = expected_icu / 3
-            metrics["expected_hosp_5_day"] = expected_hosp_5 / 3
-            metrics["expected_icu_5_day"] = expected_icu_5 / 3
-            metrics["expected_hosp_15_day"] = expected_hosp_15 / 3
-            metrics["expected_icu_15_day"] = expected_icu_15 / 3
+            metrics["expected_hosp_3_day"] = expected_hosp_3 / 3
+            metrics["expected_icu_3_day"] = expected_icu_3 / 3
+            metrics["expected_hosp_7_day"] = expected_hosp_7 / 3
+            metrics["expected_icu_7_day"] = expected_icu_7 / 3
 
             next_obs, reward = envs[hid].step(metrics, actions[hid])
 

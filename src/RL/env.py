@@ -70,10 +70,10 @@ class HospitalEnv:
         reward -= (death_ratio * 0.7) + (reject_ratio * 0.3)  # 70% веса на смерти, 30% на отказы
 
         # 2. Штрафы за нехватку ресурсов (нормализованы на прогноз спроса)
-        hosp_shortage_weights = {1: 0.6, 5: 0.3, 15: 0.1}  # Веса для разных горизонтов
-        icu_shortage_weights = {1: 0.7, 5: 0.2, 15: 0.1}  # ИВЛ важнее в краткосрочной перспективе
+        hosp_shortage_weights = {1: 0.6, 3: 0.3, 7: 0.1}  # Веса для разных горизонтов
+        icu_shortage_weights = {1: 0.7, 3: 0.2, 7: 0.1}  # ИВЛ важнее в краткосрочной перспективе
 
-        for days in [1, 5, 15]:
+        for days in [1, 3, 7]:
             # Прогнозируемый спрос
             hosp_demand = max(metrics[f'expected_hosp_{days}_day'], 1)
             icu_demand = max(metrics[f'expected_icu_{days}_day'], 1)
@@ -91,8 +91,8 @@ class HospitalEnv:
             reward -= icu_shortage_ratio * icu_shortage_weights[days] * 0.6  # 60% от общего веса (ИВЛ критичнее)
 
         # 3. Штрафы за избыток ресурсов (нормализованы на прогноз)
-        max_hosp_demand = max(1, metrics['expected_hosp_15_day'])
-        max_icu_demand = max(1, metrics['expected_icu_15_day'])
+        max_hosp_demand = max(1, metrics['expected_hosp_7_day'])
+        max_icu_demand = max(1, metrics['expected_icu_7_day'])
 
         # Избыток >30% от прогноза
         beds_ratio = (metrics['beds'] + metrics['reserve_beds']) / max_hosp_demand
@@ -128,8 +128,8 @@ class HospitalEnv:
                 reward -= 0.2  # Критическая ошибка
 
         if action in [1, 2, 3, 4]:  # Покупка ресурсов
-            future_bed_deficit = max(0, metrics['expected_hosp_5_day'] - (metrics['beds'] + metrics['reserve_beds']))
-            future_icu_deficit = max(0, metrics['expected_icu_5_day'] - (metrics['icu'] + metrics['reserve_icu']))
+            future_bed_deficit = max(0, metrics['expected_hosp_3_day'] - (metrics['beds'] + metrics['reserve_beds']))
+            future_icu_deficit = max(0, metrics['expected_icu_3_day'] - (metrics['icu'] + metrics['reserve_icu']))
             if future_bed_deficit > 0 or future_icu_deficit > 0:
                 reward -= 0.1  # Недостаточная закупка
 
