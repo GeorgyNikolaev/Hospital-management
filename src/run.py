@@ -56,7 +56,7 @@ def run_two_way(
     agents = [HospitalAgent() for _ in hospitals_cfg_rl]
     envs = [HospitalEnv(i) for i in range(len(hospitals_cfg_rl))]
     for i in range(len(agents)):
-        agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best.pt")
+        agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_new.pt")
 
     rl_logs, des, agents, _ = run_with_rl(hospitals_cfg_rl, init_params_rl, days, rng, agents, envs, False)
     plots.plot_SD_DES_results(rl_logs)

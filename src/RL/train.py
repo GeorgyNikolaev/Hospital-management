@@ -85,7 +85,7 @@ def train_epochs(
 
             if best_value is None or value > best_value:
                 best_value = value
-                path = os.path.join(save_dir, f"agent_best_.pt")
+                path = os.path.join(save_dir, f"agent_best_new.pt")
                 ckpt = {
                     "epoch": epoch,
                     "model_state": agent.q.state_dict(),
