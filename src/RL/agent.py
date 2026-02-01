@@ -7,18 +7,45 @@ import random
 
 
 class QNetwork(nn.Module):
-    def __init__(self, obs_size, n_actions):
+    def __init__(self, obs_size, n_actions, hidden_dim=128):
         super().__init__()
-        self.net = nn.Sequential(
-            nn.Linear(obs_size, 64),
+
+        # Общие слои
+        self.feature_layer = nn.Sequential(
+            nn.Linear(obs_size, hidden_dim),
+            nn.LayerNorm(hidden_dim),  # Добавить нормализацию
             nn.ReLU(),
-            nn.Linear(64, 64),
+            nn.Dropout(0.1),  # Добавить дропаут для регуляризации
+
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.LayerNorm(hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(0.1)
+        )
+
+        # Stream для Value функции
+        self.value_stream = nn.Sequential(
+            nn.Linear(hidden_dim, 64),
+            nn.ReLU(),
+            nn.Linear(64, 1)
+        )
+
+        # Stream для Advantage функции
+        self.advantage_stream = nn.Sequential(
+            nn.Linear(hidden_dim, 64),
             nn.ReLU(),
             nn.Linear(64, n_actions)
         )
 
     def forward(self, x):
-        return self.net(x)
+        features = self.feature_layer(x)
+
+        value = self.value_stream(features)
+        advantage = self.advantage_stream(features)
+
+        # Q(s,a) = V(s) + A(s,a) - mean(A(s,a))
+        q_values = value + advantage - advantage.mean(dim=1, keepdim=True)
+        return q_values
 
 
 class HospitalAgent:
@@ -34,7 +61,7 @@ class HospitalAgent:
 
         self.optim = optim.Adam(self.q.parameters(), lr=lr)
 
-        self.memory = deque(maxlen=1000)
+        self.memory = deque(maxlen=5000)
         self.batch_size = 64
 
         self.eps = 1.0  # exploration

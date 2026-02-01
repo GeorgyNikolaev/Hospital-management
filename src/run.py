@@ -34,18 +34,20 @@ def run_two_way(
     # plots.save_SD_results(sd_logs)
 
     # Моделирование SD <-> DES
-    # hospitals_cfg_des = [copy.deepcopy(h) for h in hospitals_cfg]
-    # init_params_des = replace(init_params)
-    #
-    # des_logs, des = run_des.run(hospitals_cfg_des, init_params_des, days, rng)
+    hospitals_cfg_des = [copy.deepcopy(h) for h in hospitals_cfg]
+    init_params_des = replace(init_params)
+
+    des_logs, des = run_des.run(hospitals_cfg_des, init_params_des, days, rng)
+    plots.display_results(des_logs)
     # plots.plot_SD_DES_results(des_logs)
     # plots.save_SD_DES_results(des_logs, des)
 
     # Моделирование с TTM управлением больниц
-    # hospitals_cfg_ttm = [copy.deepcopy(h) for h in hospitals_cfg]
-    # init_params_ttm = replace(init_params)
-    #
-    # ttm_logs, des = run_ttm(hospitals_cfg_ttm, init_params_ttm, days, rng)
+    hospitals_cfg_ttm = [copy.deepcopy(h) for h in hospitals_cfg]
+    init_params_ttm = replace(init_params)
+
+    ttm_logs, des = run_ttm(hospitals_cfg_ttm, init_params_ttm, days, rng)
+    plots.display_results(ttm_logs)
     # plots.plot_SD_DES_results(ttm_logs)
     # plots.plot_RL_results(ttm_logs)
     # plots.plot_RL_actions(ttm_logs)
@@ -56,10 +58,11 @@ def run_two_way(
     agents = [HospitalAgent() for _ in hospitals_cfg_rl]
     envs = [HospitalEnv(i) for i in range(len(hospitals_cfg_rl))]
     for i in range(len(agents)):
-        agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_new.pt")
+        agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_30_01_2026.pt")
 
     rl_logs, des, agents, _ = run_with_rl(hospitals_cfg_rl, init_params_rl, days, rng, agents, envs, False)
-    plots.plot_SD_DES_results(rl_logs)
+    plots.display_results(rl_logs)
+    # plots.plot_SD_DES_results(rl_logs)
     plots.plot_RL_results(rl_logs)
     # plots.plot_DES_vs_RL(des_logs, rl_logs)
     plots.plot_RL_actions(rl_logs)

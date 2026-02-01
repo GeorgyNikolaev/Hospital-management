@@ -1,4 +1,7 @@
+import math
+
 import numpy as np
+from mpmath.math2 import EPS
 
 
 class HospitalEnv:
@@ -65,73 +68,33 @@ class HospitalEnv:
 
         # 1. Критические штрафы (нормализованы на общий поток пациентов)
         total_patients = max(metrics['admitted'] + metrics['rejected'], 1)
+
         death_ratio = metrics['deaths'] / total_patients
         reject_ratio = metrics['rejected'] / total_patients
-        reward -= (death_ratio * 0.7) + (reject_ratio * 0.3)  # 70% веса на смерти, 30% на отказы
 
-        # 2. Штрафы за нехватку ресурсов (нормализованы на прогноз спроса)
-        hosp_shortage_weights = {1: 0.6, 3: 0.3, 7: 0.1}  # Веса для разных горизонтов
-        icu_shortage_weights = {1: 0.7, 3: 0.2, 7: 0.1}  # ИВЛ важнее в краткосрочной перспективе
+        reward -= death_ratio * 3
+        reward -= reject_ratio * 2
 
-        for days in [1, 3, 7]:
-            # Прогнозируемый спрос
-            hosp_demand = max(metrics[f'expected_hosp_{days}_day'], 1)
-            icu_demand = max(metrics[f'expected_icu_{days}_day'], 1)
+        # 2. Подсчет загруженности
+        target_occupancy = 0.85
+        bed_occupancy = metrics['occupied_beds'] / (metrics['beds'] + EPS)
+        icu_occupancy = metrics['occupied_icu'] / (metrics['icu'] + EPS)
 
-            # Текущие ресурсы
-            available_beds = metrics['beds'] + metrics['reserve_beds']
-            available_icu = metrics['icu'] + metrics['reserve_icu']
-
-            # Относительный дефицит (0 = нет дефицита, 1 = полный дефицит)
-            hosp_shortage_ratio = max(0, (hosp_demand - available_beds) / hosp_demand)
-            icu_shortage_ratio = max(0, (icu_demand - available_icu) / icu_demand)
-
-            # Применяем веса горизонтов
-            reward -= hosp_shortage_ratio * hosp_shortage_weights[days] * 0.4  # 40% от общего веса
-            reward -= icu_shortage_ratio * icu_shortage_weights[days] * 0.6  # 60% от общего веса (ИВЛ критичнее)
-
-        # 3. Штрафы за избыток ресурсов (нормализованы на прогноз)
-        max_hosp_demand = max(1, metrics['expected_hosp_7_day'])
-        max_icu_demand = max(1, metrics['expected_icu_7_day'])
-
-        # Избыток >30% от прогноза
-        beds_ratio = (metrics['beds'] + metrics['reserve_beds']) / max_hosp_demand
-        icu_ratio = (metrics['icu'] + metrics['reserve_icu']) / max_icu_demand
-
-        if beds_ratio > 1.3:
-            excess_beds_ratio = min((beds_ratio - 1.3) / 0.7, 1.0)  # Нормализуем до [0,1]
-            reward -= excess_beds_ratio * 0.05  # Мягкий штраф
-
-        if icu_ratio > 1.3:
-            excess_icu_ratio = min((icu_ratio - 1.3) / 0.7, 1.0)
-            reward -= excess_icu_ratio * 0.1  # Штраф сильнее для ИВЛ
+        bed_reward = math.exp(-10 * (bed_occupancy - target_occupancy) ** 2)
+        icu_reward = math.exp(-10 * (icu_occupancy - target_occupancy) ** 2)
+        reward += (bed_reward + icu_reward) * 0.5
 
         # 4. Бюджетная эффективность (нормализована на критический порог)
-        CRITICAL_BUDGET = 2000000
-        expense_ratio = metrics['expenses'] / (CRITICAL_BUDGET + EPS)
-        budget_ratio = max(0, (CRITICAL_BUDGET - metrics['budget']) / CRITICAL_BUDGET)
-
-        reward -= expense_ratio * 0.03  # Штраф за расходы
-        reward -= budget_ratio * 0.07  # Штраф за критический бюджет (сильнее)
+        CRITICAL_BUDGET = 5_000_000
+        budget_ratio = (metrics['budget'] - CRITICAL_BUDGET) / CRITICAL_BUDGET
+        reward -= budget_ratio * 0.01  # Штраф за критический бюджет (сильнее)
 
         # 5. Корректировка за действия (шкала [-0.2, +0.2])
         if action == 9:  # Срочное выделение бюджета
-            if metrics['budget'] < CRITICAL_BUDGET * 1.5:
-                reward += 0.15  # Обоснованное действие
+            if metrics['budget'] < CRITICAL_BUDGET:
+                reward -= 0.15  # Обоснованное действие
             else:
-                reward -= 0.1  # Неоправданный расход
-
-        if action in [5, 6, 7, 8]:  # Консервация ресурсов
-            current_bed_deficit = max(0, metrics['expected_hosp_1_day'] - (metrics['beds'] + metrics['reserve_beds']))
-            current_icu_deficit = max(0, metrics['expected_icu_1_day'] - (metrics['icu'] + metrics['reserve_icu']))
-            if current_bed_deficit > 0 or current_icu_deficit > 0:
-                reward -= 0.2  # Критическая ошибка
-
-        if action in [1, 2, 3, 4]:  # Покупка ресурсов
-            future_bed_deficit = max(0, metrics['expected_hosp_3_day'] - (metrics['beds'] + metrics['reserve_beds']))
-            future_icu_deficit = max(0, metrics['expected_icu_3_day'] - (metrics['icu'] + metrics['reserve_icu']))
-            if future_bed_deficit > 0 or future_icu_deficit > 0:
-                reward -= 0.1  # Недостаточная закупка
+                reward -= 1  # Неоправданный расход
 
         return reward
 

@@ -406,52 +406,115 @@ def save_SD_DES_results(log_df: pd.DataFrame, des: DES):
     out_png = os.path.join(RESULTS_DES_DIR, f"overview.png")
     plt.tight_layout(); plt.savefig(out_png, dpi=150); plt.close()
 
-def display_SD_results(results_df, params: SEIRHCDParams):
-    """Выводит в консоль статистику"""
-    # Основные показатели
-    total_population = params.population
-    final_susceptible = results_df['S'].iloc[-1]
-    final_recovered = results_df['R'].iloc[-1]
-    final_deaths = results_df['D'].iloc[-1]
+def display_results(results_df):
+    """
+    Выводит агрегированные метрики сценария управления эпидемией.
+    Функция устойчива к отсутствию отдельных столбцов.
+    """
 
-    # Пиковые значения
-    peak_infectious_idx = results_df['I'].idxmax()
-    peak_infectious_time = results_df['t'][peak_infectious_idx]
-    peak_hosp_idx = results_df['H'].idxmax()
-    peak_hosp_time = results_df['t'][peak_hosp_idx]
+    def has(col):
+        return col in results_df.columns
 
-    print(f"\n📈 ПИКОВЫЕ НАГРУЗКИ:")
-    print(f"   Пик заразных: {results_df['I'].max():,.0f} чел. (день {peak_infectious_time:.0f})")
-    print(f"   Пик госпитализаций: {results_df['H'].max():,.0f} чел. (день {peak_hosp_time:.0f})")
-    print(f"   Пик в реанимации: {results_df['C'].max():,.0f} чел.")
-    print(f"   Макс. новых заражений в день: {results_df['new_infected'].max():,.0f} чел.")
+    def ssum(col):
+        return results_df[col].sum() if has(col) else None
 
-    # Суммарные потоки
-    total_infected = results_df['new_infected'].sum()
-    total_hospitalizations = results_df['new_hospitalizations'].sum()
-    total_icu = results_df['new_icu'].sum()
-    total_deaths_flow = results_df['new_deaths'].sum()
+    def smax(col):
+        return results_df[col].max() if has(col) else None
 
-    print(f"\n📊 СУММАРНЫЕ ПОТОКИ:")
-    print(f"   Всего заражений: {total_infected:,.0f} чел.")
-    print(f"   Всего госпитализаций: {total_hospitalizations:,.0f} чел.")
-    print(f"   Всего в реанимации: {total_icu:,.0f} чел.")
-    print(f"   Всего смертей: {total_deaths_flow:,.0f} чел.")
+    def smean(col):
+        return results_df[col].mean() if has(col) else None
 
-    # Проценты от зараженных
-    print(f"\n📋 СТРУКТУРА ЗАБОЛЕВАНИЯ:")
-    print(f"   Госпитализировано: {total_hospitalizations / total_infected * 100:.1f}% от зараженных")
-    print(f"   В реанимации: {total_icu / total_infected * 100:.1f}% от зараженных")
-    print(f"   Умерло: {total_deaths_flow / total_infected * 100:.2f}% от зараженных")
+    def idxmax(col):
+        return results_df[col].idxmax() if has(col) else None
 
-    # Временные параметры
-    print(f"\n⏰ ВРЕМЕННЫЕ ХАРАКТЕРИСТИКИ:")
-    print(f"   Длительность эпидемии: {results_df['t'].iloc[-1]:.0f} дней")
-    print(f"   Время до пика: {peak_infectious_time:.0f} дней")
-    print(f"   Задержка пика госпитализаций: {peak_hosp_time - peak_infectious_time:.1f} дней")
+    def fmt(x):
+        return f"{x:,.0f}" if x is not None else "N/A"
 
-    # R0 и эффективность
-    print(f"\n🔬 ЭПИДЕМИОЛОГИЧЕСКИЕ ПАРАМЕТРЫ:")
-    print(f"   Базовое R₀: {params.beta / params.gamma:.2f}")
-    print(f"   Длительность инкубации: {1 / params.sigma:.1f} дней")
-    print(f"   Длительность заразности: {1 / params.gamma:.1f} дней")
+    # ================= ПИКОВЫЕ НАГРУЗКИ =================
+    print("\n📈 ПИКОВЫЕ НАГРУЗКИ:")
+
+    hosp_idx = idxmax('hosp_expected')
+    if hosp_idx is not None:
+        print(
+            f"   Пик госпитализаций: "
+            f"{fmt(results_df.loc[hosp_idx, 'hosp_expected'])} чел. "
+            f"(день {results_df.loc[hosp_idx, 'day']:.0f})"
+        )
+
+    icu_idx = idxmax('icu_expected')
+    if icu_idx is not None:
+        print(
+            f"   Пик ICU: "
+            f"{fmt(results_df.loc[icu_idx, 'icu_expected'])} чел. "
+            f"(день {results_df.loc[icu_idx, 'day']:.0f})"
+        )
+
+    # ================= СУММАРНЫЕ ИСХОДЫ =================
+    print("\n📊 СУММАРНЫЕ ИСХОДЫ:")
+
+    total_hosp = ssum('admitted_hosp')
+    total_icu = ssum('admitted_icu')
+    total_deaths = ssum('deaths')
+
+    print(f"   Всего госпитализаций: {fmt(total_hosp)}")
+    print(f"   Всего ICU-пациентов: {fmt(total_icu)}")
+    print(f"   Всего смертей: {fmt(total_deaths)}")
+
+    # ================= ОТКАЗЫ =================
+    print("\n🚨 ОТКАЗЫ В ПОМОЩИ:")
+
+    rejected = ssum('rejected')
+    rejected_hosp = ssum('rejected_hosp')
+    rejected_icu = ssum('rejected_icu')
+
+    print(f"   Всего отказов: {fmt(rejected)}")
+    print(f"   └─ по койкам: {fmt(rejected_hosp)}")
+    print(f"   └─ по ICU: {fmt(rejected_icu)}")
+
+    if has('admitted') and has('rejected'):
+        total_requests = results_df['admitted'].sum() + results_df['rejected'].sum()
+        if total_requests > 0:
+            print(f"   Доля отказов: {results_df['rejected'].sum() / total_requests:.2%}")
+
+    # ================= ЗАГРУЗКА РЕСУРСОВ =================
+    print("\n🏥 ЗАГРУЗКА РЕСУРСОВ:")
+
+    if has('occupied_beds') and has('beds'):
+        bed_util = results_df['occupied_beds'] / results_df['beds']
+        print(f"   Койки — пик: {bed_util.max():.1%}")
+        print(f"   Койки — средняя: {bed_util.mean():.1%}")
+
+    if has('occupied_icu') and has('icu'):
+        icu_util = results_df['occupied_icu'] / results_df['icu']
+        print(f"   ICU — пик: {icu_util.max():.1%}")
+        print(f"   ICU — средняя: {icu_util.mean():.1%}")
+
+    # ================= СМЕРТНОСТЬ =================
+    print("\n⚰️ СМЕРТНОСТЬ:")
+
+    print(f"   Смерти в стационаре: {fmt(ssum('deaths_hosp'))}")
+    print(f"   Смерти в ICU: {fmt(ssum('deaths_icu'))}")
+
+    if has('hosp_expected') and has('icu_expected') and has('deaths'):
+        total_inf = results_df['hosp_expected'].sum() + results_df['icu_expected'].sum()
+        if total_inf > 0:
+            print(f"   Летальность: {results_df['deaths'].sum() / total_inf:.2%}")
+
+    # ================= ЭКОНОМИКА =================
+    print("\n💰 ЭКОНОМИКА:")
+
+    print(f"   Общие расходы: {fmt(ssum('expenses'))}")
+    if has('budget'):
+        print(f"   Финальный бюджет: {fmt(results_df['budget'].iloc[-1])}")
+
+    if has('actions'):
+        budget_requests = results_df['actions'].apply(lambda a: sum(x == 9 for x in a)).sum()
+        print(f"   Запросы на выделение бюджета: {budget_requests}")
+
+    if has('expenses') and has('deaths') and results_df['deaths'].sum() > 0:
+        print(
+            f"   Стоимость одной смерти: "
+            f"{results_df['expenses'].sum() / results_df['deaths'].sum():,.0f}"
+        )
+
+    print("\n" + "=" * 60)
