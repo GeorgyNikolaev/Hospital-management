@@ -27,8 +27,8 @@ def train_epochs(
     # если агенты None — создаём новые
     if agents is None:
         agents = [HospitalAgent() for _ in hospitals_cfg]
-    for i in range(len(agents)):
-        agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_30_01_2026.pt")
+    # for i in range(len(agents)):
+    #     agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_30_01_2026.pt")
 
     writer = SummaryWriter(log_dir=os.path.join(save_dir, "tb"))
     records = []
@@ -87,7 +87,7 @@ def train_epochs(
 
             if best_value is None or value > best_value:
                 best_value = value
-                path = os.path.join(save_dir, f"agent_best_30_01_2026.pt")
+                path = os.path.join(save_dir, f"agent_best_01_02_2026.pt")
                 ckpt = {
                     "epoch": epoch,
                     "model_state": agent.q.state_dict(),
