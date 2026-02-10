@@ -1,7 +1,6 @@
 import math
 
 import numpy as np
-from mpmath.math2 import EPS
 
 
 class HospitalEnv:

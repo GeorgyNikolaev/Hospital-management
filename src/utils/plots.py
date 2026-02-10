@@ -8,13 +8,12 @@ from src.des.des_model import DES
 from src.utils.utils import now_str
 from src.core.models import SEIRHCDParams
 
-RESULTS_SD_DIR = "results/sd"
-RESULTS_DES_DIR = "results/des"
-os.makedirs(RESULTS_SD_DIR, exist_ok=True)
-os.makedirs(RESULTS_DES_DIR, exist_ok=True)
+RESULTS_DIR = "results/"
+os.makedirs(RESULTS_DIR, exist_ok=True)
 
-def plot_SD_results(results_df):
+def plot_SD_results(results_df, save_path: str):
     """Построение комплексного графика с состояниями и потоками"""
+    os.makedirs(RESULTS_DIR + save_path, exist_ok=True)
     title = "SEIR-HCD Model Simulation"
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
 
@@ -51,81 +50,38 @@ def plot_SD_results(results_df):
 
     plt.tight_layout()
 
-    out_png = os.path.join(RESULTS_SD_DIR, f"sd.png")
+    out_png = os.path.join(RESULTS_DIR + save_path, f"1.png")
     plt.savefig(out_png, dpi=150)
     plt.show()
     plt.close()
 
-def plot_SD_DES_results(log_df: pd.DataFrame):
+def plot_SD_DES_results(log_df: pd.DataFrame, save_path: str):
     """Выводим графики для SD <-> DES модели"""
-    plt.figure(figsize=(8, 5))
-    # plt.plot(log_df["day"], log_df["admitted"], label="admitted")
-    plt.plot(log_df["day"], log_df["admitted_hosp"], label="admitted_hosp")
-    plt.plot(log_df["day"], log_df["admitted_icu"], label="admitted_icu")
-    plt.plot(log_df["day"], log_df["rejected_hosp"], label="rejected_hosp")
-    plt.plot(log_df["day"], log_df["rejected_icu"], label="rejected_icu")
-    plt.plot(log_df["day"], log_df["deaths_hosp"], label="deaths_hosp")
-    plt.plot(log_df["day"], log_df["deaths_icu"], label="deaths_icu")
-    plt.legend()
-    #
-    out_png = os.path.join(RESULTS_DES_DIR, f"1_1.png")
-    plt.savefig(out_png)
-    plt.show()
-    plt.close()
-    #
-    plt.figure(figsize=(8, 5))
-    # plt.plot(log_df["day"], log_df["admitted"], label="admitted")
-    plt.plot(log_df["day"], log_df["admitted"], label="admitted")
-    plt.plot(log_df["day"], log_df["rejected"], label="rejected")
-    plt.plot(log_df["day"], log_df["deaths"], label="deaths")
-    plt.legend()
-
-    out_png = os.path.join(RESULTS_DES_DIR, f"1_2.png")
-    plt.savefig(out_png)
-    plt.show()
-    plt.close()
+    os.makedirs(RESULTS_DIR + save_path, exist_ok=True)
 
     # Создаем фигуру с несколькими субплогами
-    fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+    fig, axes = plt.subplots(2, 2, figsize=(13, 8))
     fig.suptitle('Анализ моделирования эпидемии', fontsize=16, fontweight='bold')
 
-    # 1. График ожидаемых случаев vs фактические
-    axes[0, 0].plot(log_df['day'], log_df['infection'], label='Ожидаемые случаи сегодня', linewidth=2)
-    axes[0, 0].set_title('Ожидаемые случаи заболевания')
-    axes[0, 0].set_xlabel('День')
-    axes[0, 0].set_ylabel('Количество случаев')
+    axes[0, 0].plot(log_df["day"], log_df["admitted_hosp"], label="Принятые госпитализированные")
+    axes[0, 0].plot(log_df["day"], log_df["admitted_icu"], label="Принятые в ICU")
+    axes[0, 0].plot(log_df["day"], log_df["rejected_hosp"], label="Отказы в госпитализации")
+    axes[0, 0].plot(log_df["day"], log_df["rejected_icu"], label="Отказы в ICU")
+    axes[0, 0].plot(log_df["day"], log_df["deaths_hosp"], label="Умершие госпитализированные")
+    axes[0, 0].plot(log_df["day"], log_df["deaths_icu"], label="Увершие в ICU")
     axes[0, 0].legend()
-    axes[0, 0].grid(True, alpha=0.3)
 
-    # 2. График госпитализаций и отказов
-    axes[0, 1].plot(log_df['day'], log_df['admitted'], label='Госпитализировано', linewidth=2)
-    axes[0, 1].plot(log_df['day'], log_df['rejected'], label='Отказано', linewidth=2)
-    axes[0, 1].set_title('Госпитализации и отказы')
-    axes[0, 1].set_xlabel('День')
-    axes[0, 1].set_ylabel('Количество людей')
+    axes[0, 1].plot(log_df["day"], log_df["admitted"], label="Принятые")
+    axes[0, 1].plot(log_df["day"], log_df["rejected"], label="Отказы")
+    axes[0, 1].plot(log_df["day"], log_df["deaths"], label="Умершие")
     axes[0, 1].legend()
-    axes[0, 1].grid(True, alpha=0.3)
 
     # 3. График смертности
-    axes[0, 2].plot(log_df['day'], log_df['deaths'], label='Смерти реальный', linewidth=2)
-    axes[0, 2].plot(log_df['day'], log_df['deaths_expected'], label='Смерти ожидаемые', linewidth=2)
-    axes[0, 2].set_title('Динамика смертности')
-    axes[0, 2].set_xlabel('День')
-    axes[0, 2].set_ylabel('Количество смертей')
-    axes[0, 2].legend()
-    axes[0, 2].grid(True, alpha=0.3)
-
-    # 4. Накопительные показатели
-    cumulative_admitted = log_df['admitted'].cumsum()
-    cumulative_rejected = log_df['rejected'].cumsum()
-    cumulative_deaths = log_df['deaths'].cumsum()
-
-    axes[1, 0].plot(log_df['day'], cumulative_admitted, label='Всего госпитализировано', linewidth=2)
-    axes[1, 0].plot(log_df['day'], cumulative_rejected, label='Всего отказано', linewidth=2)
-    axes[1, 0].plot(log_df['day'], cumulative_deaths, label='Всего смертей', linewidth=2)
-    axes[1, 0].set_title('Накопительные показатели')
+    axes[1, 0].plot(log_df['day'], log_df['deaths'], label='Смерти реальный', linewidth=2)
+    axes[1, 0].plot(log_df['day'], log_df['deaths_expected'], label='Смерти ожидаемые', linewidth=2)
+    axes[1, 0].set_title('Динамика смертности')
     axes[1, 0].set_xlabel('День')
-    axes[1, 0].set_ylabel('Количество людей')
+    axes[1, 0].set_ylabel('Количество смертей')
     axes[1, 0].legend()
     axes[1, 0].grid(True, alpha=0.3)
 
@@ -138,28 +94,19 @@ def plot_SD_DES_results(log_df: pd.DataFrame):
     axes[1, 1].legend()
     axes[1, 1].grid(True, alpha=0.3)
 
-    # 6. Соотношение показателей к населению
-    population = log_df['population'].iloc[0]
-    axes[1, 2].plot(log_df['day'], log_df['admitted'] / population * 100, label='Госпитализировано (% населения)',
-                    alpha=0.7)
-    axes[1, 2].plot(log_df['day'], log_df['deaths'] / population * 100, label='Смерти (% населения)', alpha=0.7)
-    axes[1, 2].set_title('Показатели относительно населения')
-    axes[1, 2].set_xlabel('День')
-    axes[1, 2].set_ylabel('Процент от населения')
-    axes[1, 2].legend()
-    axes[1, 2].grid(True, alpha=0.3)
-
     plt.tight_layout()
 
-    out_png = os.path.join(RESULTS_DES_DIR, f"2.png")
+    out_png = os.path.join(RESULTS_DIR + save_path, f"2.png")
     plt.savefig(out_png)
     plt.show()
     plt.close()
 
-def plot_RL_results(metrics_dict):
+def plot_RL_results(metrics_dict, save_path: str):
     """
         Построение графиков из словаря метрик
         """
+    os.makedirs(RESULTS_DIR + save_path, exist_ok=True)
+
     days = metrics_dict['day']
 
     # Создаем сетку графиков
@@ -285,18 +232,24 @@ def plot_RL_results(metrics_dict):
     # if save_path:
     #     plt.savefig(save_path, dpi=300, bbox_inches='tight')
 
+    out_png = os.path.join(RESULTS_DIR + save_path, f"3.png")
+    plt.savefig(out_png)
     plt.show()
+    plt.close()
 
-def plot_DES_vs_RL(des_log, rl_log):
+def plot_DES_vs_TTM_vs_RL(des_log, ttm_logs, rl_log, save_path: str = ""):
+    os.makedirs(RESULTS_DIR + save_path, exist_ok=True)
+
     days = des_log['day']
 
     # Создаем сетку графиков
     fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-    fig.suptitle('DES vs RL', fontsize=16, fontweight='bold')
+    fig.suptitle('Static vs TTM vs RL', fontsize=16, fontweight='bold')
 
     ax1 = axes[0, 0]
-    ax1.plot(days, des_log['admitted'], 'r-', label='DES', linewidth=2)
-    ax1.plot(days, rl_log['admitted'], 'b-', label='RL', linewidth=2)
+    ax1.plot(days, des_log['admitted'], 'r-', label='Static', linewidth=2)
+    ax1.plot(days, ttm_logs['admitted'], 'b-', label='TTM', linewidth=2)
+    ax1.plot(days, rl_log['admitted'], 'g-', label='RL', linewidth=2)
     ax1.set_title('Принято')
     ax1.set_xlabel('Дни')
     ax1.set_ylabel('Люди')
@@ -304,8 +257,9 @@ def plot_DES_vs_RL(des_log, rl_log):
     ax1.grid(True, alpha=0.3)
 
     ax2 = axes[0, 1]
-    ax2.plot(days, des_log['rejected'], 'r-', label='DES', linewidth=2)
-    ax2.plot(days, rl_log['rejected'], 'b-', label='RL', linewidth=2)
+    ax2.plot(days, des_log['rejected'], 'r-', label='Static', linewidth=2)
+    ax2.plot(days, ttm_logs['rejected'], 'b-', label='TTM', linewidth=2)
+    ax2.plot(days, rl_log['rejected'], 'g-', label='RL', linewidth=2)
     ax2.set_title('Отказы')
     ax2.set_xlabel('Дни')
     ax2.set_ylabel('Люди')
@@ -313,8 +267,9 @@ def plot_DES_vs_RL(des_log, rl_log):
     ax2.grid(True, alpha=0.3)
 
     ax3 = axes[1, 0]
-    ax3.plot(days, des_log['deaths'], 'r-', label='DES', linewidth=2)
-    ax3.plot(days, rl_log['deaths'], 'b-', label='RL', linewidth=2)
+    ax3.plot(days, des_log['deaths'], 'r-', label='Static', linewidth=2)
+    ax3.plot(days, ttm_logs['deaths'], 'b-', label='TTM', linewidth=2)
+    ax3.plot(days, rl_log['deaths'], 'g-', label='RL', linewidth=2)
     ax3.set_title('Смерти')
     ax3.set_xlabel('Дни')
     ax3.set_ylabel('Люди')
@@ -324,13 +279,18 @@ def plot_DES_vs_RL(des_log, rl_log):
     ax4 = axes[1, 1]
     # Расчет доступных коек (общие - законсервированные)
 
-    ax4.plot(days, des_log["beds"], 'b-', label='Доступные койки DES', linewidth=2)
-    ax4.plot(days, rl_log["beds"], 'r-', label='Доступные койки RL', linewidth=2)
-    ax4.plot(days, des_log["occupied_beds"], 'c-', label='Занятые койки DES', linewidth=2)
-    ax4.plot(days, rl_log["occupied_beds"], 'm-', label='Занятые койки RL', linewidth=2)
+    ax4.plot(days, des_log["beds"], 'r-', label='Доступные койки Static', linewidth=1)
+    ax4.plot(days, ttm_logs["beds"], 'b-', label='Доступные койки TTM', linewidth=1)
+    ax4.plot(days, rl_log["beds"], 'g-', label='Доступные койки RL', linewidth=1)
+
+    ax4.plot(days, des_log["occupied_beds"], 'c-', label='Занятые койки Static', linewidth=1)
+    ax4.plot(days, ttm_logs["occupied_beds"], 'm-', label='Занятые койки TTM', linewidth=1)
+    ax4.plot(days, rl_log["occupied_beds"], 'k-', label='Занятые койки RL', linewidth=1)
 
     ax4.fill_between(days, des_log["occupied_beds"], des_log["beds"], alpha=0.3, color='cyan',
                      label='Свободные койки DES')
+    ax4.fill_between(days, ttm_logs["occupied_beds"], ttm_logs["beds"], alpha=0.3, color='yellow',
+                     label='Свободные койки TTM')
     ax4.fill_between(days, rl_log["occupied_beds"], rl_log["beds"], alpha=0.3, color='blue',
                      label='Свободные койки RL')
 
@@ -341,9 +301,14 @@ def plot_DES_vs_RL(des_log, rl_log):
     ax4.grid(True, alpha=0.3)
 
     plt.tight_layout()
+    out_png = os.path.join(RESULTS_DIR + save_path, f"des_ttm_rl.png")
+    plt.savefig(out_png)
     plt.show()
+    plt.close()
 
-def plot_RL_actions(rl_logs):
+def plot_RL_actions(rl_logs, save_path: str):
+    os.makedirs(RESULTS_DIR + save_path, exist_ok=True)
+
     data_array = np.array(rl_logs["actions"])
     data_array = np.array(data_array.tolist())
 
@@ -365,7 +330,8 @@ def plot_RL_actions(rl_logs):
     plt.figure(figsize=(10, 6))
     x = range(len(rl_logs["actions"]))
 
-    for i in range(data_array.shape[1]):
+    # for i in range(data_array.shape[1]):
+    for i in range(1):
         y = [subarray[i] for subarray in rl_logs["actions"]]
         plt.plot(x, y, 'o-', label=f'Больница {i + 1}', markersize=8)
 
@@ -377,7 +343,10 @@ def plot_RL_actions(rl_logs):
     plt.legend()
     plt.grid(True, alpha=0.3)
     plt.tight_layout()  # Чтобы метки не обрезались
+    out_png = os.path.join(RESULTS_DIR + save_path, f"actions.png")
+    plt.savefig(out_png)
     plt.show()
+    plt.close()
 
 def save_SD_results(results_df):
     """Сохраняет результаты SD модели"""
@@ -391,10 +360,10 @@ def save_SD_DES_results(log_df: pd.DataFrame, des: DES):
 
     patients_df = pd.DataFrame(patients)
     ts = now_str()
-    log_path = os.path.join(RESULTS_DES_DIR, f"log_daily.csv")
-    patients_path = os.path.join(RESULTS_DES_DIR, f"patients.csv")
-    log_df.to_csv(log_path, index=False)
-    patients_df.to_csv(patients_path, index=False)
+    # log_path = os.path.join(RESULTS_DES_DIR, f"log_daily.csv")
+    # patients_path = os.path.join(RESULTS_DES_DIR, f"patients.csv")
+    # log_df.to_csv(log_path, index=False)
+    # patients_df.to_csv(patients_path, index=False)
 
     # plot overview
     plt.figure(figsize=(10,4))
@@ -403,8 +372,8 @@ def save_SD_DES_results(log_df: pd.DataFrame, des: DES):
     plt.plot(log_df["day"], log_df["rejected"], label="rejected")
     plt.plot(log_df["day"], log_df["deaths"], label="deaths_real")
     plt.xlabel("day"); plt.ylabel("counts"); plt.legend(); plt.grid(True); plt.title("Two-way SD<->DES dynamics")
-    out_png = os.path.join(RESULTS_DES_DIR, f"overview.png")
-    plt.tight_layout(); plt.savefig(out_png, dpi=150); plt.close()
+    # out_png = os.path.join(RESULTS_DES_DIR, f"overview.png")
+    # plt.tight_layout(); plt.savefig(out_png, dpi=150); plt.close()
 
 def display_results(results_df):
     """
@@ -452,12 +421,10 @@ def display_results(results_df):
     # ================= СУММАРНЫЕ ИСХОДЫ =================
     print("\n📊 СУММАРНЫЕ ИСХОДЫ:")
 
-    total_hosp = ssum('admitted_hosp')
-    total_icu = ssum('admitted_icu')
+    total_admitted = ssum('admitted')
     total_deaths = ssum('deaths')
 
-    print(f"   Всего госпитализаций: {fmt(total_hosp)}")
-    print(f"   Всего ICU-пациентов: {fmt(total_icu)}")
+    print(f"   Всего принято: {fmt(total_admitted)}")
     print(f"   Всего смертей: {fmt(total_deaths)}")
 
     # ================= ОТКАЗЫ =================
