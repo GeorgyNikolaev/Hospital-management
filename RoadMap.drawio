@@ -1,88 +1,88 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.8 Chrome/140.0.7339.240 Electron/38.4.0 Safari/537.36" version="28.2.8">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.8 Chrome/140.0.7339.240 Electron/38.4.0 Safari/537.36">
   <diagram name="Страница — 1" id="_lkTzRLW_7v-ygmfFDh_">
-    <mxGraphModel dx="1737" dy="1603" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0" adaptiveColors="simple">
+    <mxGraphModel dx="671" dy="865" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0" adaptiveColors="simple">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="owlRnpETjwI3ZZButk9U-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-1" target="owlRnpETjwI3ZZButk9U-2" edge="1">
+        <mxCell id="owlRnpETjwI3ZZButk9U-3" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="owlRnpETjwI3ZZButk9U-2">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-1" value="Постройка SEIR-C-H-D модели" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="294" y="150" width="207" height="48" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Постройка SEIR-C-H-D модели" vertex="1">
+          <mxGeometry height="48" width="207" x="294" y="150" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="ZfH4mZA31C3MoOOspyVI-3" target="owlRnpETjwI3ZZButk9U-4" edge="1">
+        <mxCell id="owlRnpETjwI3ZZButk9U-5" edge="1" parent="1" source="ZfH4mZA31C3MoOOspyVI-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="owlRnpETjwI3ZZButk9U-4">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-2" value="Постройка DES модели" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="293" y="235" width="208" height="38" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Постройка DES модели" vertex="1">
+          <mxGeometry height="38" width="208" x="293" y="235" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-4" target="owlRnpETjwI3ZZButk9U-6" edge="1">
+        <mxCell id="owlRnpETjwI3ZZButk9U-7" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="owlRnpETjwI3ZZButk9U-6">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-4" value="Выбрать регион и эпидемию" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="293" y="438" width="208" height="32" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Выбрать регион и эпидемию" vertex="1">
+          <mxGeometry height="32" width="208" x="293" y="438" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-6" target="owlRnpETjwI3ZZButk9U-8" edge="1">
+        <mxCell id="owlRnpETjwI3ZZButk9U-10" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="owlRnpETjwI3ZZButk9U-8">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-6" value="Постройка всех нужных графиков" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="293" y="502" width="208" height="49" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Постройка всех нужных графиков" vertex="1">
+          <mxGeometry height="49" width="208" x="293" y="502" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-8" target="owlRnpETjwI3ZZButk9U-11" edge="1">
+        <mxCell id="owlRnpETjwI3ZZButk9U-12" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="owlRnpETjwI3ZZButk9U-11">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-8" value="Определение KPI и критериев оптимизации" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="293" y="583" width="208" height="49" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Определение KPI и критериев оптимизации" vertex="1">
+          <mxGeometry height="49" width="208" x="293" y="583" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-11" target="owlRnpETjwI3ZZButk9U-13" edge="1">
+        <mxCell id="owlRnpETjwI3ZZButk9U-17" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="owlRnpETjwI3ZZButk9U-13">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-11" value="Оптимизация для конкретного региона и эпидемии" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="293" y="658" width="208" height="49" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Оптимизация для конкретного региона и эпидемии" vertex="1">
+          <mxGeometry height="49" width="208" x="293" y="658" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-13" target="owlRnpETjwI3ZZButk9U-15" edge="1">
+        <mxCell id="owlRnpETjwI3ZZButk9U-18" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="owlRnpETjwI3ZZButk9U-15">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-13" value="Добавление возможности выбрать разные регионы и эпидемии" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="293" y="739" width="208" height="49" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Добавление возможности выбрать разные регионы и эпидемии" vertex="1">
+          <mxGeometry height="49" width="208" x="293" y="739" as="geometry" />
         </mxCell>
-        <mxCell id="owlRnpETjwI3ZZButk9U-15" value="Написание отчета" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="293" y="820" width="208" height="49" as="geometry" />
+        <mxCell id="owlRnpETjwI3ZZButk9U-15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Написание отчета" vertex="1">
+          <mxGeometry height="49" width="208" x="293" y="820" as="geometry" />
         </mxCell>
-        <mxCell id="ZfH4mZA31C3MoOOspyVI-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="owlRnpETjwI3ZZButk9U-2" target="ZfH4mZA31C3MoOOspyVI-1" edge="1">
+        <mxCell id="ZfH4mZA31C3MoOOspyVI-2" edge="1" parent="1" source="owlRnpETjwI3ZZButk9U-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="ZfH4mZA31C3MoOOspyVI-1" value="">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="397" y="273" as="sourcePoint" />
             <mxPoint x="397" y="397" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ZfH4mZA31C3MoOOspyVI-1" value="Связать SD и DES модель." style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="293" y="300" width="208" height="38" as="geometry" />
+        <mxCell id="ZfH4mZA31C3MoOOspyVI-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Связать SD и DES модель." vertex="1">
+          <mxGeometry height="38" width="208" x="293" y="300" as="geometry" />
         </mxCell>
-        <mxCell id="ZfH4mZA31C3MoOOspyVI-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="ZfH4mZA31C3MoOOspyVI-1" target="ZfH4mZA31C3MoOOspyVI-3" edge="1">
+        <mxCell id="ZfH4mZA31C3MoOOspyVI-5" edge="1" parent="1" source="ZfH4mZA31C3MoOOspyVI-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="ZfH4mZA31C3MoOOspyVI-3" value="">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="397" y="338" as="sourcePoint" />
             <mxPoint x="397" y="438" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ZfH4mZA31C3MoOOspyVI-3" value="Моделировать без учета DES и с учетом DES" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="293" y="369" width="208" height="38" as="geometry" />
+        <mxCell id="ZfH4mZA31C3MoOOspyVI-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Моделировать без учета DES и с учетом DES" vertex="1">
+          <mxGeometry height="38" width="208" x="293" y="369" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-1" target="5F-HwiHzCKwmO7AWQMr1-2" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-8" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-2" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-1" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Восприимчивые (Susceptible - &lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;&lt;br/&gt;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:EN-US;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot; lang=&quot;EN-US&quot;&gt;S&lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;font-family:&lt;br/&gt;&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:RU;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot;&gt;)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1083" y="75" width="206" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Восприимчивые (Susceptible - &lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;&lt;br/&gt;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:EN-US;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot; lang=&quot;EN-US&quot;&gt;S&lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;font-family:&lt;br/&gt;&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:RU;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot;&gt;)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="1083" y="75" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-2" target="5F-HwiHzCKwmO7AWQMr1-3" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-9" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-3" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-2" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Подверженные (Exposed&lt;br/&gt;- &lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;&lt;br/&gt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:EN-US;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot; lang=&quot;EN-US&quot;&gt;E&lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;&lt;br/&gt;mso-bidi-font-size:11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;&lt;br/&gt;mso-fareast-font-family:Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:&lt;br/&gt;minor-bidi;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;&lt;br/&gt;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot;&gt;)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1083" y="235" width="206" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Подверженные (Exposed&lt;br/&gt;- &lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;&lt;br/&gt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:EN-US;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot; lang=&quot;EN-US&quot;&gt;E&lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;&lt;br/&gt;mso-bidi-font-size:11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;&lt;br/&gt;mso-fareast-font-family:Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:&lt;br/&gt;minor-bidi;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;&lt;br/&gt;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot;&gt;)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="1083" y="235" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-3" target="5F-HwiHzCKwmO7AWQMr1-5" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-10" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-5" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-3" target="5F-HwiHzCKwmO7AWQMr1-4" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-14" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-4">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1444" y="442" />
@@ -90,16 +90,16 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-3" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Инфекционные (Infectious - &lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;&lt;br/&gt;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:EN-US;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot; lang=&quot;EN-US&quot;&gt;I&lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;font-family:&lt;br/&gt;&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:RU;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot;&gt;)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1083" y="395" width="206" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Инфекционные (Infectious - &lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;&lt;br/&gt;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:EN-US;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot; lang=&quot;EN-US&quot;&gt;I&lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;font-family:&lt;br/&gt;&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:RU;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot;&gt;)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="1083" y="395" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-4" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Пациенты, выздоравливающие (Recovered - R)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1083" y="876.5" width="206" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Пациенты, выздоравливающие (Recovered - R)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="1083" y="876.5" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-5" target="5F-HwiHzCKwmO7AWQMr1-6" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-11" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-6" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-5" target="5F-HwiHzCKwmO7AWQMr1-4" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-15" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-4">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1404" y="603.5" />
@@ -107,40 +107,40 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-5" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Поступившие на госпитализацию (Hospitalized - H)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1083" y="556.5" width="206" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Поступившие на госпитализацию (Hospitalized - H)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="1083" y="556.5" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-6" target="5F-HwiHzCKwmO7AWQMr1-4" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-12" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-4" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-6" target="5F-HwiHzCKwmO7AWQMr1-7" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-17" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-7">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-6" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Пациенты, нуждающиеся в отделении интенсивной&lt;br/&gt;терапии (Critical — C)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1083" y="716.5" width="206" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Пациенты, нуждающиеся в отделении интенсивной&lt;br/&gt;терапии (Critical — C)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="1083" y="716.5" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-7" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Пациенты, умирающие от заболевания (Dead - D)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="773" y="716.5" width="206" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Пациенты, умирающие от заболевания (Dead - D)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="773" y="716.5" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-19" target="5F-HwiHzCKwmO7AWQMr1-21" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-18" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-21" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-19" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Ожедаемое количество пациентов&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1765" y="72" width="206" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-19" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Ожедаемое количество пациентов&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="1765" y="72" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-21" target="5F-HwiHzCKwmO7AWQMr1-24" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-20" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-24" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-21" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Распределение посещения и инициализация показателея для каждого пациента (время поступления, тяжесть, время прибывания)&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1677" y="232" width="382" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-21" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Распределение посещения и инициализация показателея для каждого пациента (время поступления, тяжесть, время прибывания)&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="94" width="382" x="1677" y="232" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;fontColor=#5AA9E6;fillColor=#FFE45E;" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-24" target="tFT7xHhE8EylXIPOgmT6-33">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-36" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;fontColor=#5AA9E6;fillColor=#FFE45E;" target="tFT7xHhE8EylXIPOgmT6-33">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-24" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Попытка записать каждого пациента в больницу, учитывая его тяжесть, рейтинг больницы.&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1708.5" y="392" width="319" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-24" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Попытка записать каждого пациента в больницу, учитывая его тяжесть, рейтинг больницы.&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="94" width="319" x="1708.5" y="392" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-27" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2470" y="603.5" />
@@ -149,169 +149,193 @@
             <mxPoint x="2355.0000000000005" y="923.4615384615386" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-38" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-39" target="5F-HwiHzCKwmO7AWQMr1-41" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-38" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-41" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-39" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Составляется ретинг больниц, который учитывает качество больнгицы, количество свобоодных коек и ИВЛ&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="2444.5" y="51" width="331" height="103.5" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-39" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Составляется ретинг больниц, который учитывает качество больнгицы, количество свобоодных коек и ИВЛ&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="103.5" width="331" x="2444.5" y="51" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-41" edge="1" target="5F-HwiHzCKwmO7AWQMr1-55">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-48" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-55">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="2610" y="379" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-41" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Попытка записать больницу&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="2507" y="187" width="206" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-41" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Попытка записать больницу&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="2507" y="187" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="5F-HwiHzCKwmO7AWQMr1-55" target="5F-HwiHzCKwmO7AWQMr1-56" edge="1">
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-57" edge="1" parent="1" source="5F-HwiHzCKwmO7AWQMr1-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F-HwiHzCKwmO7AWQMr1-56">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-55" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Расчет вероятности смерти&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="2507" y="310.5" width="206" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-55" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Расчет вероятности смерти&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="2507" y="310.5" as="geometry" />
         </mxCell>
-        <mxCell id="5F-HwiHzCKwmO7AWQMr1-56" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Обновление метрик&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="2507" y="438" width="206" height="94" as="geometry" />
+        <mxCell id="5F-HwiHzCKwmO7AWQMr1-56" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Обновление метрик&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="2507" y="438" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="z-KmeScMzANv4bv-uCME-1" target="z-KmeScMzANv4bv-uCME-3" edge="1">
+        <mxCell id="z-KmeScMzANv4bv-uCME-12" edge="1" parent="1" source="z-KmeScMzANv4bv-uCME-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="z-KmeScMzANv4bv-uCME-3">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-1" value="&lt;b&gt;Получаения маски разрешенных действий и окружения&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="3123.5" y="62" width="165" height="54" as="geometry" />
+        <mxCell id="z-KmeScMzANv4bv-uCME-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;Получаения маски разрешенных действий и окружения&lt;/b&gt;" vertex="1">
+          <mxGeometry height="54" width="165" x="3123.5" y="62" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-2" value="Процесс применения RL-модели" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="3142" y="14" width="128" height="30" as="geometry" />
+        <mxCell id="z-KmeScMzANv4bv-uCME-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Процесс применения RL-модели" vertex="1">
+          <mxGeometry height="30" width="128" x="3142" y="14" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="z-KmeScMzANv4bv-uCME-3" target="z-KmeScMzANv4bv-uCME-4" edge="1">
+        <mxCell id="z-KmeScMzANv4bv-uCME-13" edge="1" parent="1" source="z-KmeScMzANv4bv-uCME-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="z-KmeScMzANv4bv-uCME-4">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-3" value="&lt;b&gt;RL-агент выбирает действие&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="3123.5" y="144" width="165" height="54" as="geometry" />
+        <mxCell id="z-KmeScMzANv4bv-uCME-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;RL-агент выбирает действие&lt;/b&gt;" vertex="1">
+          <mxGeometry height="54" width="165" x="3123.5" y="144" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="z-KmeScMzANv4bv-uCME-4" target="z-KmeScMzANv4bv-uCME-6" edge="1">
+        <mxCell id="z-KmeScMzANv4bv-uCME-14" edge="1" parent="1" source="z-KmeScMzANv4bv-uCME-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="z-KmeScMzANv4bv-uCME-6">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-4" value="&lt;b&gt;Применяется действие&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="3123.5" y="227" width="165" height="54" as="geometry" />
+        <mxCell id="z-KmeScMzANv4bv-uCME-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;Применяется действие&lt;/b&gt;" vertex="1">
+          <mxGeometry height="54" width="165" x="3123.5" y="227" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="z-KmeScMzANv4bv-uCME-6" target="z-KmeScMzANv4bv-uCME-7" edge="1">
+        <mxCell id="z-KmeScMzANv4bv-uCME-15" edge="1" parent="1" source="z-KmeScMzANv4bv-uCME-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="z-KmeScMzANv4bv-uCME-7">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-6" value="&lt;b&gt;SD модель моделирует пациентов&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="3123.5" y="310.5" width="165" height="54" as="geometry" />
+        <mxCell id="z-KmeScMzANv4bv-uCME-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;SD модель моделирует пациентов&lt;/b&gt;" vertex="1">
+          <mxGeometry height="54" width="165" x="3123.5" y="310.5" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="z-KmeScMzANv4bv-uCME-7" target="z-KmeScMzANv4bv-uCME-9" edge="1">
+        <mxCell id="z-KmeScMzANv4bv-uCME-16" edge="1" parent="1" source="z-KmeScMzANv4bv-uCME-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="z-KmeScMzANv4bv-uCME-9">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-7" value="&lt;b&gt;Распределение пациентов по больницам&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="3123.5" y="395" width="165" height="54" as="geometry" />
+        <mxCell id="z-KmeScMzANv4bv-uCME-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;Распределение пациентов по больницам&lt;/b&gt;" vertex="1">
+          <mxGeometry height="54" width="165" x="3123.5" y="395" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="z-KmeScMzANv4bv-uCME-9" target="z-KmeScMzANv4bv-uCME-10" edge="1">
+        <mxCell id="z-KmeScMzANv4bv-uCME-17" edge="1" parent="1" source="z-KmeScMzANv4bv-uCME-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="z-KmeScMzANv4bv-uCME-10">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-9" value="&lt;b&gt;Сбор метрик&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="3146.75" y="480" width="118.5" height="35" as="geometry" />
+        <mxCell id="z-KmeScMzANv4bv-uCME-9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;Сбор метрик&lt;/b&gt;" vertex="1">
+          <mxGeometry height="35" width="118.5" x="3146.75" y="480" as="geometry" />
         </mxCell>
-        <mxCell id="z-KmeScMzANv4bv-uCME-10" value="&lt;b&gt;(опционально) Обучение агента&amp;nbsp;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="3123.5" y="546" width="165" height="54" as="geometry" />
+        <mxCell id="z-KmeScMzANv4bv-uCME-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;(опционально) Обучение агента&amp;nbsp;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="54" width="165" x="3123.5" y="546" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-2" target="tFT7xHhE8EylXIPOgmT6-4">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-1" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-4" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-2" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Восприимчивые (Susceptible - &lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;&lt;br/&gt;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:EN-US;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot; lang=&quot;EN-US&quot;&gt;S&lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;font-family:&lt;br/&gt;&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:RU;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot;&gt;)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="773" y="1126" width="206" height="94" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Восприимчивые (Susceptible - &lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;&lt;br/&gt;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:EN-US;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot; lang=&quot;EN-US&quot;&gt;S&lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;font-family:&lt;br/&gt;&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:RU;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot;&gt;)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="773" y="1126" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-4" target="tFT7xHhE8EylXIPOgmT6-7">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-3" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-7" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-4" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Подверженные (Exposed&lt;br/&gt;- &lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;&lt;br/&gt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:EN-US;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot; lang=&quot;EN-US&quot;&gt;E&lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;&lt;br/&gt;mso-bidi-font-size:11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;&lt;br/&gt;mso-fareast-font-family:Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:&lt;br/&gt;minor-bidi;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;&lt;br/&gt;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot;&gt;)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="773" y="1265" width="206" height="94" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Подверженные (Exposed&lt;br/&gt;- &lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;&lt;br/&gt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:EN-US;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot; lang=&quot;EN-US&quot;&gt;E&lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;&lt;br/&gt;mso-bidi-font-size:11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;&lt;br/&gt;mso-fareast-font-family:Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:&lt;br/&gt;minor-bidi;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;&lt;br/&gt;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot;&gt;)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="773" y="1265" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-7" target="tFT7xHhE8EylXIPOgmT6-11">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-5" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-11" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-7" target="tFT7xHhE8EylXIPOgmT6-8">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-6" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-8">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1130" y="1473" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-7" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Инфекционные (Infectious - &lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;&lt;br/&gt;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:EN-US;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot; lang=&quot;EN-US&quot;&gt;I&lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;font-family:&lt;br/&gt;&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:RU;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot;&gt;)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="1027" y="1265" width="206" height="94" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Инфекционные (Infectious - &lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;&lt;br/&gt;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:EN-US;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot; lang=&quot;EN-US&quot;&gt;I&lt;/span&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:107%;font-family:&lt;br/&gt;&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:Aptos;mso-fareast-theme-font:&lt;br/&gt;minor-latin;mso-bidi-theme-font:minor-bidi;mso-font-kerning:0pt;mso-ligatures:&lt;br/&gt;none;mso-ansi-language:RU;mso-fareast-language:EN-US;mso-bidi-language:AR-SA&quot;&gt;)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="1027" y="1265" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-8" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Пациенты, выздоравливающие (Recovered - R)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="1292" y="1426" width="206" height="94" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Пациенты, выздоравливающие (Recovered - R)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="1292" y="1426" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-11" target="tFT7xHhE8EylXIPOgmT6-14">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-9" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-14" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-11" target="tFT7xHhE8EylXIPOgmT6-8">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-10" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-8">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1395" y="1460" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-11" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Поступившие на госпитализацию (Hospitalized - H)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="1292" y="1265" width="206" height="94" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Поступившие на госпитализацию (Hospitalized - H)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="1292" y="1265" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-14" target="tFT7xHhE8EylXIPOgmT6-8">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-12" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-8" value="">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1660" y="1473" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-14" target="tFT7xHhE8EylXIPOgmT6-15">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-13" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-15">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-14" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Пациенты, нуждающиеся в отделении интенсивной&lt;br/&gt;терапии (Critical — C)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="1557" y="1265" width="206" height="94" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Пациенты, нуждающиеся в отделении интенсивной&lt;br/&gt;терапии (Critical — C)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="1557" y="1265" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-15" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Пациенты, умирающие от заболевания (Dead - D)&lt;/span&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="1557" y="1126" width="206" height="94" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;&lt;span style=&quot;font-size:14.0pt;mso-bidi-font-size:&lt;br/&gt;11.0pt;line-height:107%;font-family:&amp;quot;Times New Roman&amp;quot;,serif;mso-fareast-font-family:&lt;br/&gt;Aptos;mso-fareast-theme-font:minor-latin;mso-bidi-theme-font:minor-bidi;&lt;br/&gt;mso-font-kerning:0pt;mso-ligatures:none;mso-ansi-language:RU;mso-fareast-language:&lt;br/&gt;EN-US;mso-bidi-language:AR-SA&quot;&gt;Пациенты, умирающие от заболевания (Dead - D)&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="1557" y="1126" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-17" target="tFT7xHhE8EylXIPOgmT6-19">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-24" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-19">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-17" value="Состояние" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="3728" y="37.5" width="104" height="45" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Состояние" vertex="1">
+          <mxGeometry height="45" width="104" x="3728" y="37.5" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-18" value="DQN" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="3766" y="-38" width="60" height="30" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-18" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="DQN" vertex="1">
+          <mxGeometry height="30" width="60" x="3766" y="-38" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-19" target="tFT7xHhE8EylXIPOgmT6-20">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-25" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-20">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-19" value="Действие&lt;div&gt;(агент при помощи нейронной сети выбирает действие)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="3882" y="24" width="193" height="72" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-19" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Действие&lt;div&gt;(агент при помощи нейронной сети выбирает действие)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="72" width="193" x="3882" y="24" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-20" target="tFT7xHhE8EylXIPOgmT6-21">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-26" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-21">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-20" value="Применение действия и&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;DES симуляция&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="4117" y="24" width="147" height="72" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-20" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Применение действия и&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;DES симуляция&lt;/span&gt;" vertex="1">
+          <mxGeometry height="72" width="147" x="4117" y="24" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-21" target="tFT7xHhE8EylXIPOgmT6-23">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-27" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-23">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-21" value="Получение нового состояния, награды и флага завершения" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="4117" y="132" width="147" height="72" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-21" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Получение нового состояния, награды и флага завершения" vertex="1">
+          <mxGeometry height="72" width="147" x="4117" y="132" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-23" target="tFT7xHhE8EylXIPOgmT6-28">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-29" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-28">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-23" value="Опыт в буфер воспроизведения" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="3905" y="132" width="147" height="72" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-23" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Опыт в буфер воспроизведения" vertex="1">
+          <mxGeometry height="72" width="147" x="3905" y="132" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-28" target="tFT7xHhE8EylXIPOgmT6-17">
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-32" edge="1" parent="1" source="tFT7xHhE8EylXIPOgmT6-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="tFT7xHhE8EylXIPOgmT6-17">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-28" value="Периодическое обучение" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="3730.75" y="132" width="98.5" height="72" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-28" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Периодическое обучение" vertex="1">
+          <mxGeometry height="72" width="98.5" x="3730.75" y="132" as="geometry" />
         </mxCell>
-        <mxCell id="tFT7xHhE8EylXIPOgmT6-33" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Обновления коэффициентов эпидеммии, за счет работы больниц&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="2101" y="392" width="206" height="94" as="geometry" />
+        <mxCell id="tFT7xHhE8EylXIPOgmT6-33" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Обновления коэффициентов эпидеммии, за счет работы больниц&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="2101" y="392" as="geometry" />
+        </mxCell>
+        <mxCell id="rdu62U67sbggMYqK9_Eq-5" edge="1" parent="1" source="rdu62U67sbggMYqK9_Eq-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="rdu62U67sbggMYqK9_Eq-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rdu62U67sbggMYqK9_Eq-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;SD&lt;/b&gt;" vertex="1">
+          <mxGeometry height="39" width="69" x="389" y="-368" as="geometry" />
+        </mxCell>
+        <mxCell id="rdu62U67sbggMYqK9_Eq-6" edge="1" parent="1" source="rdu62U67sbggMYqK9_Eq-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="rdu62U67sbggMYqK9_Eq-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rdu62U67sbggMYqK9_Eq-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;DES&lt;/b&gt;" vertex="1">
+          <mxGeometry height="39" width="69" x="483" y="-368" as="geometry" />
+        </mxCell>
+        <mxCell id="rdu62U67sbggMYqK9_Eq-7" edge="1" parent="1" source="rdu62U67sbggMYqK9_Eq-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="rdu62U67sbggMYqK9_Eq-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rdu62U67sbggMYqK9_Eq-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;Расчет метрик&lt;/b&gt;" vertex="1">
+          <mxGeometry height="39" width="69" x="483" y="-305" as="geometry" />
+        </mxCell>
+        <mxCell id="rdu62U67sbggMYqK9_Eq-8" edge="1" parent="1" source="rdu62U67sbggMYqK9_Eq-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="rdu62U67sbggMYqK9_Eq-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rdu62U67sbggMYqK9_Eq-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;Принятие решения&lt;/b&gt;" vertex="1">
+          <mxGeometry height="39" width="69" x="389" y="-305" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

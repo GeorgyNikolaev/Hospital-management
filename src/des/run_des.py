@@ -49,6 +49,7 @@ def run(hospitals_cfg: List[Hospital], init_params: SEIRHCDParams, days: int, rn
         )
 
         seir_df = simulate_seir_hcd(params=seir_params_today, days=1, start_day=day+1, beta_time_fn=beta_time_fn, data=seir_df)
+        # seir_df = simulate_seir_hcd(params=seir_params_today, days=1, start_day=day, beta_time_fn=beta_time_fn)
 
         expected_hosp = seir_df["new_hospitalizations"].iloc[-1]
         expected_icu = seir_df["new_icu"].iloc[-1]
@@ -72,9 +73,9 @@ def run(hospitals_cfg: List[Hospital], init_params: SEIRHCDParams, days: int, rn
                 else:
                     metric_day[key] = value  # создаем новую запись
 
-        seir_df.loc[seir_df.index[-1], "H"] += metric_day["admitted_hosp"]
-        seir_df.loc[seir_df.index[-1], "C"] += metric_day["admitted_icu"]
-        seir_df.loc[seir_df.index[-1], "D"] += metric_day["deaths"]
+        # seir_df.loc[seir_df.index[-1], "H"] += metric_day["admitted_hosp"]
+        # seir_df.loc[seir_df.index[-1], "C"] += metric_day["admitted_icu"]
+        # seir_df.loc[seir_df.index[-1], "D"] += metric_day["deaths"]
 
         # 1) Смертность сокращает численность населения (вычитается из N)
         if metric_day["deaths"] > 0:

@@ -18,13 +18,13 @@ def plot_SD_results(results_df, save_path: str):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
 
     # График 1: Основные состояния SEIHCRD
-    ax1.plot(results_df['t'], results_df['S'], label='Susceptible (S)', linewidth=2)
-    ax1.plot(results_df['t'], results_df['E'], label='Exposed (E)', linewidth=2)
-    ax1.plot(results_df['t'], results_df['I'], label='Infectious (I)', linewidth=2)
-    ax1.plot(results_df['t'], results_df['H'], label='Hospitalized (H)', linewidth=2)
-    ax1.plot(results_df['t'], results_df['C'], label='Critical (C)', linewidth=2)
-    ax1.plot(results_df['t'], results_df['R'], label='Recovered (R)', linewidth=2)
-    ax1.plot(results_df['t'], results_df['D'], label='Deceased (D)', linewidth=2)
+    ax1.plot(results_df['day'], results_df['S'], label='Susceptible (S)', linewidth=2)
+    ax1.plot(results_df['day'], results_df['E'], label='Exposed (E)', linewidth=2)
+    ax1.plot(results_df['day'], results_df['I'], label='Infectious (I)', linewidth=2)
+    ax1.plot(results_df['day'], results_df['H'], label='Hospitalized (H)', linewidth=2)
+    ax1.plot(results_df['day'], results_df['C'], label='Critical (C)', linewidth=2)
+    ax1.plot(results_df['day'], results_df['R'], label='Recovered (R)', linewidth=2)
+    ax1.plot(results_df['day'], results_df['D'], label='Deceased (D)', linewidth=2)
 
     ax1.set_title(f'{title} - States', fontsize=14, fontweight='bold')
     ax1.set_ylabel('Number of People', fontsize=12)
@@ -33,13 +33,13 @@ def plot_SD_results(results_df, save_path: str):
     ax1.grid(True, alpha=0.3)
 
     # График 2: Потоки (новые случаи)
-    ax2.plot(results_df['t'], results_df['new_infected'],
+    ax2.plot(results_df['day'], results_df['new_infected'],
              label='New Infections', linewidth=2, color='red')
-    ax2.plot(results_df['t'], results_df['new_hospitalizations'],
+    ax2.plot(results_df['day'], results_df['new_hospitalizations'],
              label='New Hospitalizations', linewidth=2, color='orange')
-    ax2.plot(results_df['t'], results_df['new_icu'],
+    ax2.plot(results_df['day'], results_df['new_icu'],
              label='New ICU Cases', linewidth=2, color='purple')
-    ax2.plot(results_df['t'], results_df['new_deaths'],
+    ax2.plot(results_df['day'], results_df['new_deaths'],
              label='New Deaths', linewidth=2, color='black')
 
     ax2.set_title('Daily Flows', fontsize=14, fontweight='bold')
@@ -247,7 +247,7 @@ def plot_DES_vs_TTM_vs_RL(des_log, ttm_logs, rl_log, save_path: str = ""):
     fig.suptitle('Static vs TTM vs RL', fontsize=16, fontweight='bold')
 
     ax1 = axes[0, 0]
-    ax1.plot(days, des_log['admitted'], 'r-', label='Static', linewidth=2)
+    # ax1.plot(days, des_log['admitted'], 'r-', label='Static', linewidth=2)
     ax1.plot(days, ttm_logs['admitted'], 'b-', label='TTM', linewidth=2)
     ax1.plot(days, rl_log['admitted'], 'g-', label='RL', linewidth=2)
     ax1.set_title('Принято')
@@ -257,7 +257,7 @@ def plot_DES_vs_TTM_vs_RL(des_log, ttm_logs, rl_log, save_path: str = ""):
     ax1.grid(True, alpha=0.3)
 
     ax2 = axes[0, 1]
-    ax2.plot(days, des_log['rejected'], 'r-', label='Static', linewidth=2)
+    # ax2.plot(days, des_log['rejected'], 'r-', label='Static', linewidth=2)
     ax2.plot(days, ttm_logs['rejected'], 'b-', label='TTM', linewidth=2)
     ax2.plot(days, rl_log['rejected'], 'g-', label='RL', linewidth=2)
     ax2.set_title('Отказы')
@@ -267,7 +267,7 @@ def plot_DES_vs_TTM_vs_RL(des_log, ttm_logs, rl_log, save_path: str = ""):
     ax2.grid(True, alpha=0.3)
 
     ax3 = axes[1, 0]
-    ax3.plot(days, des_log['deaths'], 'r-', label='Static', linewidth=2)
+    # ax3.plot(days, des_log['deaths'], 'r-', label='Static', linewidth=2)
     ax3.plot(days, ttm_logs['deaths'], 'b-', label='TTM', linewidth=2)
     ax3.plot(days, rl_log['deaths'], 'g-', label='RL', linewidth=2)
     ax3.set_title('Смерти')
@@ -279,16 +279,16 @@ def plot_DES_vs_TTM_vs_RL(des_log, ttm_logs, rl_log, save_path: str = ""):
     ax4 = axes[1, 1]
     # Расчет доступных коек (общие - законсервированные)
 
-    ax4.plot(days, des_log["beds"], 'r-', label='Доступные койки Static', linewidth=1)
+    # ax4.plot(days, des_log["beds"], 'r-', label='Доступные койки Static', linewidth=1)
     ax4.plot(days, ttm_logs["beds"], 'b-', label='Доступные койки TTM', linewidth=1)
     ax4.plot(days, rl_log["beds"], 'g-', label='Доступные койки RL', linewidth=1)
 
-    ax4.plot(days, des_log["occupied_beds"], 'c-', label='Занятые койки Static', linewidth=1)
+    # ax4.plot(days, des_log["occupied_beds"], 'c-', label='Занятые койки Static', linewidth=1)
     ax4.plot(days, ttm_logs["occupied_beds"], 'm-', label='Занятые койки TTM', linewidth=1)
     ax4.plot(days, rl_log["occupied_beds"], 'k-', label='Занятые койки RL', linewidth=1)
 
-    ax4.fill_between(days, des_log["occupied_beds"], des_log["beds"], alpha=0.3, color='cyan',
-                     label='Свободные койки DES')
+    # ax4.fill_between(days, des_log["occupied_beds"], des_log["beds"], alpha=0.3, color='cyan',
+    #                  label='Свободные койки DES')
     ax4.fill_between(days, ttm_logs["occupied_beds"], ttm_logs["beds"], alpha=0.3, color='yellow',
                      label='Свободные койки TTM')
     ax4.fill_between(days, rl_log["occupied_beds"], rl_log["beds"], alpha=0.3, color='blue',
@@ -480,8 +480,13 @@ def display_results(results_df):
 
     if has('expenses') and has('deaths') and results_df['deaths'].sum() > 0:
         print(
+            f"   Стоимость одной жизни: "
+            f"{results_df['expenses'].sum() / (results_df['infection'].sum() - results_df['deaths'].sum()):,.0f}"
+        )
+
+        print(
             f"   Стоимость одной смерти: "
-            f"{results_df['expenses'].sum() / results_df['deaths'].sum():,.0f}"
+            f"{results_df['expenses'].sum() / results_df['deaths'].sum() :,.0f}"
         )
 
     print("\n" + "=" * 60)

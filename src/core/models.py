@@ -291,6 +291,8 @@ class Hospital:
             elif self.costs[bed_type + "_purchase"] * n < self.budget:
                 setattr(self, bed_type, b + n)
                 self.budget -= self.costs[bed_type + "_purchase"] * n
+                last_key = list(self.metrics.keys())[-1]
+                self.metrics[last_key]["expenses"] += self.costs[bed_type + "_purchase"] * n
 
         
 

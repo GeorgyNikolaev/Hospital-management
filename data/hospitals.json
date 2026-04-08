@@ -7,12 +7,12 @@
     "icu_beds": 15,
     "reserve_beds": 5,
     "reserve_icu": 2,
-    "budget": 50000000,
+    "budget": 70000000,
     "costs": {
-      "beds_purchase": 200000,
-      "beds_day": 4000,
-      "icu_purchase": 2000000,
-      "icu_day": 12000
+      "beds_purchase": 100000,
+      "beds_day": 3000,
+      "icu_purchase": 1000000,
+      "icu_day": 8000
     }
   },
   {
@@ -23,12 +23,12 @@
     "icu_beds": 40,
     "reserve_beds": 20,
     "reserve_icu": 4,
-    "budget": 80000000,
+    "budget": 100000000,
     "costs": {
-      "beds_purchase": 220000,
-      "beds_day": 4500,
-      "icu_purchase": 2300000,
-      "icu_day": 13000
+      "beds_purchase": 120000,
+      "beds_day": 4000,
+      "icu_purchase": 1300000,
+      "icu_day": 10000
     }
   },
   {
@@ -39,12 +39,12 @@
     "icu_beds": 60,
     "reserve_beds": 10,
     "reserve_icu": 5,
-    "budget": 120000000,
+    "budget": 160000000,
     "costs": {
-      "beds_purchase": 250000,
-      "beds_day": 5000,
-      "icu_purchase": 2500000,
-      "icu_day": 15000
+      "beds_purchase": 150000,
+      "beds_day": 4500,
+      "icu_purchase": 1500000,
+      "icu_day": 12000
     }
   }
 ]

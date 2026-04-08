@@ -140,8 +140,8 @@ def run_with_rl(
         # print(metric_day["expenses"])
 
         # 1) Смертность сокращает численность населения (вычитается из N)
-        if metric_day["deaths"] > 0:
-            params.population = max(1000, params.population - metric_day["deaths"])
+        # if metric_day["deaths"] > 0:
+        #     params.population = max(1000, params.population - metric_day["deaths"])
 
         # 2) Высокий уровень отторжения => увеличить бета-модификатор (поведенческую реакцию)
         overload = metric_day["rejected"] / max(1.0, len(events))
@@ -208,7 +208,8 @@ def run_with_rl(
             rewards.append(reward)
 
             # сохраняем опыт с маской состояния и маской next
-            agents[hid].store(obs_list[hid], actions[hid], reward, next_obs, action_masks[hid], next_mask)
+            done = (day >= days - 1) or (h.budget <= 0)
+            agents[hid].store(obs_list[hid], actions[hid], reward, next_obs, done, action_masks[hid], next_mask)
 
             # аккумулируем reward для эпизода
             episode_rewards[hid] += float(reward)
@@ -217,9 +218,9 @@ def run_with_rl(
             for agent in agents:
                 agent.train_step()
 
-            if day % 20 == 0:
-                for agent in agents:
-                    agent.update_target()
+            # if day % 20 == 0:
+            #     for agent in agents:
+            #         agent.update_target()
 
         # обновляем состояния
         obs_list = new_obs_list

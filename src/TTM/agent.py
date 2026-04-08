@@ -4,25 +4,25 @@
 levels = {
     "growth" :
         {
-            "low_1_level": 0.3,
-            "low_2_level": 0.4,
+            "low_1_level": 0.08,
+            "low_2_level": 0.12,
             "top_1_level": 0.9,
             "top_2_level": 0.95
+        },
+    "normal" :
+        {
+            "low_1_level": 0.1,
+            "low_2_level": 0.2,
+            "top_1_level": 0.8,
+            "top_2_level": 0.85
         },
     "fall" :
         {
             "low_1_level": 0.001,
             "low_2_level": 0.01,
-            "top_1_level": 0.05,
-            "top_2_level": 0.1
-        },
-    "normal" :
-        {
-            "low_1_level": 0.3,
-            "low_2_level": 0.4,
-            "top_1_level": 0.9,
-            "top_2_level": 0.95
-        },
+            "top_1_level": 0.1,
+            "top_2_level": 0.2
+        }
 }
 
 class Agent:

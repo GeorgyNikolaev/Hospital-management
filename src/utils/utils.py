@@ -126,5 +126,7 @@ def change_beta_modifier(beta_modifier: float, overload: float) -> float:
         new_beta_modifier += 0.02 * (1.0 - beta_modifier)
 
     # --- жёсткие границы ---
-    new_beta_modifier = max(BETA_MIN, min(BETA_MAX, beta_modifier))
+    # print(new_beta_modifier, beta_modifier, overload)
+    # new_beta_modifier = max(BETA_MIN, min(BETA_MAX, beta_modifier))
+    new_beta_modifier = max(BETA_MIN, min(BETA_MAX, new_beta_modifier))
     return new_beta_modifier

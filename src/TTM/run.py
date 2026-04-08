@@ -133,8 +133,8 @@ def run_ttm(
                     metric_day[key] = value  # создаем новую запись
 
         # 1) Смертность сокращает численность населения (вычитается из N)
-        if metric_day["deaths"] > 0:
-            params.population = max(1000, params.population - metric_day["deaths"])
+        # if metric_day["deaths"] > 0:
+        #     params.population = max(1000, params.population - metric_day["deaths"])
 
         # 2) Высокий уровень отторжения => увеличить бета-модификатор (поведенческую реакцию)
         overload = metric_day["rejected"] / max(1.0, len(events))

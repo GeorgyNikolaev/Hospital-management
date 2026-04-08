@@ -28,7 +28,7 @@ def run_two_way(
     # Моделирование SD модели
     init_params_sd = copy.deepcopy(init_params)
 
-    sd_logs = simulate_seir_hcd(params=init_params_sd, days=settings.DAYS)
+    # sd_logs = simulate_seir_hcd(params=init_params_sd, days=settings.DAYS)
     # plots.plot_SD_results(sd_logs, "sd")
 
     # Моделирование SD <-> DES
@@ -36,7 +36,8 @@ def run_two_way(
     init_params_des = replace(init_params)
 
     des_logs, des = run_des.run(hospitals_cfg_des, init_params_des, days, rng)
-    plots.display_results(des_logs)
+    # plots.plot_SD_results(des_logs, "des")
+    # plots.display_results(des_logs)
     # plots.plot_SD_DES_results(des_logs, "des")
     # plots.plot_RL_results(des_logs, "des")
 
@@ -56,12 +57,14 @@ def run_two_way(
     agents = [HospitalAgent() for _ in hospitals_cfg_rl]
     envs = [HospitalEnv(i) for i in range(len(hospitals_cfg_rl))]
     for i in range(len(agents)):
-        agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_01_02_2026.pt")
+        # agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_01_02_2026.pt")
+        agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_08_04_2026.pt")
 
     rl_logs, des, agents, _ = run_with_rl(hospitals_cfg_rl, init_params_rl, days, rng, agents, envs, False)
     plots.display_results(rl_logs)
-    # plots.plot_SD_DES_results(rl_logs, "rl")
-    # plots.plot_RL_results(rl_logs, "rl")
-    # plots.plot_RL_actions(rl_logs, "rl")
+    plots.plot_SD_DES_results(rl_logs, "rl")
+    plots.plot_RL_results(rl_logs, "rl")
+    plots.plot_RL_actions(rl_logs, "rl")
 
     # plots.plot_DES_vs_TTM_vs_RL(des_logs, ttm_logs, rl_logs)
+    plots.plot_DES_vs_TTM_vs_RL(des_logs, ttm_logs, rl_logs)
