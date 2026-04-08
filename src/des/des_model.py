@@ -72,12 +72,11 @@ class DES:
         # self.metrics[fallback.name]["rejected"] += 1
         # self.metrics[fallback.name]["patients"].append(asdict(patient))
         day = math.floor(patient.absolute_time)
-        metric = self.hospitals[0].metrics[day]
         if patient.died:
-            metric["deaths"] += 1
+            self.hospitals[0].metrics[day]["deaths"] += 1
             if patient.severity == "icu" :
-                metric["deaths_icu"] += 1
+                self.hospitals[0].metrics[day]["deaths_icu"] += 1
             else:
-                metric["deaths_hosp"] += 1
+                self.hospitals[0].metrics[day]["deaths_hosp"] += 1
         return patient
 

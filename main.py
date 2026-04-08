@@ -11,7 +11,7 @@ from src.utils.utils import make_params_consistent
 
 RESULTS_DIR = "results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
-IS_TRAIN = True
+IS_TRAIN = False
 
 def load_hospital_config(path: Optional[str]) -> List[Hospital]:
     """Загрузка данныз о госпиталях"""
@@ -65,7 +65,7 @@ def main():
             days=settings.DAYS,
             num_epochs=100,
             save_dir="checkpoints/hospital_rl",
-            seed_base=444
+            seed_base=4
         )
     else:
         run_two_way(init_params=params, hospitals_cfg=hospitals, days=settings.DAYS)

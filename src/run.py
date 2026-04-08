@@ -62,7 +62,7 @@ def run_two_way(
 
     rl_logs, des, agents, _ = run_with_rl(hospitals_cfg_rl, init_params_rl, days, rng, agents, envs, False)
     plots.display_results(rl_logs)
-    plots.plot_SD_DES_results(rl_logs, "rl")
+    # plots.plot_SD_DES_results(rl_logs, "rl")
     plots.plot_RL_results(rl_logs, "rl")
     plots.plot_RL_actions(rl_logs, "rl")
 

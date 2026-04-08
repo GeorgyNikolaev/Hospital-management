@@ -180,16 +180,15 @@ def run_with_rl(
         )
         seir_df = simulate_seir_hcd(params=seir_params_tomorrow, days=7, start_day=day + 2, beta_time_fn=beta_time_fn,
                                     data=seir_df)
+        expected_hosp = seir_df["new_hospitalizations"].values[-7]
+        expected_icu = seir_df["new_icu"].values[-7]
 
-        expected_hosp = seir_df["new_hospitalizations"].iloc[-7]
-        expected_icu = seir_df["new_icu"].iloc[-7]
+        expected_hosp_3 = seir_df["new_hospitalizations"].values[-5]
+        expected_icu_3 = seir_df["new_icu"].values[-5]
+        expected_hosp_7 = seir_df["new_hospitalizations"].values[-1]
+        expected_icu_7 = seir_df["new_icu"].values[-1]
 
-        expected_hosp_3 = seir_df["new_hospitalizations"].iloc[-5]
-        expected_icu_3 = seir_df["new_icu"].iloc[-5]
-        expected_hosp_7 = seir_df["new_hospitalizations"].iloc[-1]
-        expected_icu_7 = seir_df["new_icu"].iloc[-1]
-
-
+        # print(day, expected_hosp, expected_hosp_3, expected_hosp_7)
         for hid, h in enumerate(des.hospitals):
             metrics = h.daily_metrics(day=day)
             metrics["expected_hosp_1_day"] = expected_hosp / 3
@@ -199,6 +198,7 @@ def run_with_rl(
             metrics["expected_hosp_7_day"] = expected_hosp_7 / 3
             metrics["expected_icu_7_day"] = expected_icu_7 / 3
 
+            # print(metrics)
             next_obs, reward = envs[hid].step(metrics, actions[hid])
 
             # вычисляем маску действий для next state (важно: budget/резервы уже обновлены после apply_action)

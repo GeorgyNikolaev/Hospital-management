@@ -11,7 +11,7 @@
     "costs": {
       "beds_purchase": 100000,
       "beds_day": 3000,
-      "icu_purchase": 1000000,
+      "icu_purchase": 200000,
       "icu_day": 8000
     }
   },
@@ -27,7 +27,7 @@
     "costs": {
       "beds_purchase": 120000,
       "beds_day": 4000,
-      "icu_purchase": 1300000,
+      "icu_purchase": 250000,
       "icu_day": 10000
     }
   },
@@ -41,9 +41,9 @@
     "reserve_icu": 5,
     "budget": 160000000,
     "costs": {
-      "beds_purchase": 150000,
+      "beds_purchase": 100000,
       "beds_day": 4500,
-      "icu_purchase": 1500000,
+      "icu_purchase": 300000,
       "icu_day": 12000
     }
   }

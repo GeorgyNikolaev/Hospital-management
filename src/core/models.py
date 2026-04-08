@@ -90,7 +90,6 @@ class Hospital:
 
     @property
     def _default_metric_day(self) -> dict[str, int]:
-        # print(self.costs["bed_day"] * self.beds + self.costs["icu_day"] * self.icu)
         return {
             "day": 0,
             "admitted": 0,
@@ -212,15 +211,15 @@ class Hospital:
             self.budget -= metric["expenses"]
             metric["budget"] = self.budget
             self.metrics[day] = metric
-
         occ = self.current_occ(day)
+
         metric["occupied_beds"] = occ["beds_in_use"]
         metric["occupied_icu"] = occ["icu_in_use"]
 
         metric["beds"] = self.beds
         metric["icu"] = self.icu
 
-        return metric.copy()
+        return metric
 
     def save_daily_metrics(self, day: int = 0):
         """Сохранение дневной метрики"""
@@ -259,18 +258,18 @@ class Hospital:
             self._add_beds("beds", 5)
         elif action == 2: # Купить 10 коек (освободить)
             self._add_beds("beds", 10)
-        elif action == 3: # Купить 5 аппарат ИВЛ (освободить)
+        elif action == 3: # Купить 1 аппарат ИВЛ (освободить)
+            self._add_beds("icu", 1)
+        elif action == 4: # Купить 5 аппаратов ИВЛ (освободить)
             self._add_beds("icu", 5)
-        elif action == 4: # Купить 10 аппаратов ИВЛ (освободить)
-            self._add_beds("icu", 10)
         elif action == 5: # Законсервировать 5 койку
             self._add_beds("beds", 5, is_reserved=True)
         elif action == 6: # Законсервировать 10 коек
             self._add_beds("beds", 10, is_reserved=True)
-        elif action == 7: # Законсервировать 5 аппарат ИВЛ
+        elif action == 7: # Законсервировать 1 аппарат ИВЛ
+            self._add_beds("icu", 1, is_reserved=True)
+        elif action == 8: # Законсервировать 5 аппаратов ИВЛ
             self._add_beds("icu", 5, is_reserved=True)
-        elif action == 8: # Законсервировать 10 аппаратов ИВЛ
-            self._add_beds("icu", 10, is_reserved=True)
         elif action == 9: # Срочно выделить бюджет на закупку
             self.budget += 40_000_000
             return

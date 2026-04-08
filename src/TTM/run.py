@@ -49,7 +49,7 @@ def run_ttm(
         h.icu = 2
 
         metrics = h.daily_metrics()
-        initial_metrics.append(metrics)
+        initial_metrics.append(metrics.copy())
 
     # init environments
     obs_list = initial_metrics

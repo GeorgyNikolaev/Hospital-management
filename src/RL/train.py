@@ -103,7 +103,7 @@ def train_epochs(
                     agents[j].q_target.load_state_dict(agent.q.state_dict())
                     agents[j].optim.load_state_dict(agent.optim.state_dict())
 
-        print(f"[Epoch {epoch:3}] deaths={total_deaths:7.1f}, rejected={total_rejected:7.1f}, mean_reward={mean_agent_reward:7.3f}")
+        print(f"[Epoch {epoch:3}] deaths={total_deaths:7.1f}, rejected={total_rejected:7.1f}, mean_reward={mean_agent_reward:7.3f}, sum_rewards={sum_agent_rewards:7.3f}")
 
     writer.close()
     return agents, pd.DataFrame(records)
