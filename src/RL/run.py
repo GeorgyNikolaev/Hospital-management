@@ -21,7 +21,8 @@ def run_with_rl(
         envs,            # список HospitalEnv
         is_train: bool=True
 ):
-    des = DES(hospitals_cfg, rng_seed=settings.RANDOM_SEED)
+    # des = DES(hospitals_cfg, rng_seed=settings.RANDOM_SEED)
+    des = DES(hospitals_cfg, rng_seed=444)
     params = init_params
 
     logs = {"day": [],
@@ -104,13 +105,19 @@ def run_with_rl(
                 obs_list[hid] = np.append(obs_list[hid], expected_icu_7)
 
         for hid, agent in enumerate(agents):
-            des.hospitals[hid].save_daily_metrics(day=day)
+            m = des.hospitals[hid].save_daily_metrics(day=day)
 
             # вычисляем маску действий для больницы (текущий бюджет и резервы учтены внутри Hospital)
             mask = des.hospitals[hid].get_action_mask()
+            # print(mask)
             action_masks.append(mask)
 
-            action = agent.select_action(obs_list[hid], mask)  # передаём маску
+            # Отладка маски (удалите после проверки)
+            if day > 80 and day < 120 and hid == 0:
+                occ = m.get('occupied_beds', 0) / max(m.get('beds', 1), 1)
+                # print(f"[Day {day}] Occ: {occ:.2f} | Mask: {mask} | Allowed conserve: {mask[5:9]}")
+
+            action = agent.select_action(obs_list[hid], mask, is_train)  # передаём маску
             actions.append(action)
 
             # применяем действие к больнице
@@ -189,6 +196,7 @@ def run_with_rl(
         expected_icu_7 = seir_df["new_icu"].values[-1]
 
         # print(day, expected_hosp, expected_hosp_3, expected_hosp_7)
+        done = False
         for hid, h in enumerate(des.hospitals):
             metrics = h.daily_metrics(day=day)
             metrics["expected_hosp_1_day"] = expected_hosp / 3
@@ -209,6 +217,7 @@ def run_with_rl(
 
             # сохраняем опыт с маской состояния и маской next
             done = (day >= days - 1) or (h.budget <= 0)
+            # done = (day >= days - 1)
             agents[hid].store(obs_list[hid], actions[hid], reward, next_obs, done, action_masks[hid], next_mask)
 
             # аккумулируем reward для эпизода

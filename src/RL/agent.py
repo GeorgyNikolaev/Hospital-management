@@ -41,7 +41,7 @@ class QNetwork(nn.Module):
 
 class HospitalAgent:
     def __init__(
-            self, obs_size=24, n_actions=10, lr=5e-4, gamma=0.99,
+            self, obs_size=26, n_actions=10, lr=5e-4, gamma=0.99,
             batch_size=64, buffer_size=20_000, grad_clip=5.0,
             n_step=2, device="cpu", reward_scale=1  # 🔑 Критически важно
     ):
@@ -107,17 +107,18 @@ class HospitalAgent:
         # Сдвигаем окно (удаляем первый элемент)
         self.n_step_buffer.popleft()  # используйте collections.deque
 
-    def select_action(self, obs, action_mask):
+    def select_action(self, obs, action_mask, is_train: bool=True):
         self.total_steps += 1
 
         # 🔑 Линейное затухание exploration
-        self.eps = max(self.eps_min, 1.0 - self.total_steps / self.eps_decay_steps)
+        if is_train:
+            self.eps = max(self.eps_min, 1.0 - self.total_steps / self.eps_decay_steps)
 
-        valid = [i for i, m in enumerate(action_mask) if m]
-        if not valid:
-            return 0  # fallback
-        if random.random() < self.eps:
-            return random.choice(valid)
+            valid = [i for i, m in enumerate(action_mask) if m]
+            if not valid:
+                return 0  # fallback
+            if random.random() < self.eps:
+                return random.choice(valid)
 
         obs_t = torch.tensor(obs, dtype=torch.float32).unsqueeze(0).to(self.device)
         mask_t = torch.tensor(action_mask, dtype=torch.bool).to(self.device)

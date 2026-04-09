@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 
 from matplotlib import pyplot as plt
+from scipy.ndimage import gaussian_filter1d
+
 from src.des.des_model import DES
 from src.utils.utils import now_str
 from src.core.models import SEIRHCDParams
@@ -242,39 +244,93 @@ def plot_DES_vs_TTM_vs_RL(des_log, ttm_logs, rl_log, save_path: str = ""):
 
     days = des_log['day']
 
+    from statsmodels.nonparametric.smoothers_lowess import lowess
+
+    def smooth_lowess(x, y, frac=0.3):
+        """
+        LOWESS сглаживание
+        frac - доля данных для локальной регрессии (0.1-0.5)
+        Чем меньше frac, тем более извилистая кривая
+        Чем больше frac, тем более гладкая
+        """
+        smoothed = lowess(y, x, frac=frac, return_sorted=False)
+        return smoothed
+
+    # Красивые цвета (современная палитра)
+    COLORS = {
+        'des': '#FFB3B3',  # бледно-розовый (сырые данные)
+        'ttm': '#bd7ebe',  # бледно-голубой (сырые данные)
+        'rl': '#ffb55a',  # бледно-лавандовый (сырые данные)
+        'trend_des': '#E63946',  # насыщенный красный (тренд)
+        'trend_ttm': '#9b19f5',  # темно-синий (тренд)
+        'trend_rl': '#ffa300'  # фиолетовый (тренд)
+    }
+
     # Создаем сетку графиков
     fig, axes = plt.subplots(2, 2, figsize=(15, 12))
     fig.suptitle('Static vs TTM vs RL', fontsize=16, fontweight='bold')
 
     ax1 = axes[0, 0]
+
+    ax1.plot(days, ttm_logs['admitted'], color=COLORS['ttm'], alpha=0.4, linewidth=1.5, label='TTM (raw)')
+    ax1.plot(days, rl_log['admitted'], color=COLORS['rl'], alpha=0.4, linewidth=1.5, label='RL (raw)')
+
+    # Использование
+    ttm_smooth = smooth_lowess(days, ttm_logs['admitted'], frac=0.2)
+    rl_smooth = smooth_lowess(days, rl_log['admitted'], frac=0.2)
+
+    # Сглаженные тренды (яркие)
+    ax1.plot(days, ttm_smooth, color=COLORS['trend_ttm'], linewidth=3, linestyle='-', label='TTM (trend)')
+    ax1.plot(days, rl_smooth, color=COLORS['trend_rl'], linewidth=3, linestyle='-', label='RL (trend)')
+
     # ax1.plot(days, des_log['admitted'], 'r-', label='Static', linewidth=2)
-    ax1.plot(days, ttm_logs['admitted'], 'b-', label='TTM', linewidth=2)
-    ax1.plot(days, rl_log['admitted'], 'g-', label='RL', linewidth=2)
-    ax1.set_title('Принято')
-    ax1.set_xlabel('Дни')
-    ax1.set_ylabel('Люди')
-    ax1.legend()
-    ax1.grid(True, alpha=0.3)
+    # ax1.plot(days, ttm_logs['admitted'], 'b-', label='TTM', linewidth=2)
+    # ax1.plot(days, rl_log['admitted'], 'g-', label='RL', linewidth=2)
+    ax1.set_title('Принято', fontsize=12)
+    ax1.set_xlabel('Дни', fontsize=10)
+    ax1.set_ylabel('Люди', fontsize=10)
+    ax1.legend(loc='best', framealpha=0.9)
+    ax1.grid(True, alpha=0.3, linestyle='--')
 
     ax2 = axes[0, 1]
+
+    ax2.plot(days, ttm_logs['rejected'], color=COLORS['ttm'], alpha=0.4, linewidth=1.5, label='TTM (raw)')
+    ax2.plot(days, rl_log['rejected'], color=COLORS['rl'], alpha=0.4, linewidth=1.5, label='RL (raw)')
+
+    # Использование
+    ttm_smooth = smooth_lowess(days, ttm_logs['rejected'], frac=0.2)
+    rl_smooth = smooth_lowess(days, rl_log['rejected'], frac=0.2)
+
+    # Сглаженные тренды (яркие)
+    ax2.plot(days, ttm_smooth, color=COLORS['trend_ttm'], linewidth=3, linestyle='-', label='TTM (trend)')
+    ax2.plot(days, rl_smooth, color=COLORS['trend_rl'], linewidth=3, linestyle='-', label='RL (trend)')
+
     # ax2.plot(days, des_log['rejected'], 'r-', label='Static', linewidth=2)
-    ax2.plot(days, ttm_logs['rejected'], 'b-', label='TTM', linewidth=2)
-    ax2.plot(days, rl_log['rejected'], 'g-', label='RL', linewidth=2)
-    ax2.set_title('Отказы')
-    ax2.set_xlabel('Дни')
-    ax2.set_ylabel('Люди')
-    ax2.legend()
-    ax2.grid(True, alpha=0.3)
+    # ax2.plot(days, ttm_logs['rejected'], 'b-', label='TTM', linewidth=2)
+    # ax2.plot(days, rl_log['rejected'], 'g-', label='RL', linewidth=2)
+    ax2.set_title('Отказы', fontsize=12)
+    ax2.set_xlabel('Дни', fontsize=10)
+    ax2.set_ylabel('Люди', fontsize=10)
+    ax2.legend(loc='best', framealpha=0.9)
+    ax2.grid(True, alpha=0.3, linestyle='--')
 
     ax3 = axes[1, 0]
-    # ax3.plot(days, des_log['deaths'], 'r-', label='Static', linewidth=2)
-    ax3.plot(days, ttm_logs['deaths'], 'b-', label='TTM', linewidth=2)
-    ax3.plot(days, rl_log['deaths'], 'g-', label='RL', linewidth=2)
-    ax3.set_title('Смерти')
-    ax3.set_xlabel('Дни')
-    ax3.set_ylabel('Люди')
-    ax3.legend()
-    ax3.grid(True, alpha=0.3)
+    ax3.plot(days, ttm_logs['deaths'], color=COLORS['ttm'], alpha=0.4, linewidth=1.5, label='TTM (raw)')
+    ax3.plot(days, rl_log['deaths'], color=COLORS['rl'], alpha=0.4, linewidth=1.5, label='RL (raw)')
+
+    # Использование
+    ttm_smooth = smooth_lowess(days, ttm_logs['deaths'], frac=0.2)
+    rl_smooth = smooth_lowess(days, rl_log['deaths'], frac=0.2)
+
+    # Сглаженные тренды (яркие)
+    ax3.plot(days, ttm_smooth, color=COLORS['trend_ttm'], linewidth=3, linestyle='-', label='TTM (trend)')
+    ax3.plot(days, rl_smooth, color=COLORS['trend_rl'], linewidth=3, linestyle='-', label='RL (trend)')
+
+    ax3.set_title('Смерти', fontsize=12)
+    ax3.set_xlabel('Дни', fontsize=10)
+    ax3.set_ylabel('Люди', fontsize=10)
+    ax3.legend(loc='best', framealpha=0.9)
+    ax3.grid(True, alpha=0.3, linestyle='--')
 
     ax4 = axes[1, 1]
     # Расчет доступных коек (общие - законсервированные)

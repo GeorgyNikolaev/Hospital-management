@@ -63,9 +63,9 @@ def main():
             hospitals_cfg=hospitals,
             init_params=params,
             days=settings.DAYS,
-            num_epochs=100,
+            num_epochs=1000,
             save_dir="checkpoints/hospital_rl",
-            seed_base=4
+            seed_base=444
         )
     else:
         run_two_way(init_params=params, hospitals_cfg=hospitals, days=settings.DAYS)

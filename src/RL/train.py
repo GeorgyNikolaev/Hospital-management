@@ -10,6 +10,7 @@ import copy
 from src.RL.agent import HospitalAgent
 from src.RL.env import HospitalEnv
 from src.RL.run import run_with_rl
+from utils import plots
 
 
 def train_epochs(
@@ -27,8 +28,8 @@ def train_epochs(
     # если агенты None — создаём новые
     if agents is None:
         agents = [HospitalAgent() for _ in hospitals_cfg]
-    # for i in range(len(agents)):
-    #     agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_08_04_2026.pt")
+    for i in range(len(agents)):
+        agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_09_04_2026.pt")
 
     writer = SummaryWriter(log_dir=os.path.join(save_dir, "tb"))
     records = []
@@ -85,40 +86,45 @@ def train_epochs(
         for i, agent in enumerate(agents):
             value = episode_rewards[i]
 
-            if best_value is None or value > best_value:
+            if best_value is None or value > best_value and value > 0:
                 best_value = value
-                # path = os.path.join(save_dir, f"agent_best_01_02_2026.pt")
-                path = os.path.join(save_dir, f"agent_best_08_04_2026.pt")
+                print(f"save: {round(best_value)}")
+                path = os.path.join(save_dir, f"agent_best_09_04_2026.pt")
                 ckpt = {
                     "epoch": epoch,
+                    "agent_id": i,  # Какой агент сохраняем
                     "model_state": agent.q.state_dict(),
                     "optimizer_state": agent.optim.state_dict(),
                     "eps": agent.eps,
+                    "total_steps": agent.total_steps,
                     "metric_value": value,
                     "metric_name": "reward"
                 }
                 torch.save(ckpt, path)
+                # plots.plot_RL_results(logs, "rl")
+
+                # ✅ Синхронизируем ТОЛЬКО сети, НЕ оптимизаторы
                 for j in range(len(agents)):
                     agents[j].q.load_state_dict(agent.q.state_dict())
                     agents[j].q_target.load_state_dict(agent.q.state_dict())
-                    agents[j].optim.load_state_dict(agent.optim.state_dict())
 
         print(f"[Epoch {epoch:3}] deaths={total_deaths:7.1f}, rejected={total_rejected:7.1f}, mean_reward={mean_agent_reward:7.3f}, sum_rewards={sum_agent_rewards:7.3f}")
 
     writer.close()
     return agents, pd.DataFrame(records)
 
-
-def load_agent_checkpoint(agent: HospitalAgent, ckpt_path: str, load_optimizer=True):
+def load_agent_checkpoint(agent: HospitalAgent, ckpt_path: str, load_optimizer=False):  # По умолчанию False
     data = torch.load(ckpt_path, map_location="cpu")
     agent.q.load_state_dict(data["model_state"])
     agent.q_target.load_state_dict(data["model_state"])
+    agent.eps = data["eps"]
+    agent.total_steps = data["total_steps"]
+
+    # Только если явно нужно и оптимизатор совместим
     if load_optimizer and "optimizer_state" in data:
         try:
             agent.optim.load_state_dict(data["optimizer_state"])
-        except Exception:
-            # если оптимизатор несовместим — пропускаем
-            pass
-    if "eps" in data:
-        agent.eps = data["eps"]
+        except Exception as e:
+            print(f"Warning: Could not load optimizer state: {e}")
+
     return agent

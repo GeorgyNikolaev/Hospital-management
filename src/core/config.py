@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     # Общие настройки
     DAYS: int = Field(default=150, alias="DAYS")
     POPULATION: int = Field(default=5_000, alias="POPULATION")
-    RANDOM_SEED: int = Field(default=42, alias="RANDOM_SEED")
+    RANDOM_SEED: int = Field(default=444, alias="RANDOM_SEED")
 
     # Статистика смертности от коронавируса
     P_DEATH_HOSP_TREATED: float = Field(default=0.10, alias="P_DEATH_HOSP_TREATED")

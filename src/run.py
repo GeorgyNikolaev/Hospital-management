@@ -53,18 +53,22 @@ def run_two_way(
 
     # Использование RL агента
     hospitals_cfg_rl = [copy.deepcopy(h) for h in hospitals_cfg]
-    init_params_rl = replace(init_params)
-    agents = [HospitalAgent() for _ in hospitals_cfg_rl]
     envs = [HospitalEnv(i) for i in range(len(hospitals_cfg_rl))]
+    init_params_rl = replace(init_params)
+    agents = [HospitalAgent() for _ in hospitals_cfg]
     for i in range(len(agents)):
-        # agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_01_02_2026.pt")
-        agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_08_04_2026.pt")
+        # Загружаем лучшую модель для каждого агента (или одну для всех)
+        agents[i] = load_agent_checkpoint(
+            agents[i],
+            f"checkpoints/hospital_rl/agent_best_09_04_2026.pt",  # Конкретный агент
+            load_optimizer=False  # Не загружаем оптимизатор
+        )
 
-    rl_logs, des, agents, _ = run_with_rl(hospitals_cfg_rl, init_params_rl, days, rng, agents, envs, False)
+    rl_logs, des, agents, rewards = run_with_rl(hospitals_cfg_rl, init_params_rl, days, rng, agents, envs, False)
     plots.display_results(rl_logs)
     # plots.plot_SD_DES_results(rl_logs, "rl")
-    plots.plot_RL_results(rl_logs, "rl")
-    plots.plot_RL_actions(rl_logs, "rl")
+    # plots.plot_RL_results(rl_logs, "rl")
+    # plots.plot_RL_actions(rl_logs, "rl")
 
     # plots.plot_DES_vs_TTM_vs_RL(des_logs, ttm_logs, rl_logs)
     plots.plot_DES_vs_TTM_vs_RL(des_logs, ttm_logs, rl_logs)
