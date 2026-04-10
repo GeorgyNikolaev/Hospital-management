@@ -4,15 +4,15 @@
 levels = {
     "growth" :
         {
-            "low_1_level": 0.08,
-            "low_2_level": 0.12,
+            "low_1_level": 0.4,
+            "low_2_level": 0.7,
             "top_1_level": 0.9,
             "top_2_level": 0.95
         },
     "normal" :
         {
-            "low_1_level": 0.1,
-            "low_2_level": 0.2,
+            "low_1_level": 0.4,
+            "low_2_level": 0.6,
             "top_1_level": 0.8,
             "top_2_level": 0.85
         },
@@ -20,8 +20,8 @@ levels = {
         {
             "low_1_level": 0.001,
             "low_2_level": 0.01,
-            "top_1_level": 0.1,
-            "top_2_level": 0.2
+            "top_1_level": 0.05,
+            "top_2_level": 0.1
         }
 }
 
@@ -57,7 +57,7 @@ class Agent:
 
         # print(beds_level, icu_level)
 
-        if ((is_growth == 1 or is_growth == 0) and beds_level < icu_level) or ((is_growth == -1 or is_growth == 0) and beds_level > icu_level):
+        if ((is_growth == 1 or is_growth == 0) and beds_level <= icu_level) or ((is_growth == -1 or is_growth == 0) and beds_level >= icu_level):
             if beds_level <= levels_["low_1_level"]:
                 return Agent.try_buy_beds(action=2, mask=mask)
             elif levels_["low_1_level"] < beds_level <= levels_["low_2_level"]:
@@ -75,7 +75,6 @@ class Agent:
                 return 7
             elif icu_level > levels_["top_2_level"]:
                 return 8
-
         return 0
 
     @staticmethod

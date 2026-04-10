@@ -28,8 +28,8 @@ def train_epochs(
     # если агенты None — создаём новые
     if agents is None:
         agents = [HospitalAgent() for _ in hospitals_cfg]
-    for i in range(len(agents)):
-        agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_09_04_2026.pt")
+    # for i in range(len(agents)):
+    #     agents[i] = load_agent_checkpoint(agents[i], f"checkpoints/hospital_rl/agent_best_09_04_2026_2.pt")
 
     writer = SummaryWriter(log_dir=os.path.join(save_dir, "tb"))
     records = []
@@ -86,10 +86,10 @@ def train_epochs(
         for i, agent in enumerate(agents):
             value = episode_rewards[i]
 
-            if best_value is None or value > best_value and value > 0:
+            if best_value is None or value > best_value:
                 best_value = value
                 print(f"save: {round(best_value)}")
-                path = os.path.join(save_dir, f"agent_best_09_04_2026.pt")
+                path = os.path.join(save_dir, f"agent_best_09_04_2026_1.pt")
                 ckpt = {
                     "epoch": epoch,
                     "agent_id": i,  # Какой агент сохраняем

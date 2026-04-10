@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.8 Chrome/140.0.7339.240 Electron/38.4.0 Safari/537.36">
   <diagram name="Страница — 1" id="_lkTzRLW_7v-ygmfFDh_">
-    <mxGraphModel dx="671" dy="865" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0" adaptiveColors="simple">
+    <mxGraphModel dx="774" dy="936" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0" adaptiveColors="simple">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -336,6 +336,79 @@
         </mxCell>
         <mxCell id="rdu62U67sbggMYqK9_Eq-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;b&gt;Принятие решения&lt;/b&gt;" vertex="1">
           <mxGeometry height="39" width="69" x="389" y="-305" as="geometry" />
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-4" edge="1" parent="1" source="0qYya90w9c2_YpoMsStA-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="0qYya90w9c2_YpoMsStA-3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Составляется рейтинг больниц&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="53" width="298" x="2577" y="723" as="geometry" />
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Попытка записать больницу&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="94" width="206" x="2768" y="546" as="geometry" />
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-6" edge="1" parent="1" source="0qYya90w9c2_YpoMsStA-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="0qYya90w9c2_YpoMsStA-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Попытка записаться в больницу&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="68" width="210" x="2621" y="823" as="geometry" />
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-8" edge="1" parent="1" source="0qYya90w9c2_YpoMsStA-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="0qYya90w9c2_YpoMsStA-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-17" connectable="0" parent="0qYya90w9c2_YpoMsStA-8" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;Да&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.6142" y="1" as="geometry">
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-11" edge="1" parent="1" source="0qYya90w9c2_YpoMsStA-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="0qYya90w9c2_YpoMsStA-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-18" connectable="0" parent="0qYya90w9c2_YpoMsStA-11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;Больницы кончились&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.6806" y="2" as="geometry">
+            <mxPoint x="-2" y="-9" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-13" edge="1" parent="1" source="0qYya90w9c2_YpoMsStA-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="0qYya90w9c2_YpoMsStA-12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2556" y="965" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-16" connectable="0" parent="0qYya90w9c2_YpoMsStA-13" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;Нет&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.7095" y="-1" as="geometry">
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Получилось?&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="47" width="183" x="2634.5" y="942" as="geometry" />
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-10" edge="1" parent="1" source="0qYya90w9c2_YpoMsStA-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="0qYya90w9c2_YpoMsStA-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2912" y="1159" />
+              <mxPoint x="2726" y="1159" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Учет ресурсов&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="47" width="183" x="2820" y="1061.5" as="geometry" />
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Расчет вероятности смерти&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="47" width="183" x="2634.5" y="1180" as="geometry" />
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-20" edge="1" parent="1" source="0qYya90w9c2_YpoMsStA-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="0qYya90w9c2_YpoMsStA-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2514" y="1137" />
+              <mxPoint x="2426" y="1137" />
+              <mxPoint x="2426" y="912" />
+              <mxPoint x="2726" y="912" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0qYya90w9c2_YpoMsStA-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;font-size: 18.6667px;&quot;&gt;&lt;b&gt;Попытка записаться в другую больницу&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="68" width="223" x="2444.5" y="1051" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

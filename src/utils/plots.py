@@ -4,7 +4,9 @@ import numpy as np
 import pandas as pd
 
 from matplotlib import pyplot as plt
+from scipy.interpolate import UnivariateSpline
 from scipy.ndimage import gaussian_filter1d
+from scipy.signal import savgol_filter
 
 from src.des.des_model import DES
 from src.utils.utils import now_str
@@ -256,6 +258,25 @@ def plot_DES_vs_TTM_vs_RL(des_log, ttm_logs, rl_log, save_path: str = ""):
         smoothed = lowess(y, x, frac=frac, return_sorted=False)
         return smoothed
 
+    def smooth_lowess(x, y, window_size=30, polyorder=5):
+        """
+        Savitzky-Golay фильтр для сверхгладкого сглаживания.
+
+        Параметры:
+        - window_size: длина окна (нечётное, чем больше — тем глаже).
+          Рекомендация: 5-10% от длины ряда, но не менее 21.
+        - polyorder: порядок полинома (2-3 обычно достаточно).
+        """
+        y = np.asarray(y, dtype=float)
+        # window_size должно быть нечётным и <= len(y)
+        window_size = min(window_size, len(y) if len(y) % 2 == 1 else len(y) - 1)
+        if window_size < polyorder + 2:
+            window_size = polyorder + 2
+            if window_size % 2 == 0:
+                window_size += 1
+
+        return savgol_filter(y, window_length=window_size, polyorder=polyorder)
+
     # Красивые цвета (современная палитра)
     COLORS = {
         'des': '#FFB3B3',  # бледно-розовый (сырые данные)
@@ -268,7 +289,7 @@ def plot_DES_vs_TTM_vs_RL(des_log, ttm_logs, rl_log, save_path: str = ""):
 
     # Создаем сетку графиков
     fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-    fig.suptitle('Static vs TTM vs RL', fontsize=16, fontweight='bold')
+    # fig.suptitle('Static vs TTM vs RL', fontsize=16, fontweight='bold')
 
     ax1 = axes[0, 0]
 
@@ -276,8 +297,8 @@ def plot_DES_vs_TTM_vs_RL(des_log, ttm_logs, rl_log, save_path: str = ""):
     ax1.plot(days, rl_log['admitted'], color=COLORS['rl'], alpha=0.4, linewidth=1.5, label='RL (raw)')
 
     # Использование
-    ttm_smooth = smooth_lowess(days, ttm_logs['admitted'], frac=0.2)
-    rl_smooth = smooth_lowess(days, rl_log['admitted'], frac=0.2)
+    ttm_smooth = smooth_lowess(days, ttm_logs['admitted'])
+    rl_smooth = smooth_lowess(days, rl_log['admitted'])
 
     # Сглаженные тренды (яркие)
     ax1.plot(days, ttm_smooth, color=COLORS['trend_ttm'], linewidth=3, linestyle='-', label='TTM (trend)')
@@ -298,8 +319,8 @@ def plot_DES_vs_TTM_vs_RL(des_log, ttm_logs, rl_log, save_path: str = ""):
     ax2.plot(days, rl_log['rejected'], color=COLORS['rl'], alpha=0.4, linewidth=1.5, label='RL (raw)')
 
     # Использование
-    ttm_smooth = smooth_lowess(days, ttm_logs['rejected'], frac=0.2)
-    rl_smooth = smooth_lowess(days, rl_log['rejected'], frac=0.2)
+    ttm_smooth = smooth_lowess(days, ttm_logs['rejected'])
+    rl_smooth = smooth_lowess(days, rl_log['rejected'])
 
     # Сглаженные тренды (яркие)
     ax2.plot(days, ttm_smooth, color=COLORS['trend_ttm'], linewidth=3, linestyle='-', label='TTM (trend)')
@@ -319,8 +340,8 @@ def plot_DES_vs_TTM_vs_RL(des_log, ttm_logs, rl_log, save_path: str = ""):
     ax3.plot(days, rl_log['deaths'], color=COLORS['rl'], alpha=0.4, linewidth=1.5, label='RL (raw)')
 
     # Использование
-    ttm_smooth = smooth_lowess(days, ttm_logs['deaths'], frac=0.2)
-    rl_smooth = smooth_lowess(days, rl_log['deaths'], frac=0.2)
+    ttm_smooth = smooth_lowess(days, ttm_logs['deaths'])
+    rl_smooth = smooth_lowess(days, rl_log['deaths'])
 
     # Сглаженные тренды (яркие)
     ax3.plot(days, ttm_smooth, color=COLORS['trend_ttm'], linewidth=3, linestyle='-', label='TTM (trend)')

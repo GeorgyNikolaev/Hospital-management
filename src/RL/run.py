@@ -21,8 +21,7 @@ def run_with_rl(
         envs,            # список HospitalEnv
         is_train: bool=True
 ):
-    # des = DES(hospitals_cfg, rng_seed=settings.RANDOM_SEED)
-    des = DES(hospitals_cfg, rng_seed=444)
+    des = DES(hospitals_cfg, rng_seed=settings.RANDOM_SEED)
     params = init_params
 
     logs = {"day": [],

@@ -37,7 +37,7 @@ def run_two_way(
 
     des_logs, des = run_des.run(hospitals_cfg_des, init_params_des, days, rng)
     # plots.plot_SD_results(des_logs, "des")
-    # plots.display_results(des_logs)
+    plots.display_results(des_logs)
     # plots.plot_SD_DES_results(des_logs, "des")
     # plots.plot_RL_results(des_logs, "des")
 
@@ -60,7 +60,7 @@ def run_two_way(
         # Загружаем лучшую модель для каждого агента (или одну для всех)
         agents[i] = load_agent_checkpoint(
             agents[i],
-            f"checkpoints/hospital_rl/agent_best_09_04_2026.pt",  # Конкретный агент
+            f"checkpoints/hospital_rl/agent_best_09_04_2026_2.pt",  # Конкретный агент
             load_optimizer=False  # Не загружаем оптимизатор
         )
 

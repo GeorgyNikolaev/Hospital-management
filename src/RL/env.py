@@ -93,14 +93,21 @@ class HospitalEnv:
 
         # 2. Подсчет загруженности
         target_occupancy = 0.85
-        bed_occupancy = (metrics['occupied_beds'] + EPS) / (metrics['beds'] + EPS)
-        icu_occupancy = (metrics['occupied_icu'] + EPS) / (metrics['icu'] + EPS)
+        bed_occupancy = (metrics['occupied_beds']) / (metrics['beds'] + EPS)
+        icu_occupancy = (metrics['occupied_icu']) / (metrics['icu'] + EPS)
+
+        # bed_occupancy = (metrics['beds'] - metrics['occupied_beds']) / 20
+        # icu_occupancy = (metrics['icu'] - metrics['occupied_icu']) / 6
 
         def calc_resource_reward(a: float, b: float, x: float):
             return a * math.exp(b * (x - target_occupancy) ** 2) - (a - 2 + 0.3)
 
-        bed_reward = calc_resource_reward(3, -20, bed_occupancy) if bed_occupancy < target_occupancy else calc_resource_reward(3, -30, bed_occupancy)
-        icu_reward = calc_resource_reward(3, -20, icu_occupancy) if icu_occupancy < target_occupancy else calc_resource_reward(3, -30, icu_occupancy)
+        bed_reward = 0
+        icu_reward = 0
+        if metrics['occupied_beds'] != 0:
+            bed_reward = calc_resource_reward(3, -20, bed_occupancy) if bed_occupancy < target_occupancy else calc_resource_reward(3, -30, bed_occupancy)
+        if metrics['occupied_icu'] != 0:
+            icu_reward = calc_resource_reward(3, -20, icu_occupancy) if icu_occupancy < target_occupancy else calc_resource_reward(3, -30, icu_occupancy)
         reward += (bed_reward + icu_reward) * 1
         # print(metrics['day'], death_ratio, reject_ratio, bed_reward, icu_reward)
 
